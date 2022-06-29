@@ -1,0 +1,40 @@
+<style type="text/css">
+.list-group-item {
+  position: relative;
+  display: block;
+  padding: 8px;
+  color: #1a1a1a;
+  text-decoration: none;
+  background-color: #fff;
+  border: 0px;
+}
+</style>
+
+
+
+<div id="content">
+</div>
+<script type="text/javascript">
+  
+function listBlogs() {
+  console.log("blog is working")
+  // call the page html
+  // loads its js there.
+  content = App.html('blogs.html')
+  $("#content").html(content)
+}
+
+
+function dashboardInit() {
+  console.log("init is working")
+  content = App.html('dashboard.html')
+  $("#content").html(content)
+}
+
+function editProfile() {
+  content = App.html('profile.html')
+  $("#content").html(content)
+}
+
+window.init = dashboardInit();
+</script>

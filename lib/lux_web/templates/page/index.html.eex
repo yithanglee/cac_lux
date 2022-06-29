@@ -1,0 +1,130 @@
+<div class="row gx-0">
+  <div aria-label="mainbar" class="col-12 ">
+    <div class="row gx-0 bg-dark py-3">
+      <div class="col-12">
+        <div class="d-flex justify-content-center align-items-center gap-4 text-white text-sm">
+          <span class="">Special Appointments</span>
+          <span>
+            Directory
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="row gx-0 py-2 bg-white">
+      <div class="col-12 d-none d-lg-block">
+        <div class="d-flex justify-content-center align-items-center gap-4 py-4">
+          <span class="fs-1 p-lg-0 p-2">Damiens Lab</span>
+          <span>
+            Web Application Development
+          </span>
+        </div>
+      </div>
+
+      <div class="col-12 d-block d-lg-none">
+        <div class="d-flex justify-content-center flex-column align-items-start py-4">
+          <span class="fs-2 p-lg-0 ps-2">Damiens Lab</span>
+          <span class="ps-2">
+            Web Application Development
+          </span>
+        </div>
+      </div>
+    </div>
+      <div class="row gx-0 bg-primary py-4 d-none d-lg-block">
+        <div class="col-12">
+          <div class="d-flex justify-content-center align-items-center gap-4 text-white fw-bold fw-3">
+            <span class="">Resources</span>
+            <span>
+              News
+            </span>
+          </div>
+        </div>
+      </div>
+    <section id="subcontent">
+    </section>
+  </div>
+  <div aria-label="sidebar" class="user-select-none w-0 position-fixed position-lg-block min-vh-100 col-10  bg-light end-0" style="z-index: 20;">
+    <div class="d-flex align-items-center gap-2">
+      <i onclick="toggleSidebar();" class="btn fa fa-minus"></i>
+      <span class="py-2 d-flex align-items-center">Welcome! <span class="ps-1" id="ulg2"></span></span>
+      <i onclick="" class="d-none btn fa fa-2x fa-qrcode text-primary"></i>
+    </div>
+    <div class="list-group">
+      <a class="list-group-item list-group-item-action" href="javascript:void(0);" onclick='
+        toggleSidebar();
+        repeatAction("landing.html")'>
+        <i class="fa fa-home me-2 text-primary"></i>Home </a>
+      <a class="list-group-item list-group-item-action" href="javascript:void(0);" onclick='
+        toggleSidebar();
+        repeatAction("timer.html")'>
+        <i class="fa fa-clock me-2 text-primary"></i>Timer </a>
+      <%#  <a class="list-group-item list-group-item-action" href="/admin/login">
+        <i class="fa fa-info me-2 text-danger"></i> Admin </a> %>
+    </div>
+    <div class="m-4 d-flex justify-content-center">
+      <div class="w-100 d-flex justify-content-center check-in-code d-none" id="cic">
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+window.todo = ["buy wine for gordon", "make coffee"]
+window.doneList = []
+
+function toggleSidebar(forceClose) {
+  console.log("sidebar")
+  if (forceClose != null) {
+    if (forceClose) {
+      $("div[aria-label='sidebar']").removeClass("col-lg-2")
+      $("div[aria-label='mainbar']").addClass("col-lg-10")
+      $("div[aria-label='sidebar']").addClass("w-0")
+    } else {
+      $("div[aria-label='sidebar']").addClass("col-lg-2")
+      $("div[aria-label='mainbar']").removeClass("col-lg-10")
+      $("div[aria-label='sidebar']").removeClass("w-0")
+    }
+
+  } else {
+
+    $("div[aria-label='sidebar']").toggleClass("col-lg-2")
+    $("div[aria-label='mainbar']").toggleClass("col-lg-10")
+    $("div[aria-label='sidebar']").toggleClass("w-0")
+    $("#cic").toggleClass("d-none")
+  }
+
+}
+var content = App.html("landing.html")
+$("#subcontent").html(content)
+
+function repeatAction(page, additionalParamString) {
+  $("#menus").find("div.btn").removeClass("selected");
+  var title = page.split(".")[0]
+  $("#menus").find("div.btn[aria-label='" + title + "']").addClass("selected")
+  var xParamString = ""
+  if (additionalParamString == null) {
+    xParamString = ""
+  } else {
+    xParamString = additionalParamString
+  }
+
+  var route_names = [
+    { title: "landing", alias: "Home - Damiens Lab" },
+    { title: "timer", alias: "Timer - Damiens Lab" },
+  ]
+  var doc_title = "Damiens Lab"
+  doc_title = route_names.filter((v, i) => {
+    return v.title == title;
+  })[0]
+  $("title").html(doc_title.alias)
+  // whether or not to pushstate, else when click back, the state will repeat the same route.. 
+  if (window.back) {
+
+  } else {
+    var stateObj = { fn: `repeatAction('` + page + `', '` + xParamString + `')`, title: title };
+    history.pushState(stateObj, doc_title, "?get=" + title + xParamString);
+
+  }
+  window.back = false
+  var html = App.html(page)
+  $("#subcontent").html(html)
+}
+</script>
