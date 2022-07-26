@@ -132,12 +132,27 @@ defmodule Lux.Settings do
 
   alias Lux.Settings.Blog
 
-  def list_blogs(limit \\ 10) do
-    Repo.all(from b in Blog, preload: [:category, :author], limit: 10, order_by: [desc: b.id])
+  def list_blogs(category_name \\ nil, limit \\ 10) do
+    q =
+      if category_name != nil do
+        from b in Blog,
+          left_join: c in Lux.Settings.Category,
+          on: c.id == b.category_id,
+          left_join: cc in Lux.Settings.Category,
+          on: cc.id == c.parent_id,
+          where: cc.name == ^category_name,
+          preload: [:category, :author],
+          limit: 10,
+          order_by: [desc: b.inserted_at]
+      else
+        from b in Blog, preload: [:category, :author], limit: 10, order_by: [desc: b.inserted_at]
+      end
+
+    Repo.all(q)
   end
 
   def get_blog!(id) do
-    Repo.get!(Blog, id)
+    Repo.get!(Blog, id) |> Repo.preload([:category, :author])
   end
 
   def create_blog(params \\ %{}) do
@@ -188,11 +203,72 @@ defmodule Lux.Settings do
     Category.changeset(%Category{}, params) |> Repo.insert()
   end
 
+  def get_category_by_name(name) do
+    res = Repo.get_by(Category, name: name)
+
+    if res != nil do
+      res
+    else
+      {:ok, cat} = create_category(%{name: name})
+      cat
+    end
+  end
+
   def update_category(model, params) do
     Category.changeset(model, params) |> Repo.update()
   end
 
   def delete_category(%Category{} = model) do
     Repo.delete(model)
+  end
+
+  alias Lux.Settings.StoredMedia
+
+  def list_stored_medias() do
+    Repo.all(StoredMedia)
+  end
+
+  def get_stored_media!(id) do
+    Repo.get!(StoredMedia, id)
+  end
+
+  def create_stored_media(params \\ %{}) do
+    a = StoredMedia.changeset(%StoredMedia{}, params) |> Repo.insert()
+
+    case a do
+      {:ok, sm} ->
+        filename = sm.img_url |> String.replace("/images/uploads/", "")
+        Lux.s3_large_upload(filename)
+
+        StoredMedia.changeset(sm, %{
+          s3_url: "https://cac-bucket.ap-south-1.linodeobjects.com/#{filename}"
+        })
+        |> Repo.update()
+
+      _ ->
+        nil
+    end
+
+    a
+  end
+
+  def update_stored_media(model, params) do
+    StoredMedia.changeset(model, params) |> Repo.update()
+  end
+
+  def delete_stored_media(%StoredMedia{} = model) do
+    Repo.delete(model)
+  end
+
+  def get_category_children(parent_id) do
+    Repo.all(from c in Category, where: c.parent_id == ^parent_id)
+    |> Enum.map(&(&1 |> BluePotion.s_to_map()))
+  end
+
+  def update_category_children(parent_id, children_ids) do
+    for children_id <- children_ids do
+      c = Repo.get(Category, children_id)
+      update_category(c, %{parent_id: parent_id})
+    end
   end
 end

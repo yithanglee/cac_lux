@@ -19,7 +19,17 @@ defmodule Lux.Settings.Blog do
   @doc false
   def changeset(blog, attrs) do
     blog
-    |> cast(attrs, [:title, :subtitle, :excerpt, :content, :author_id, :category_id, :img_url])
+    |> cast(attrs, [
+      :inserted_at,
+      :updated_at,
+      :title,
+      :subtitle,
+      :excerpt,
+      :content,
+      :author_id,
+      :category_id,
+      :img_url
+    ])
 
     # |> validate_required([
     #   :title,

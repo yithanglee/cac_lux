@@ -8,6 +8,20 @@ defmodule LuxWeb.ApiController do
   def webhook_post(conn, params) do
     final =
       case params["scope"] do
+        "update_category_children" ->
+          %{
+            "category" => %{"41" => %{"27" => "", "28" => "", "29" => ""}},
+            "scope" => "update_children"
+          }
+
+          [parent_key] = params |> Map.get("category") |> Map.keys() |> IO.inspect()
+
+          children_ids =
+            params |> Map.get("category") |> Map.get(parent_key) |> Map.keys() |> IO.inspect()
+
+          Settings.update_category_children(parent_key, children_ids)
+          %{status: "ok"}
+
         "scan_image" ->
           image =
             open(params["image"].path)
@@ -69,12 +83,18 @@ defmodule LuxWeb.ApiController do
   def webhook(conn, params) do
     final =
       case params["scope"] do
+        "children_category" ->
+          Settings.get_category_children(params["id"])
+
+        "blog" ->
+          Settings.get_blog!(params["id"]) |> BluePotion.s_to_map()
+
         "blogs" ->
           put_ago = fn map ->
             Map.put(map, :ago, map.inserted_at |> Lux.check_time_difference())
           end
 
-          Settings.list_blogs()
+          Settings.list_blogs(params["category"])
           |> Enum.map(&(&1 |> BluePotion.s_to_map()))
           |> Enum.map(&(&1 |> put_ago.()))
 

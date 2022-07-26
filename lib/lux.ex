@@ -7,6 +7,304 @@ defmodule Lux do
   if it comes from the database, an external API or others.
   """
   import Mogrify
+  import Ecto.Query
+
+  def wordpress_get(next_link \\ "per_page=50&page=1") do
+    url = "http://www.methodist.org.my/wp-json/wp/v2/posts?#{next_link}"
+
+    # Lux.Repo.delete_all(Lux.Settings.Blog)
+
+    case HTTPoison.get(url) do
+      {:ok, %{body: body, headers: header} = resp} ->
+        link =
+          header
+          |> Enum.into(%{})
+          |> Map.get("Link")
+          |> String.split(",")
+          |> Enum.filter(&(&1 |> String.contains?("next")))
+          |> Enum.map(&(&1 |> String.split(";") |> hd))
+          |> Enum.map(&(&1 |> String.split("?") |> tl))
+          |> List.flatten()
+          |> List.first()
+          |> String.replace(">", "")
+          |> IO.inspect()
+
+        list = body |> Jason.decode!()
+
+        for post <- list do
+          post |> parse_post_body
+        end
+
+        Elixir.Task.start_link(__MODULE__, :wordpress_get, [link])
+
+        link
+
+      _ ->
+        nil
+    end
+  end
+
+  def parse_post_body(post) do
+    IO.inspect(post)
+
+    meta = %{
+      "会友篇" => "",
+      "供图" => "",
+      "整理" => "",
+      "文" => "",
+      "牧者篇" => "",
+      "资料提供" => "",
+      "采访/整理" => ""
+    }
+
+    get_content = fn post ->
+      post |> Map.get("content") |> Map.get("rendered")
+    end
+
+    get_featured_image = fn post ->
+      # todo need to save the image into local machine
+
+      check = File.exists?(File.cwd!() <> "/media")
+
+      path =
+        if check do
+          File.cwd!() <> "/media"
+        else
+          File.mkdir(File.cwd!() <> "/media")
+          File.cwd!() <> "/media"
+        end
+
+      urls = post |> Map.get("featured_image_urls") |> IO.inspect() |> Map.get("1536x1536")
+
+      with true <- urls != "",
+           true <- urls != [] do
+        url = urls |> hd
+
+        [_head, tail] = url |> String.split("http://www.methodist.org.my/wp-content/uploads/")
+
+        fl = tail |> String.replace("/", "_") |> IO.inspect()
+
+        %HTTPoison.Response{body: body} = HTTPoison.get!(url)
+        File.write!("#{path}/#{fl}", body)
+
+        {:ok, sm} =
+          Lux.Settings.create_stored_media(%{img_url: "/images/uploads/#{fl}", name: fl})
+
+        "/images/uploads/#{fl}"
+      else
+        _ ->
+          "/images/placeholder.png"
+      end
+    end
+
+    get_category = fn post ->
+      cat = Lux.Settings.get_category_by_name(post |> Map.get("tag_info"))
+      cat.id
+    end
+
+    get_title = fn post ->
+      post |> Map.get("title") |> Map.get("rendered")
+    end
+
+    get_date = fn post ->
+      NaiveDateTime.from_iso8601!(post |> Map.get("date"))
+    end
+
+    attrs = %{
+      content: get_content.(post),
+      img_url: get_featured_image.(post),
+      category_id: get_category.(post),
+      title: get_title.(post),
+      inserted_at: get_date.(post),
+      updated_at: get_date.(post)
+    }
+
+    {:ok, blog} = Lux.Settings.create_blog(attrs) |> IO.inspect()
+
+    %{
+      "_links" => %{
+        "about" => [
+          %{"href" => "http://www.methodist.org.my/wp-json/wp/v2/types/post"}
+        ],
+        "author" => [
+          %{
+            "embeddable" => true,
+            "href" => "http://www.methodist.org.my/wp-json/wp/v2/users/4"
+          }
+        ],
+        "collection" => [
+          %{"href" => "http://www.methodist.org.my/wp-json/wp/v2/posts"}
+        ],
+        "curies" => [
+          %{
+            "href" => "https://api.w.org/{rel}",
+            "name" => "wp",
+            "templated" => true
+          }
+        ],
+        "predecessor-version" => [
+          %{
+            "href" => "http://www.methodist.org.my/wp-json/wp/v2/posts/17834/revisions/17838",
+            "id" => 17838
+          }
+        ],
+        "replies" => [
+          %{
+            "embeddable" => true,
+            "href" => "http://www.methodist.org.my/wp-json/wp/v2/comments?post=17834"
+          }
+        ],
+        "self" => [
+          %{"href" => "http://www.methodist.org.my/wp-json/wp/v2/posts/17834"}
+        ],
+        "version-history" => [
+          %{
+            "count" => 1,
+            "href" => "http://www.methodist.org.my/wp-json/wp/v2/posts/17834/revisions"
+          }
+        ],
+        "wp:attachment" => [
+          %{
+            "href" => "http://www.methodist.org.my/wp-json/wp/v2/media?parent=17834"
+          }
+        ],
+        "wp:featuredmedia" => [
+          %{
+            "embeddable" => true,
+            "href" => "http://www.methodist.org.my/wp-json/wp/v2/media/17836"
+          }
+        ],
+        "wp:term" => [
+          %{
+            "embeddable" => true,
+            "href" => "http://www.methodist.org.my/wp-json/wp/v2/categories?post=17834",
+            "taxonomy" => "category"
+          },
+          %{
+            "embeddable" => true,
+            "href" => "http://www.methodist.org.my/wp-json/wp/v2/tags?post=17834",
+            "taxonomy" => "post_tag"
+          }
+        ]
+      },
+      "author" => 4,
+      "author_info" => %{
+        "author_link" => "http://www.methodist.org.my/author/damien/",
+        "display_name" => "damien"
+      },
+      "categories" => '\f',
+      "category_info" =>
+        "<a href=\"http://www.methodist.org.my/category/latest-news/%e4%bb%a3%e7%a5%b7%e4%ba%8b%e9%a1%b9/\" rel=\"category tag\">代祷事项</a>",
+      "comment_status" => "closed",
+      "content" => %{
+        "protected" => false,
+        "rendered" =>
+          "<a href=\"http://www.methodist.org.my/wp-content/uploads/2022/03/CAC-2022年3月祷告通讯.pdf\" class=\"pdfemb-viewer\" style=\"\" data-width=\"max\" data-height=\"max\"  data-toolbar=\"bottom\" data-toolbar-fixed=\"off\">CAC-2022年3月祷告通讯<br/></a>\n<p class=\"wp-block-pdfemb-pdf-embedder-viewer\"></p>\n"
+      },
+      "date" => "2022-03-28T23:28:16",
+      "date_gmt" => "2022-03-28T15:28:16",
+      "excerpt" => %{"protected" => false, "rendered" => ""},
+      "featured_image_urls" => %{
+        "1536x1536" => [
+          "http://www.methodist.org.my/wp-content/uploads/2022/03/march.jpg",
+          600,
+          500,
+          false
+        ],
+        "2048x2048" => [
+          "http://www.methodist.org.my/wp-content/uploads/2022/03/march.jpg",
+          600,
+          500,
+          false
+        ],
+        "content-slide-thumbnail" => [
+          "http://www.methodist.org.my/wp-content/uploads/2022/03/march.jpg",
+          600,
+          500,
+          false
+        ],
+        "covernews-featured" => [
+          "http://www.methodist.org.my/wp-content/uploads/2022/03/march.jpg",
+          600,
+          500,
+          false
+        ],
+        "covernews-medium" => [
+          "http://www.methodist.org.my/wp-content/uploads/2022/03/march-600x380.jpg",
+          600,
+          380,
+          true
+        ],
+        "covernews-medium-square" => [
+          "http://www.methodist.org.my/wp-content/uploads/2022/03/march-600x450.jpg",
+          600,
+          450,
+          true
+        ],
+        "covernews-slider-center" => [
+          "http://www.methodist.org.my/wp-content/uploads/2022/03/march.jpg",
+          600,
+          500,
+          false
+        ],
+        "covernews-slider-full" => [
+          "http://www.methodist.org.my/wp-content/uploads/2022/03/march.jpg",
+          600,
+          500,
+          false
+        ],
+        "full" => [
+          "http://www.methodist.org.my/wp-content/uploads/2022/03/march.jpg",
+          600,
+          500,
+          false
+        ],
+        "large" => [
+          "http://www.methodist.org.my/wp-content/uploads/2022/03/march.jpg",
+          600,
+          500,
+          false
+        ],
+        "medium" => [
+          "http://www.methodist.org.my/wp-content/uploads/2022/03/march-300x250.jpg",
+          300,
+          250,
+          true
+        ],
+        "medium_large" => [
+          "http://www.methodist.org.my/wp-content/uploads/2022/03/march.jpg",
+          600,
+          500,
+          false
+        ],
+        "thumbnail" => [
+          "http://www.methodist.org.my/wp-content/uploads/2022/03/march-150x150.jpg",
+          150,
+          150,
+          true
+        ]
+      },
+      "featured_media" => 17836,
+      "format" => "standard",
+      "guid" => %{"rendered" => "https://www.methodist.org.my/?p=17834"},
+      "id" => 17834,
+      "link" =>
+        "http://www.methodist.org.my/2022/03/%e6%af%8f%e6%9c%88%e7%a5%b7%e5%91%8a%e9%80%9a%e6%8a%a5-monthly-prayer-bulletin-12/",
+      "meta" => [],
+      "modified" => "2022-03-28T23:28:23",
+      "modified_gmt" => "2022-03-28T15:28:23",
+      "ping_status" => "closed",
+      "slug" =>
+        "%e6%af%8f%e6%9c%88%e7%a5%b7%e5%91%8a%e9%80%9a%e6%8a%a5-monthly-prayer-bulletin-12",
+      "status" => "publish",
+      "sticky" => false,
+      "tag_info" => "代祷事项",
+      "tags" => [],
+      "template" => "",
+      "title" => %{"rendered" => "每月祷告通报 MONTHLY PRAYER BULLETIN"},
+      "type" => "post"
+    }
+  end
 
   def check_time_difference(date_to_check \\ Timex.shift(Timex.now(), hours: -100)) do
     duration = date_to_check |> Timex.diff(Timex.now(), :duration)
@@ -351,7 +649,7 @@ defmodule Lux do
     res =
       "#{path}/#{filename}"
       |> ExAws.S3.Upload.stream_file()
-      |> ExAws.S3.upload("damien-bucket", filename, opts)
+      |> ExAws.S3.upload("cac-bucket", filename, opts)
       |> ExAws.request!()
 
     data = res.body |> SweetXml.parse()
