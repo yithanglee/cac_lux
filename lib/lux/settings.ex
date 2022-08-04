@@ -141,6 +141,7 @@ defmodule Lux.Settings do
           left_join: cc in Lux.Settings.Category,
           on: cc.id == c.parent_id,
           where: cc.name == ^category_name,
+          or_where: c.name == ^category_name,
           preload: [:category, :author],
           limit: 10,
           order_by: [desc: b.inserted_at]
@@ -270,5 +271,8 @@ defmodule Lux.Settings do
       c = Repo.get(Category, children_id)
       update_category(c, %{parent_id: parent_id})
     end
+  end
+
+  def get_blog_between(startDt, endDt) do
   end
 end

@@ -83,6 +83,13 @@ defmodule LuxWeb.ApiController do
   def webhook(conn, params) do
     final =
       case params["scope"] do
+        "get_events" ->
+          eventStart = DateTime.from_unix!(params["start"] |> String.to_integer(), :millisecond)
+          eventEnd = DateTime.from_unix!(params["end"] |> String.to_integer(), :millisecond)
+
+          {eventStart, eventEnd} |> IO.inspect()
+          %{status: "ok"}
+
         "children_category" ->
           Settings.get_category_children(params["id"])
 
