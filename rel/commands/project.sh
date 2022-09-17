@@ -1,8 +1,8 @@
 #!/bin/sh
-            cd /lux
-            echo  | sudo -S tar xfz lux.tar.gz
-            sudo mv /lux/lux.tar.gz /lux/releases/0.1.0/
-            sudo /lux/bin/lux stop
-            sudo /lux/bin/lux migrate
-            sudo /lux/bin/lux start
+            cd /cac
+            echo  | sudo -S tar xfz cac.tar.gz
+            sudo mv /cac/cac.tar.gz /cac/releases/0.1.0/
+            sudo /cac/bin/cac stop
+            sudo /cac/bin/cac migrate
+            sudo /cac/bin/cac start
             

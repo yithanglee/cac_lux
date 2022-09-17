@@ -1,4 +1,4 @@
-defmodule Lux.Repo.Migrations.CreateCategories do
+defmodule Cac.Repo.Migrations.CreateCategories do
   use Ecto.Migration
 
   def change do

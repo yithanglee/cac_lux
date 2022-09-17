@@ -1,4 +1,4 @@
-# Lux
+# Cac
 
 To start your Phoenix server:
 

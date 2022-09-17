@@ -1,5 +1,5 @@
-defmodule LuxWeb.PageControllerTest do
-  use LuxWeb.ConnCase
+defmodule CacWeb.PageControllerTest do
+  use CacWeb.ConnCase
 
   test "GET /", %{conn: conn} do
     conn = get(conn, "/")

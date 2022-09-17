@@ -1,4 +1,4 @@
-defmodule LuxWeb.ChannelCase do
+defmodule CacWeb.ChannelCase do
   @moduledoc """
   This module defines the test case to be used by
   channel tests.
@@ -11,7 +11,7 @@ defmodule LuxWeb.ChannelCase do
   we enable the SQL sandbox, so changes done to the database
   are reverted at the end of every test. If you are using
   PostgreSQL, you can even run database tests asynchronously
-  by setting `use LuxWeb.ChannelCase, async: true`, although
+  by setting `use CacWeb.ChannelCase, async: true`, although
   this option is not recommended for other databases.
   """
 
@@ -21,18 +21,18 @@ defmodule LuxWeb.ChannelCase do
     quote do
       # Import conveniences for testing with channels
       import Phoenix.ChannelTest
-      import LuxWeb.ChannelCase
+      import CacWeb.ChannelCase
 
       # The default endpoint for testing
-      @endpoint LuxWeb.Endpoint
+      @endpoint CacWeb.Endpoint
     end
   end
 
   setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Lux.Repo)
+    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Cac.Repo)
 
     unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(Lux.Repo, {:shared, self()})
+      Ecto.Adapters.SQL.Sandbox.mode(Cac.Repo, {:shared, self()})
     end
 
     :ok

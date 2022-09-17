@@ -1,7 +1,7 @@
-defmodule LuxWeb.LiveVideoControllerTest do
-  use LuxWeb.ConnCase
+defmodule CacWeb.LiveVideoControllerTest do
+  use CacWeb.ConnCase
 
-  alias Lux.Settings
+  alias Cac.Settings
 
   @create_attrs %{
     created_at: ~N[2010-04-17 14:00:00],

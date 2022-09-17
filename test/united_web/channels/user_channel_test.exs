@@ -1,11 +1,11 @@
-defmodule LuxWeb.UserChannelTest do
-  use LuxWeb.ChannelCase
+defmodule CacWeb.UserChannelTest do
+  use CacWeb.ChannelCase
 
   setup do
     {:ok, _, socket} =
-      LuxWeb.UserSocket
+      CacWeb.UserSocket
       |> socket("user_id", %{some: :assign})
-      |> subscribe_and_join(LuxWeb.UserChannel, "user:lobby")
+      |> subscribe_and_join(CacWeb.UserChannel, "user:lobby")
 
     %{socket: socket}
   end

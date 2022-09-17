@@ -1,11 +1,11 @@
-defmodule LuxWeb.FacebookPageChannelTest do
-  use LuxWeb.ChannelCase
+defmodule CacWeb.FacebookPageChannelTest do
+  use CacWeb.ChannelCase
 
   setup do
     {:ok, _, socket} =
-      LuxWeb.UserSocket
+      CacWeb.UserSocket
       |> socket("user_id", %{some: :assign})
-      |> subscribe_and_join(LuxWeb.FacebookPageChannel, "facebook_page:lobby")
+      |> subscribe_and_join(CacWeb.FacebookPageChannel, "facebook_page:lobby")
 
     %{socket: socket}
   end

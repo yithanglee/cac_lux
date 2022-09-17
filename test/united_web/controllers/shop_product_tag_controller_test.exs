@@ -1,7 +1,7 @@
-defmodule LuxWeb.ShopProductTagControllerTest do
-  use LuxWeb.ConnCase
+defmodule CacWeb.ShopProductTagControllerTest do
+  use CacWeb.ConnCase
 
-  alias Lux.Settings
+  alias Cac.Settings
 
   @create_attrs %{shop_product_id: 42, tag_id: 42}
   @update_attrs %{shop_product_id: 43, tag_id: 43}

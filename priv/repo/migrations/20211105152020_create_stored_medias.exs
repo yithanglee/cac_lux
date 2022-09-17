@@ -1,4 +1,4 @@
-defmodule Lux.Repo.Migrations.CreateStoredMedias do
+defmodule Cac.Repo.Migrations.CreateStoredMedias do
   use Ecto.Migration
 
   def change do

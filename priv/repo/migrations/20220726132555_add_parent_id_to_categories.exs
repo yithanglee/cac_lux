@@ -1,4 +1,4 @@
-defmodule Lux.Repo.Migrations.AddParentIdToCategories do
+defmodule Cac.Repo.Migrations.AddParentIdToCategories do
   use Ecto.Migration
 
   def change do

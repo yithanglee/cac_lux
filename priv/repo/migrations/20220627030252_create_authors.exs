@@ -1,4 +1,4 @@
-defmodule Lux.Repo.Migrations.CreateAuthors do
+defmodule Cac.Repo.Migrations.CreateAuthors do
   use Ecto.Migration
 
   def change do

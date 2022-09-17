@@ -1,7 +1,7 @@
-defmodule LuxWeb.TagControllerTest do
-  use LuxWeb.ConnCase
+defmodule CacWeb.TagControllerTest do
+  use CacWeb.ConnCase
 
-  alias Lux.Settings
+  alias Cac.Settings
 
   @create_attrs %{desc: "some desc", name: "some name"}
   @update_attrs %{desc: "some updated desc", name: "some updated name"}

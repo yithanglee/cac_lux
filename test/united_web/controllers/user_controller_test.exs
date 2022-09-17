@@ -1,7 +1,7 @@
-defmodule LuxWeb.UserControllerTest do
-  use LuxWeb.ConnCase
+defmodule CacWeb.UserControllerTest do
+  use CacWeb.ConnCase
 
-  alias Lux.Settings
+  alias Cac.Settings
 
   @create_attrs %{
     bio: "some bio",

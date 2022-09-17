@@ -1,5 +1,5 @@
 defmodule Accounting do
-  @endpoint Application.get_env(:lux, :facebook)[:accounting_url]
+  @endpoint Application.get_env(:cac, :facebook)[:accounting_url]
   @sample_token "SFMyNTY.g2gDYQJuBgAy9xutfwFiAAFRgA.WKJMQoTw1YIc-1I4xZd3S9WDkyFdB_prJmF3Cxo3nvM"
 
   def request(name, params) do
@@ -15,14 +15,14 @@ defmodule Accounting do
   end
 
   def post(body, token) do
-    HTTPoison.post("#{@endpoint}/lux/api", body, [
+    HTTPoison.post("#{@endpoint}/cac/api", body, [
       {"content-type", "application/json"},
       {"Authorization", "Bearer #{token}"}
     ])
   end
 
   def get(body, token) do
-    HTTPoison.get("#{@endpoint}/lux/api/#{body}", [
+    HTTPoison.get("#{@endpoint}/cac/api/#{body}", [
       {"content-type", "application/json"},
       {"Authorization", "Bearer #{token}"}
     ])

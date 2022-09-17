@@ -1,5 +1,5 @@
-defmodule LuxWeb.LayoutViewTest do
-  use LuxWeb.ConnCase, async: true
+defmodule CacWeb.LayoutViewTest do
+  use CacWeb.ConnCase, async: true
 
   # When testing helpers, you may want to import Phoenix.HTML and
   # use functions such as safe_to_string() to convert the helper

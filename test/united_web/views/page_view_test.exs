@@ -1,3 +1,3 @@
-defmodule LuxWeb.PageViewTest do
-  use LuxWeb.ConnCase, async: true
+defmodule CacWeb.PageViewTest do
+  use CacWeb.ConnCase, async: true
 end

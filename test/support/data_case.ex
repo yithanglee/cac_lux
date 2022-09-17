@@ -1,4 +1,4 @@
-defmodule Lux.DataCase do
+defmodule Cac.DataCase do
   @moduledoc """
   This module defines the setup for tests requiring
   access to the application's data layer.
@@ -10,7 +10,7 @@ defmodule Lux.DataCase do
   we enable the SQL sandbox, so changes done to the database
   are reverted at the end of every test. If you are using
   PostgreSQL, you can even run database tests asynchronously
-  by setting `use Lux.DataCase, async: true`, although
+  by setting `use Cac.DataCase, async: true`, although
   this option is not recommended for other databases.
   """
 
@@ -18,20 +18,20 @@ defmodule Lux.DataCase do
 
   using do
     quote do
-      alias Lux.Repo
+      alias Cac.Repo
 
       import Ecto
       import Ecto.Changeset
       import Ecto.Query
-      import Lux.DataCase
+      import Cac.DataCase
     end
   end
 
   setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Lux.Repo)
+    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Cac.Repo)
 
     unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(Lux.Repo, {:shared, self()})
+      Ecto.Adapters.SQL.Sandbox.mode(Cac.Repo, {:shared, self()})
     end
 
     :ok

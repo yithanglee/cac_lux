@@ -1,7 +1,7 @@
-defmodule LuxWeb.ShopControllerTest do
-  use LuxWeb.ConnCase
+defmodule CacWeb.ShopControllerTest do
+  use CacWeb.ConnCase
 
-  alias Lux.Settings
+  alias Cac.Settings
 
   @create_attrs %{
     address: "some address",

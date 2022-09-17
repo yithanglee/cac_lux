@@ -1,10 +1,10 @@
-defmodule Lux.SettingsTest do
-  use Lux.DataCase
+defmodule Cac.SettingsTest do
+  use Cac.DataCase
 
-  alias Lux.Settings
+  alias Cac.Settings
 
   describe "users" do
-    alias Lux.Settings.User
+    alias Cac.Settings.User
 
     @valid_attrs %{
       bio: "some bio",
@@ -99,7 +99,7 @@ defmodule Lux.SettingsTest do
   end
 
   describe "blogs" do
-    alias Lux.Settings.Blog
+    alias Cac.Settings.Blog
 
     @valid_attrs %{
       author: "some author",
@@ -174,7 +174,7 @@ defmodule Lux.SettingsTest do
   end
 
   describe "stored_medias" do
-    alias Lux.Settings.StoredMedia
+    alias Cac.Settings.StoredMedia
 
     @valid_attrs %{
       f_extension: "some f_extension",
@@ -259,7 +259,7 @@ defmodule Lux.SettingsTest do
   end
 
   describe "shops" do
-    alias Lux.Settings.Shop
+    alias Cac.Settings.Shop
 
     @valid_attrs %{
       address: "some address",
@@ -349,7 +349,7 @@ defmodule Lux.SettingsTest do
   end
 
   describe "shop_products" do
-    alias Lux.Settings.ShopProduct
+    alias Cac.Settings.ShopProduct
 
     @valid_attrs %{
       cost_price: 120.5,
@@ -450,7 +450,7 @@ defmodule Lux.SettingsTest do
   end
 
   describe "tags" do
-    alias Lux.Settings.Tag
+    alias Cac.Settings.Tag
 
     @valid_attrs %{desc: "some desc", name: "some name"}
     @update_attrs %{desc: "some updated desc", name: "some updated name"}
@@ -511,7 +511,7 @@ defmodule Lux.SettingsTest do
   end
 
   describe "shop_product_tags" do
-    alias Lux.Settings.ShopProductTag
+    alias Cac.Settings.ShopProductTag
 
     @valid_attrs %{shop_product_id: 42, tag_id: 42}
     @update_attrs %{shop_product_id: 43, tag_id: 43}
@@ -583,7 +583,7 @@ defmodule Lux.SettingsTest do
   end
 
   describe "facebook_pages" do
-    alias Lux.Settings.FacebookPage
+    alias Cac.Settings.FacebookPage
 
     @valid_attrs %{
       name: "some name",
@@ -668,7 +668,7 @@ defmodule Lux.SettingsTest do
   end
 
   describe "live_videos" do
-    alias Lux.Settings.LiveVideo
+    alias Cac.Settings.LiveVideo
 
     @valid_attrs %{
       created_at: ~N[2010-04-17 14:00:00],
@@ -766,7 +766,7 @@ defmodule Lux.SettingsTest do
   end
 
   describe "video_comments" do
-    alias Lux.Settings.VideoComment
+    alias Cac.Settings.VideoComment
 
     @valid_attrs %{
       created_at: ~N[2010-04-17 14:00:00],
@@ -847,7 +847,7 @@ defmodule Lux.SettingsTest do
   end
 
   describe "page_visitors" do
-    alias Lux.Settings.PageVisitor
+    alias Cac.Settings.PageVisitor
 
     @valid_attrs %{
       email: "some email",
@@ -943,7 +943,7 @@ defmodule Lux.SettingsTest do
   end
 
   describe "customer_orders" do
-    alias Lux.Settings.CustomerOrder
+    alias Cac.Settings.CustomerOrder
 
     @valid_attrs %{
       date: ~D[2010-04-17],
@@ -1076,7 +1076,7 @@ defmodule Lux.SettingsTest do
   end
 
   describe "customer_order_lines" do
-    alias Lux.Settings.CustomerOrderLine
+    alias Cac.Settings.CustomerOrderLine
 
     @valid_attrs %{
       cost_price: 120.5,

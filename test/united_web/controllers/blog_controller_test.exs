@@ -1,7 +1,7 @@
-defmodule LuxWeb.BlogControllerTest do
-  use LuxWeb.ConnCase
+defmodule CacWeb.BlogControllerTest do
+  use CacWeb.ConnCase
 
-  alias Lux.Settings
+  alias Cac.Settings
 
   @create_attrs %{
     author: "some author",

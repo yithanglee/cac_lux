@@ -1,7 +1,7 @@
-defmodule LuxWeb.ShopProductControllerTest do
-  use LuxWeb.ConnCase
+defmodule CacWeb.ShopProductControllerTest do
+  use CacWeb.ConnCase
 
-  alias Lux.Settings
+  alias Cac.Settings
 
   @create_attrs %{
     cost_price: 120.5,

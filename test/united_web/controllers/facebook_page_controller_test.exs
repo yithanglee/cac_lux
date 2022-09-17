@@ -1,7 +1,7 @@
-defmodule LuxWeb.FacebookPageControllerTest do
-  use LuxWeb.ConnCase
+defmodule CacWeb.FacebookPageControllerTest do
+  use CacWeb.ConnCase
 
-  alias Lux.Settings
+  alias Cac.Settings
 
   @create_attrs %{
     name: "some name",

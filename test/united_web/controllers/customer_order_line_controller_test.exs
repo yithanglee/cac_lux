@@ -1,7 +1,7 @@
-defmodule LuxWeb.CustomerOrderLineControllerTest do
-  use LuxWeb.ConnCase
+defmodule CacWeb.CustomerOrderLineControllerTest do
+  use CacWeb.ConnCase
 
-  alias Lux.Settings
+  alias Cac.Settings
 
   @create_attrs %{
     cost_price: 120.5,

@@ -1,10 +1,10 @@
 use Mix.Config
 
 # Configure your database
-config :lux, Lux.Repo,
+config :cac, Cac.Repo,
   username: "postgres",
   password: "postgres",
-  database: "lux_dev",
+  database: "cac_dev",
   hostname: "localhost",
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
@@ -15,7 +15,7 @@ config :lux, Lux.Repo,
 # The watchers configuration can be used to run external
 # watchers to your application. For example, we use it
 # with webpack to recompile .js and .css sources.
-config :lux, LuxWeb.Endpoint,
+config :cac, CacWeb.Endpoint,
   http: [port: 8501],
   debug_errors: true,
   code_reloader: true,
@@ -47,13 +47,13 @@ config :lux, LuxWeb.Endpoint,
 # different ports.
 
 # Watch static and templates for browser reloading.
-config :lux, LuxWeb.Endpoint,
+config :cac, CacWeb.Endpoint,
   live_reload: [
     patterns: [
       ~r"priv/static/.*(js|css|png|jpeg|jpg|gif|svg)$",
       ~r"priv/gettext/.*(po)$",
-      ~r"lib/lux_web/(live|views)/.*(ex)$",
-      ~r"lib/lux_web/templates/.*(eex)$"
+      ~r"lib/cac_web/(live|views)/.*(ex)$",
+      ~r"lib/cac_web/templates/.*(eex)$"
     ]
   ]
 
@@ -67,7 +67,7 @@ config :phoenix, :stacktrace_depth, 20
 # Initialize plugs at runtime for faster development compilation
 config :phoenix, :plug_init_mode, :runtime
 
-config :lux, :facebook,
+config :cac, :facebook,
   accounting_url: System.get_env("ACCOUNTING_URL"),
   base_url: System.get_env("FB_CALLBACK") |> String.split("/fb_callback") |> List.first(),
   callback_url: System.get_env("FB_CALLBACK")

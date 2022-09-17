@@ -1,7 +1,7 @@
-defmodule LuxWeb.StoredMediaControllerTest do
-  use LuxWeb.ConnCase
+defmodule CacWeb.StoredMediaControllerTest do
+  use CacWeb.ConnCase
 
-  alias Lux.Settings
+  alias Cac.Settings
 
   @create_attrs %{
     f_extension: "some f_extension",

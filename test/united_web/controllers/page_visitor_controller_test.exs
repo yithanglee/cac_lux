@@ -1,7 +1,7 @@
-defmodule LuxWeb.PageVisitorControllerTest do
-  use LuxWeb.ConnCase
+defmodule CacWeb.PageVisitorControllerTest do
+  use CacWeb.ConnCase
 
-  alias Lux.Settings
+  alias Cac.Settings
 
   @create_attrs %{
     email: "some email",

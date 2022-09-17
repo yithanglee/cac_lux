@@ -7,15 +7,15 @@
 # General application configuration
 use Mix.Config
 
-config :lux,
-  ecto_repos: [Lux.Repo]
+config :cac,
+  ecto_repos: [Cac.Repo]
 
 # Configures the endpoint
-config :lux, LuxWeb.Endpoint,
+config :cac, CacWeb.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "IdcF5HXBHZs3Vi9wXjCqqBYOJFTha3/nNYlRgtNMTtsWVZT69I/26G90KnUAqh05",
-  render_errors: [view: LuxWeb.ErrorView, accepts: ~w(html json), layout: false],
-  pubsub_server: Lux.PubSub,
+  render_errors: [view: CacWeb.ErrorView, accepts: ~w(html json), layout: false],
+  pubsub_server: Cac.PubSub,
   live_view: [signing_salt: "OuHuDKgj"]
 
 # Configures Elixir's Logger
@@ -31,10 +31,10 @@ config :phoenix, :json_library, Jason
 import_config "#{Mix.env()}.exs"
 
 config :blue_potion,
-  otp_app: "Lux",
-  repo: Lux.Repo,
+  otp_app: "Cac",
+  repo: Cac.Repo,
   contexts: ["Settings"],
-  project: %{name: "Lux", alias_name: "lux", vsn: "0.1.0"},
+  project: %{name: "Cac", alias_name: "cac", vsn: "0.1.0"},
   server: %{
     url: "139.162.60.209",
     db_url: "127.0.0.1",
@@ -43,7 +43,7 @@ config :blue_potion,
     domain_name: "localhost"
   }
 
-config :lux, :facebook,
+config :cac, :facebook,
   app_token: System.get_env("APP_TOKEN"),
   app_secret: System.get_env("APP_SECRET"),
   app_id: System.get_env("APP_ID")

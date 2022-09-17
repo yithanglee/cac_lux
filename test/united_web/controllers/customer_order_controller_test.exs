@@ -1,7 +1,7 @@
-defmodule LuxWeb.CustomerOrderControllerTest do
-  use LuxWeb.ConnCase
+defmodule CacWeb.CustomerOrderControllerTest do
+  use CacWeb.ConnCase
 
-  alias Lux.Settings
+  alias Cac.Settings
 
   @create_attrs %{
     date: ~D[2010-04-17],
