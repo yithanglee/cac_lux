@@ -13,6 +13,8 @@ defmodule Cac.Settings.Blog do
     field :subtitle, :string
     field :title, :string
 
+    field :javascript_binary, :binary
+    field :thumbnail_img, :string
     timestamps()
   end
 
@@ -20,6 +22,8 @@ defmodule Cac.Settings.Blog do
   def changeset(blog, attrs) do
     blog
     |> cast(attrs, [
+      :javascript_binary,
+      :thumbnail_img,
       :inserted_at,
       :updated_at,
       :title,

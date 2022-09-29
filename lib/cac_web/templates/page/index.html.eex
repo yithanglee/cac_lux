@@ -1,3 +1,7 @@
+<!-- treant -->
+<link rel="stylesheet" href="/css/treant.css" type="text/css" />
+<script src="/vendor/raphael/raphael.js"></script>
+<script src="/js/treant.js"></script>
 <style type="text/css">
 .dropdown-toggle::after {
   display: inline-block;
@@ -17,14 +21,14 @@
 </style>
 <!--Wrapper Start-->
 <div class="" id="subcontent" aria-label="mainbar">
-</div>
+</div>s
 <!--Wrapper End-->
 <script type="text/javascript">
 var route_names = [
   { html: "landing.html", title: "Home - 卫理华人年议会 Methodist Chinese Annual Conference", route: "/home" },
   { html: "blog_show.html", title: "Blog - 卫理华人年议会 Methodist Chinese Annual Conference", route: "/blogs/:id/:title" },
 
-   { html: "page_show.html", title: "Page - 卫理华人年议会 Methodist Chinese Annual Conference", route: "/pages/:id/:title", customNav: "blog_nav_sub.html" },
+  { html: "page_show.html", title: "Page - 卫理华人年议会 Methodist Chinese Annual Conference", route: "/pages/:id/:title", customNav: "blog_nav_sub.html" },
 
 ]
 
