@@ -41,10 +41,7 @@ defmodule CacWeb.Router do
     post("/register", LoginController, :create)
     post("/authenticate", LoginController, :authenticate)
     get("/logout", LoginController, :logout)
-    resources "/users", UserController
-    resources "/blogs", BlogController
-
-    resources "/stored_medias", StoredMediaController
+    get "/*path", PageController, :dashboard
   end
 
   scope "/api", CacWeb do

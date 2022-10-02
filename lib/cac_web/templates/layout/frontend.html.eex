@@ -47,6 +47,7 @@
   <link rel="stylesheet" href="/vendor/revealjs/reveal.css" />
   <link rel="stylesheet" href="/vendor/revealjs/theme/white.css" />
   <script type="text/javascript" src="/vendor/revealjs/reveal.js"></script>
+  <script type="text/javascript" src="/js/bootstrap.notify.js"></script>
   <!--reveal end -->
 
   <!--[if lt IE 9]>

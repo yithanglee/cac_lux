@@ -10,12 +10,26 @@
   </div>
 </div>
 <div class="list-group">
-  <a href="javascript:void(0);" onclick="setCurrentPage('dashboardInit();', 'Home')" class="list-group-item list-group-item-action">
+  <a href="javascript:void(0);" onclick="navigateTo('/admin/dashboard')" class="list-group-item list-group-item-action">
     <span class="badge bg-primary rounded-pill">
       <i class="fa fa-sm fa-tachometer-alt"></i>
     </span>
     <span class="ps-2"> Dashboard</span>
   </a>
+  <a href="javascript:void(0);" onclick="navigateTo('/admin/blogs')" class="list-group-item list-group-item-action">
+    <span class="badge bg-primary rounded-pill">
+      <i class="fa fa-sm fa-wrench"></i>
+    </span>
+    <span class="ps-2"> Blogs</span>
+  </a>
+
+  <a href="javascript:void(0);" onclick="navigateTo('/admin/departments')" class="list-group-item list-group-item-action">
+    <span class="badge bg-primary rounded-pill">
+      <i class="fa fa-sm fa-wrench"></i>
+    </span>
+    <span class="ps-2"> Departments</span>
+  </a>
+
   <a href="#" class="list-group-item list-group-item-action">
     <span class="badge bg-primary rounded-pill">
       <i class="fa fa-sm fa-wrench"></i>

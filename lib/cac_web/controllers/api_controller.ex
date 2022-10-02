@@ -83,6 +83,10 @@ defmodule CacWeb.ApiController do
   def webhook(conn, params) do
     final =
       case params["scope"] do
+        "departments" ->
+          Settings.list_departments()
+          |> Enum.map(&(&1 |> BluePotion.s_to_map()))
+
         "get_events" ->
           eventStart = DateTime.from_unix!(params["start"] |> String.to_integer(), :millisecond)
           eventEnd = DateTime.from_unix!(params["end"] |> String.to_integer(), :millisecond)
@@ -101,7 +105,7 @@ defmodule CacWeb.ApiController do
             Map.put(map, :ago, map.inserted_at |> Cac.check_time_difference())
           end
 
-          Settings.list_blogs(params["category"])
+          Settings.list_blogs(params)
           |> Enum.map(&(&1 |> BluePotion.s_to_map()))
           |> Enum.map(&(&1 |> put_ago.()))
 
@@ -305,7 +309,7 @@ defmodule CacWeb.ApiController do
       end
   end
 
-  def datatable(conn, params) do
+  def _datatable(conn, params) do
     model = Map.get(params, "model")
     preloads = Map.get(params, "preloads")
     additional_search_queries = Map.get(params, "additional_search_queries")
@@ -375,6 +379,122 @@ defmodule CacWeb.ApiController do
       BluePotion.post_process_datatable(
         params,
         Module.concat(["Cac", "Settings", model]),
+        additional_search_queries,
+        preloads
+      )
+
+    conn
+    |> put_resp_content_type("application/json")
+    |> send_resp(200, Jason.encode!(json))
+  end
+
+  def datatable(conn, params) do
+    model = Map.get(params, "model")
+    preloads = Map.get(params, "preloads")
+    additional_search_queries = Map.get(params, "additional_search_queries")
+    additional_join_statements = Map.get(params, "additional_join_statements") |> IO.inspect()
+    params = Map.delete(params, "model") |> Map.delete("preloads")
+
+    additional_join_statements =
+      if additional_join_statements == nil do
+        ""
+      else
+        joins = additional_join_statements |> Jason.decode!()
+
+        for join <- joins do
+          key = Map.keys(join) |> List.first()
+          value = join |> Map.get(key)
+          module = Module.concat(["United", "Settings", key])
+
+          "|> join(:left, [a], b in #{module}, on: a.#{value} == b.id)"
+        end
+        |> Enum.join("")
+      end
+      |> IO.inspect()
+
+    additional_search_queries =
+      if additional_search_queries == nil do
+        ""
+      else
+        # replace the data inside
+        # its a list [column1, column2]
+        columns = additional_search_queries |> String.split(",")
+
+        for {item, index} <- columns |> Enum.with_index() do
+          if item |> String.contains?("!=") do
+            [i, val] = item |> String.split("!=")
+
+            """
+            |> where([a], a.#{i} != "#{val}") 
+            """
+          else
+            ss = params["search"]["value"]
+
+            if index > 0 do
+              if item |> String.contains?("b.") do
+                item = item |> String.replace("b.", "")
+
+                # if possible, here need to add back the previous and statements
+
+                """
+                |> or_where([a, b], ilike(b.#{item}, ^"%#{ss}%"))
+                """
+              else
+                """
+                |> or_where([a], ilike(a.#{item}, ^"%#{ss}%"))
+                """
+              end
+            else
+              if item |> String.contains?("b.") do
+                item = item |> String.replace("b.", "")
+
+                """
+                |> where([a, b], ilike(b.#{item}, ^"%#{ss}%"))
+                """
+              else
+                """
+                |> where([a], ilike(a.#{item}, ^"%#{ss}%"))
+                """
+              end
+            end
+          end
+        end
+        |> Enum.join("")
+      end
+      |> IO.inspect()
+
+    preloads =
+      if preloads == nil do
+        preloads = []
+      else
+        convert_to_atom = fn data ->
+          if is_map(data) do
+            items = data |> Map.to_list()
+
+            for {x, y} <- items do
+              {String.to_atom(x), String.to_atom(y)}
+            end
+          else
+            String.to_atom(data)
+          end
+        end
+
+        preloads
+        |> Jason.decode!()
+        |> IO.inspect()
+        |> Enum.map(&(&1 |> convert_to_atom.()))
+
+        # |> Enum.map(&(&1 |> String.to_atom()))
+      end
+      |> List.flatten()
+
+    IO.inspect(preloads)
+
+    json =
+      BluePotion.post_process_datatable(
+        params,
+        Module.concat(["Cac", "Settings", model]),
+        additional_join_statements,
         additional_search_queries,
         preloads
       )

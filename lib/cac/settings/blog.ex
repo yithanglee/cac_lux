@@ -1,12 +1,22 @@
 defmodule Cac.Settings.Blog do
   use Ecto.Schema
   import Ecto.Changeset
+  import EctoEnum
+
+  defenum(
+    BlogType,
+    ~w(
+      blog page
+    )
+  )
 
   schema "blogs" do
     belongs_to :author, Cac.Settings.Author
     # field :author_id, :integer
     # field :category_id, :integer
     belongs_to :category, Cac.Settings.Category
+
+    field :blog_type, BlogType, default: "blog"
     field :content, :binary
     field :excerpt, :binary
     field :img_url, :string
@@ -22,6 +32,7 @@ defmodule Cac.Settings.Blog do
   def changeset(blog, attrs) do
     blog
     |> cast(attrs, [
+      :blog_type,
       :javascript_binary,
       :thumbnail_img,
       :inserted_at,

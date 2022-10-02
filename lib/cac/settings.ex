@@ -120,6 +120,7 @@ defmodule Cac.Settings do
   @doc """
   Returns an `%Ecto.Changeset{}` for tracking user changes.
 
+  <script>PDFObject.embed("/pdf/sample-3pp.pdf", "#example1");</script>
   ## Examples
 
       iex> change_user(user)
@@ -132,7 +133,23 @@ defmodule Cac.Settings do
 
   alias Cac.Settings.Blog
 
-  def list_blogs(category_name \\ nil, limit \\ 10) do
+  def list_blogs(opts \\ nil, limit \\ 10) do
+    category_name = opts |> Map.get("category", nil)
+
+    is_page = opts |> Map.get("is_page", false)
+
+    blog_type =
+      case is_page do
+        "false" ->
+          "blog"
+
+        "true" ->
+          "page"
+
+        _ ->
+          "blog"
+      end
+
     q =
       if category_name != nil do
         from b in Blog,
@@ -148,6 +165,7 @@ defmodule Cac.Settings do
       else
         from b in Blog, preload: [:category, :author], limit: 10, order_by: [desc: b.inserted_at]
       end
+      |> where([b], b.blog_type == ^"#{blog_type}")
 
     Repo.all(q)
   end
@@ -274,5 +292,49 @@ defmodule Cac.Settings do
   end
 
   def get_blog_between(startDt, endDt) do
+  end
+
+  alias Cac.Settings.Department
+
+  def list_departments() do
+    Repo.all(from d in Department, preload: [sub_departments: :blog])
+  end
+
+  def get_department!(id) do
+    Repo.get!(Department, id)
+  end
+
+  def create_department(params \\ %{}) do
+    Department.changeset(%Department{}, params) |> Repo.insert()
+  end
+
+  def update_department(model, params) do
+    Department.changeset(model, params) |> Repo.update()
+  end
+
+  def delete_department(%Department{} = model) do
+    Repo.delete(model)
+  end
+
+  alias Cac.Settings.SubDepartment
+
+  def list_sub_departments() do
+    Repo.all(SubDepartment)
+  end
+
+  def get_sub_department!(id) do
+    Repo.get!(SubDepartment, id)
+  end
+
+  def create_sub_department(params \\ %{}) do
+    SubDepartment.changeset(%SubDepartment{}, params) |> Repo.insert()
+  end
+
+  def update_sub_department(model, params) do
+    SubDepartment.changeset(model, params) |> Repo.update()
+  end
+
+  def delete_sub_department(%SubDepartment{} = model) do
+    Repo.delete(model)
   end
 end

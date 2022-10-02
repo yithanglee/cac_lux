@@ -9,32 +9,146 @@
   border: 0px;
 }
 </style>
-
-
-
-<div id="content">
+<div id="subcontent">
 </div>
+
 <script type="text/javascript">
-  
-function listBlogs() {
-  console.log("blog is working")
-  // call the page html
-  // loads its js there.
-  content = App.html('blogs.html')
-  $("#content").html(content)
+var profile_data =
+  App.api("get_corporate_account_profile", { token: window.userToken })
+
+var route_names = [{
+    html: "dashboard.html",
+    title: "Home - CAC",
+    route: "/admin/dashboard",
+    skipNav: true
+  },
+
+
+  {
+    html: "blogs.html",
+    title: "Blogs - CAC",
+    route: "/admin/blogs",
+    skipNav: true
+  },
+
+
+  {
+    html: "departments.html",
+    title: "Deparments - CAC",
+    route: "/admin/departments",
+    skipNav: true
+  },
+
+  {
+    html: "profile.html",
+    title: "Profile - CAC",
+    route: "/admin/profile",
+    skipNav: true
+  },
+
+
+
+]
+
+function navigateTo(route, additionalParamString) {
+  if (route == null) {
+    route = window.location.pathname
+  }
+  var current_pattern = route.split("/").filter((v, i) => {
+    return v != "";
+  })
+  console.log(current_pattern)
+
+  var match_1 = route_names.filter((rroute, i) => {
+    var z = rroute.route.split("/").filter((v, i) => {
+      return v != "";
+    })
+    console.log(z[z.length - 1])
+
+    if (z[z.length - 1].includes(":")) {
+      return z.length == current_pattern.length
+    } else {
+
+      return z.length == current_pattern.length && z[z.length - 1] == current_pattern[z.length - 1];
+    }
+  })
+
+  var match_2 =
+    match_1.filter((rroute, i) => {
+      console.log(rroute)
+      var z = rroute.route.split("/").filter((v, i) => {
+        return v != "";
+      })
+      return z[0] == current_pattern[0]
+    })
+
+  if (match_2.length > 0) {
+
+    var params = {}
+    match_2.forEach((rroute, i) => {
+      var z = rroute.route.split("/").forEach((v, ii) => {
+        if (v.includes(":")) {
+          params[v.replace(":", "")] = current_pattern[ii - 1]
+        }
+      })
+    })
+    console.log("params here")
+    console.log(params)
+    window.pageParams = params
+    var xParamString = ""
+    if (additionalParamString == null) {
+      xParamString = ""
+    } else {
+      xParamString = additionalParamString
+    }
+
+    if (window.back) {
+      window.back = false
+    } else {
+      var stateObj = { fn: `navigateTo('` + route + `', '` + xParamString + `')`, params: params };
+      console.log("route")
+      console.log(route)
+      window.stateObj = stateObj
+      window.matchTitle = match_2[0].title
+      window.matchRoute = route
+
+
+      if (Object.keys(params).includes("title")) {
+        $("title").html(params.title)
+        history.pushState(stateObj, params.title, route);
+      } else {
+        $("title").html(match_2[0].title)
+        history.pushState(stateObj, match_2[0].title, route);
+      }
+    }
+    var html = App.html(match_2[0].html)
+    var keys = Object.keys(match_2[0])
+    if (keys.includes("skipNav")) {
+      $("#subcontent").html(html)
+
+    } else {
+      var nav = App.html("nav.html")
+
+      if (keys.includes("customNav")) {
+        var nav = App.html(match_2[0].customNav)
+      }
+
+      $("#subcontent").html(nav)
+      $("#subcontent").append(html)
+    }
+    return match_2[0]
+  } else {
+    var html = App.html("landing.html")
+    // var nav = App.html("blog_nav.html")
+    // $("#subcontent").html(nav)
+    $("#subcontent").html(html)
+
+  }
 }
 
-
-function dashboardInit() {
-  console.log("init is working")
-  content = App.html('dashboard.html')
-  $("#content").html(content)
+function updatePageParams(obj) {
+  window.stateObj = obj
+  history.pushState(obj, obj.title, obj.route);
 }
-
-function editProfile() {
-  content = App.html('profile.html')
-  $("#content").html(content)
-}
-
-window.init = dashboardInit();
+navigateTo();
 </script>
