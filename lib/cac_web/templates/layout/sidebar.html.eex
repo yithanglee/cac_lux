@@ -6,7 +6,7 @@
   </div>
   <div class="d-flex flex-column justify-content-center text-center text-white">
     <span class="lead" id="cur_user">Famour User</span>
-    <a href="javascript:void(0);" onclick="editProfile()">Edit Profile</a>
+    <a href="javascript:void(0);" onclick="navigateTo('/admin/profile')">Edit Profile</a>
   </div>
 </div>
 <div class="list-group">

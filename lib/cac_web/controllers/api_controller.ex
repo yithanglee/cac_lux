@@ -83,6 +83,11 @@ defmodule CacWeb.ApiController do
   def webhook(conn, params) do
     final =
       case params["scope"] do
+        "blog_categories" ->
+          Settings.list_categories()
+          |> Cac.Repo.preload(:children)
+          |> Enum.map(&(&1 |> BluePotion.s_to_map()))
+
         "departments" ->
           Settings.list_departments()
           |> Enum.map(&(&1 |> BluePotion.s_to_map()))

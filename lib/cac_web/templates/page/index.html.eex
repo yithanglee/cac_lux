@@ -1,4 +1,3 @@
-
 <style type="text/css">
 .dropdown-toggle::after {
   display: inline-block;
@@ -19,15 +18,14 @@
 <!--Wrapper Start-->
 <div class="" id="subcontent" aria-label="mainbar">
 </div>
-
-
 <div class="row">
-  
 </div>
 <!--Wrapper End-->
 <script type="text/javascript">
+  var categories = App.api("blog_categories", {})
 var route_names = [
   { html: "landing.html", title: "Home - 卫理华人年议会 Methodist Chinese Annual Conference", route: "/home" },
+  { html: "blog_listing.html", title: "Blog - 卫理华人年议会 Methodist Chinese Annual Conference", route: "/blog_listing/:id/:title" },
   { html: "blog_show.html", title: "Blog - 卫理华人年议会 Methodist Chinese Annual Conference", route: "/blogs/:id/:title" },
 
   { html: "page_show.html", title: "Page - 卫理华人年议会 Methodist Chinese Annual Conference", route: "/pages/:id/:title", customNav: "blog_nav_sub.html" },
@@ -109,22 +107,22 @@ function navigateTo(route, additionalParamString) {
     var html = App.html(match_2[0].html)
     var keys = Object.keys(match_2[0])
     $("html")[0].scrollIntoView()
-    
 
-      if (keys.includes("skipNav")) {
-        $("#subcontent").html(html)
 
-      } else {
-        var nav = App.html("blog_nav.html")
+    if (keys.includes("skipNav")) {
+      $("#subcontent").html(html)
 
-        if (keys.includes("customNav")) {
-          var nav = App.html(match_2[0].customNav)
-        }
+    } else {
+      var nav = App.html("blog_nav.html")
 
-        $("#subcontent").html(nav)
-        $("#subcontent").append(html)
-       
+      if (keys.includes("customNav")) {
+        var nav = App.html(match_2[0].customNav)
       }
+
+      $("#subcontent").html(nav)
+      $("#subcontent").append(html)
+
+    }
     return match_2[0]
   } else {
     var html = App.html("landing.html")
@@ -142,4 +140,51 @@ function updatePageParams(obj) {
   history.pushState(obj, obj.title, obj.route);
 }
 navigateTo();
+
+
+function populate_menus() {
+  parents = categories.filter((cat, i) => {
+    return cat.parent.name == cat.name
+  })
+  console.log(parents)
+  parents.forEach((cat, i) => {
+    var pages = []
+
+    cat.children.forEach((child, ii) => {
+      var cname = child.name
+      if (child.alias != null) {
+        cname  = child.alias
+      }
+      var a = `<a class="dropdown-item navz" href="javascript:void(0);"
+      onclick='navigateTo("/blog_listing/`+child.id+`/`+child.name+`")'
+       >` + cname + `</a>`
+      pages.push(a)
+    })
+
+    var div = `<div class="dropdown-menu ">` + pages.join("") + `
+                </div>`
+    var name = cat.name
+
+    if (cat.alias != null) {
+      name = cat.alias
+    }
+
+    var li = `<li class="nav-item dropdown"><a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">` + name + ` <span class="caret"></span></a>` + div + `</li>`
+    if (cat.show_menu) {
+
+      $("#nav_items").append(li)
+    }
+
+
+  })
+
+}
+// $(document).ready(() => {
+//     $("a.navz").click((event) => {
+//     event.preventDefault();
+//     console.log(event)
+//     url = $(this).attr("href")
+//     navigateTo(url)
+//   })
+// })
 </script>

@@ -3,6 +3,7 @@ defmodule Cac.Settings.Department do
   import Ecto.Changeset
 
   schema "departments" do
+    belongs_to :blog, Cac.Settings.Blog
     field :desc, :string
     field :iconn, :string
     field :img_url, :string
@@ -16,7 +17,7 @@ defmodule Cac.Settings.Department do
   @doc false
   def changeset(department, attrs) do
     department
-    |> cast(attrs, [:name, :desc, :long_desc, :img_url, :iconn])
+    |> cast(attrs, [:blog_id, :name, :desc, :long_desc, :img_url, :iconn])
 
     # |> validate_required([:name, :desc, :long_desc, :img_url, :iconn])
   end

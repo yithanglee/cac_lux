@@ -211,7 +211,7 @@ defmodule Cac.Settings do
   alias Cac.Settings.Category
 
   def list_categories() do
-    Repo.all(Category)
+    Repo.all(from c in Category, preload: [:parent])
   end
 
   def get_category!(id) do

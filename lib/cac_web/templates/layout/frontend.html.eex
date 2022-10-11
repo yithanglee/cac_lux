@@ -37,8 +37,10 @@
   <link href="/assets/slick.css" rel="stylesheet">
   <link rel="icon" href="" type="image/png">
 
-  <!-- JS -->
+  <!-- JS 
   <script src="/assets/jquery.min.js"></script>
+  -->
+  <script type="text/javascript" src="/js/jquery.min.js"></script>
   <script src="/js/bootstrap.min.js"></script>
   <script src="/assets/owl.carousel.min.js"></script>
   <script src="/assets/jquery.prettyPhoto.js"></script>

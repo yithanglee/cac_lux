@@ -9,7 +9,7 @@ defmodule Cac do
   import Mogrify
   import Ecto.Query
 
-  def wordpress_get(next_link \\ "per_page=10&page=1") do
+  def wordpress_get(next_link \\ "per_page=10&page=2") do
     url = "http://www.methodist.org.my/wp-json/wp/v2/posts?#{next_link}"
 
     # Cac.Repo.delete_all(Cac.Settings.Blog)
