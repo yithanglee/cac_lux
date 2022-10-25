@@ -14,7 +14,15 @@ defmodule Cac.Settings.User do
     field :fb_user_id, :string
     field :fb_psid, :string
     field :image_url, :string
-    field :role_id, :integer
+
+    field :chinese_name, :string
+    # field :role_id, :integer
+    belongs_to :role, Cac.Settings.Role
+    has_many :user_groups, Cac.Settings.UserGroup
+    has_many :groups, through: [:user_groups, :group]
+
+    has_many :user_venues, Cac.Settings.UserVenue
+    has_many :venues, through: [:user_venues, :venue]
 
     timestamps()
   end
@@ -23,6 +31,7 @@ defmodule Cac.Settings.User do
   def changeset(user, attrs) do
     user
     |> cast(attrs, [
+      :chinese_name,
       :image_url,
       :role_id,
       :fb_user_id,

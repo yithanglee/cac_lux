@@ -30,6 +30,50 @@ defmodule Cac.Settings do
     map.id == id
   end
 
+  alias Cac.Settings.Group
+
+  def list_groups(_params) do
+    Repo.all(Group)
+  end
+
+  def get_group!(id) do
+    Repo.get!(Group, id)
+  end
+
+  def create_group(params \\ %{}) do
+    Group.changeset(%Group{}, params) |> Repo.insert()
+  end
+
+  def update_group(model, params) do
+    Group.changeset(model, params) |> Repo.update()
+  end
+
+  def delete_group(%Group{} = model) do
+    Repo.delete(model)
+  end
+
+  alias Cac.Settings.Role
+
+  def list_roles() do
+    Repo.all(Role)
+  end
+
+  def get_role!(id) do
+    Repo.get!(Role, id)
+  end
+
+  def create_role(params \\ %{}) do
+    Role.changeset(%Role{}, params) |> Repo.insert()
+  end
+
+  def update_role(model, params) do
+    Role.changeset(model, params) |> Repo.update()
+  end
+
+  def delete_role(%Role{} = model) do
+    Repo.delete(model)
+  end
+
   alias Cac.Settings.User
 
   @doc """
@@ -131,6 +175,28 @@ defmodule Cac.Settings do
     User.changeset(user, attrs)
   end
 
+  alias Cac.Settings.UserGroup
+
+  def list_user_groups() do
+    Repo.all(UserGroup)
+  end
+
+  def get_user_group!(id) do
+    Repo.get!(UserGroup, id)
+  end
+
+  def create_user_group(params \\ %{}) do
+    UserGroup.changeset(%UserGroup{}, params) |> Repo.insert()
+  end
+
+  def update_user_group(model, params) do
+    UserGroup.changeset(model, params) |> Repo.update()
+  end
+
+  def delete_user_group(%UserGroup{} = model) do
+    Repo.delete(model)
+  end
+
   alias Cac.Settings.Blog
 
   def list_blogs(opts \\ nil, limit \\ 10) do
@@ -171,7 +237,7 @@ defmodule Cac.Settings do
   end
 
   def get_blog!(id) do
-    Repo.get!(Blog, id) |> Repo.preload([:category, :author])
+    Repo.get!(Blog, id) |> Repo.preload([:attachment, :category, :author])
   end
 
   def create_blog(params \\ %{}) do
@@ -336,5 +402,207 @@ defmodule Cac.Settings do
 
   def delete_sub_department(%SubDepartment{} = model) do
     Repo.delete(model)
+  end
+
+  alias Cac.Settings.Organizer
+
+  def list_organizers() do
+    Repo.all(Organizer)
+  end
+
+  def get_organizer!(id) do
+    Repo.get!(Organizer, id)
+  end
+
+  def create_organizer(params \\ %{}) do
+    Organizer.changeset(%Organizer{}, params) |> Repo.insert()
+  end
+
+  def update_organizer(model, params) do
+    Organizer.changeset(model, params) |> Repo.update()
+  end
+
+  def delete_organizer(%Organizer{} = model) do
+    Repo.delete(model)
+  end
+
+  alias Cac.Settings.Speaker
+
+  def list_speakers() do
+    Repo.all(Speaker)
+  end
+
+  def get_speaker!(id) do
+    Repo.get!(Speaker, id)
+  end
+
+  def create_speaker(params \\ %{}) do
+    Speaker.changeset(%Speaker{}, params) |> Repo.insert()
+  end
+
+  def update_speaker(model, params) do
+    Speaker.changeset(model, params) |> Repo.update()
+  end
+
+  def delete_speaker(%Speaker{} = model) do
+    Repo.delete(model)
+  end
+
+  alias Cac.Settings.Event
+
+  def list_events() do
+    Repo.all(Event)
+  end
+
+  def get_event!(id) do
+    Repo.get!(Event, id)
+  end
+
+  def create_event(params \\ %{}) do
+    Event.changeset(%Event{}, params) |> Repo.insert()
+  end
+
+  def update_event(model, params) do
+    Event.changeset(model, params) |> Repo.update()
+  end
+
+  def delete_event(%Event{} = model) do
+    Repo.delete(model)
+  end
+
+  alias Cac.Settings.Venue
+
+  def list_venues() do
+    Repo.all(Venue)
+  end
+
+  def get_venue!(id) do
+    Repo.get!(Venue, id)
+  end
+
+  def create_venue(params \\ %{}) do
+    Venue.changeset(%Venue{}, params) |> Repo.insert()
+  end
+
+  def update_venue(model, params) do
+    Venue.changeset(model, params) |> Repo.update()
+  end
+
+  def delete_venue(%Venue{} = model) do
+    Repo.delete(model)
+  end
+
+  alias Cac.Settings.Region
+
+  def list_regions() do
+    Repo.all(Region)
+  end
+
+  def get_region!(id) do
+    Repo.get!(Region, id)
+  end
+
+  def create_region(params \\ %{}) do
+    Region.changeset(%Region{}, params) |> Repo.insert()
+  end
+
+  def update_region(model, params) do
+    Region.changeset(model, params) |> Repo.update()
+  end
+
+  def delete_region(%Region{} = model) do
+    Repo.delete(model)
+  end
+
+  def assign_event_speaker(parent, children_ids) do
+    Repo.delete_all(from es in Cac.Settings.EventSpeaker, where: es.event_id == ^parent)
+
+    for id <- children_ids do
+      Cac.Settings.EventSpeaker.changeset(%Cac.Settings.EventSpeaker{}, %{
+        event_id: parent,
+        speaker_id: id
+      })
+      |> Repo.insert()
+    end
+  end
+
+  def assign_group_user(parent, children_ids, params) do
+    Repo.delete_all(from ug in Cac.Settings.UserGroup, where: ug.group_id == ^parent)
+
+    for id <- children_ids do
+      Cac.Settings.UserGroup.changeset(%Cac.Settings.UserGroup{}, %{
+        group_id: parent,
+        user_id: id,
+        remarks: params |> Kernel.get_in(["remarks", id])
+      })
+      |> Repo.insert()
+    end
+  end
+
+  def assign_venue_user(parent, children_ids, params) do
+    Repo.delete_all(from ug in Cac.Settings.UserVenue, where: ug.venue_id == ^parent)
+
+    for id <- children_ids do
+      Cac.Settings.UserVenue.changeset(%Cac.Settings.UserVenue{}, %{
+        venue_id: parent,
+        user_id: id,
+        remarks: params |> Kernel.get_in(["remarks", id]),
+        date_start: params |> Kernel.get_in(["start_date", id])
+      })
+      |> Repo.insert()
+    end
+  end
+
+  def get_group_users(group_id) do
+    q =
+      from ug in UserGroup,
+        left_join: u in User,
+        on: u.id == ug.user_id,
+        where: ug.group_id == ^group_id,
+        preload: [user: [:venues]]
+
+    Repo.all(q) |> IO.inspect()
+  end
+
+  alias Cac.Settings.UserVenue
+
+  def list_user_venues() do
+    Repo.all(UserVenue)
+  end
+
+  def get_user_venue!(id) do
+    Repo.get!(UserVenue, id)
+  end
+
+  def create_user_venue(params \\ %{}) do
+    UserVenue.changeset(%UserVenue{}, params) |> Repo.insert()
+  end
+
+  def delete_user_venue(params \\ %{}) do
+    Repo.delete_all(
+      from uv in UserVenue,
+        where:
+          uv.user_id == ^params["user_id"] and uv.venue_id == ^params["venue_id"] and
+            uv.remarks == ^params["remarks"]
+    )
+  end
+
+  def update_user_venue(model, params) do
+    UserVenue.changeset(model, params) |> Repo.update()
+  end
+
+  def delete_user_venue(%UserVenue{} = model) do
+    Repo.delete(model)
+  end
+
+  def get_venue_users(venue_id) do
+    q =
+      from ug in UserVenue,
+        left_join: u in User,
+        on: u.id == ug.user_id,
+        where: ug.venue_id == ^venue_id,
+        preload: [:user]
+
+    Repo.all(q)
   end
 end

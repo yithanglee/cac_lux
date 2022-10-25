@@ -1,4 +1,13 @@
+<!-- pdf
+ -->
+<script src="/js/pdfobject.min.js"></script>
+<!-- treant -->
+<link rel="stylesheet" href="/css/treant.css" type="text/css" />
+<script src="/vendor/raphael/raphael.js"></script>
+<script src="/js/treant.js"></script>
 <style type="text/css">
+
+
 .dropdown-toggle::after {
   display: inline-block;
   margin-left: .255em;
@@ -14,25 +23,131 @@
   background-color: #40407e;
   border: 1px solid rgba(0, 0, 0, .125);
 }
+
+#pdf-render {
+  display: none;
+  height: 100vh;
+  position: fixed;
+  top: 1vh;
+  left: 0;
+  width: 100vw;
+  z-index: 10;
+
+}
 </style>
 <!--Wrapper Start-->
 <div class="" id="subcontent" aria-label="mainbar">
 </div>
 <div class="row">
 </div>
+<!--Footer Start-->
+<footer class="home3 main-footer wf100" style="background: var(--bs-indigo-dart);">
+  <div class="container">
+    <div class="row">
+      <!--Footer Widget Start-->
+      <div class="col-md-3 col-sm-6">
+        <div class="textwidget"> <img src="/images/cac_logo.png" alt="" style="background: white;padding: 10px;border-radius: 48px;" height="100px">
+          <address>
+            <ul>
+              <li> <i class="fas fa-university"></i> <strong>Address:</strong>
+                Tingkat 6, Wisma Methodist,<br>
+                Lorong Hang Jebat,<br>
+                50150 Kuala Lumpur, Malaysia<br>
+              </li>
+              <li> <i class="fas fa-envelope"></i> <strong>Email:</strong> cacmcm@methodist.org.my </li>
+              <li> <i class="fas fa-phone"></i> <strong>Call us:</strong>+603-2070 2501 <br>+603-2070 2797 </li>
+            </ul>
+          </address>
+        </div>
+      </div>
+      <!--Footer Widget End-->
+      <!--Footer Widget Start-->
+      <div class="col-md-3 col-sm-6">
+        <div class="footer-widget">
+          <h6>Govt. Departments</h6>
+          <ul>
+            <li><a href="#"><i class="fas fa-star"></i> Agriculture & Food</a></li>
+            <li><a href="#"><i class="fas fa-star"></i> Employment Affairs</a></li>
+            <li><a href="#"><i class="fas fa-star"></i> Housing & Planning</a></li>
+            <li><a href="#"><i class="fas fa-star"></i> Education and Skills</a></li>
+            <li><a href="#"><i class="fas fa-star"></i> Health & Security</a></li>
+            <li><a href="#"><i class="fas fa-star"></i> Laws & Justice</a></li>
+            <li><a href="#"><i class="fas fa-star"></i> Roads & Transport</a></li>
+            <li><a href="#"><i class="fas fa-star"></i> Climate & Environment</a></li>
+          </ul>
+        </div>
+      </div>
+      <!--Footer Widget End-->
+      <!--Footer Widget Start-->
+      <div class="col-md-3 col-sm-6">
+        <div class="footer-widget">
+          <h6>Explore City Highlights</h6>
+          <ul>
+            <li><a href="#"><i class="fas fa-star"></i> City Culture & Heritage</a></li>
+            <li><a href="#"><i class="fas fa-star"></i> City Events</a></li>
+            <li><a href="#"><i class="fas fa-star"></i> Jobs & Careers</a></li>
+            <li><a href="#"><i class="fas fa-star"></i> Donations</a></li>
+            <li><a href="#"><i class="fas fa-star"></i> Become a Volunteer</a></li>
+            <li><a href="#"><i class="fas fa-star"></i> Tourism Map</a></li>
+            <li><a href="#"><i class="fas fa-star"></i> Food & Restaurants</a></li>
+            <li><a href="#"><i class="fas fa-star"></i> Nightlife Entertainments</a></li>
+          </ul>
+        </div>
+      </div>
+      <!--Footer Widget End-->
+      <!--Footer Widget Start-->
+      <div class="col-md-3 col-sm-6">
+        <div class="twitter-widget">
+          <div class="tw-txt">
+            <h6>@john.flintoff</h6>
+            <a href="#" class="reply-tw"><i class="fas fa-reply"></i></a>
+            <p> The Hightst Glory of the Citizen’s revolution was this; it connected in one indissoluble bond the principles of civil govt. with humanity principles. </p>
+          </div>
+          <div class="tw-footer"> @Balad.gov <strong>3 November, 2019</strong> <i class="fab fa-twitter"></i> </div>
+        </div>
+      </div>
+      <!--Footer Widget End-->
+    </div>
+  </div>
+</footer>
+<!--Footer Start-->
+<!--Footer Start-->
+<footer class="home3 footer wf100">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-7 col-sm-7">
+        <p class="copyr"> <a href="#">2023 CAC Methodist</a></p>
+      </div>
+      <div class="col-md-5 col-sm-5">
+        <ul class="footer-social">
+          <li><a href="#" class="fb"><i class="fab fa-facebook-f"></i></a></li>
+          <li><a href="#" class="tw"><i class="fab fa-twitter"></i></a></li>
+          <li><a href="#" class="insta"><i class="fab fa-instagram"></i></a></li>
+          <li><a href="#" class="linken"><i class="fab fa-linkedin-in"></i></a></li>
+          <li><a href="#" class="yt"><i class="fab fa-youtube"></i></a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</footer>
+<!--Footer End-->
 <!--Wrapper End-->
 <script type="text/javascript">
-  var categories = App.api("blog_categories", {})
+var categories = App.api("blog_categories", {})
 var route_names = [
   { html: "landing.html", title: "Home - 卫理华人年议会 Methodist Chinese Annual Conference", route: "/home" },
-  { html: "blog_listing.html", title: "Blog - 卫理华人年议会 Methodist Chinese Annual Conference", route: "/blog_listing/:id/:title" },
-  { html: "blog_show.html", title: "Blog - 卫理华人年议会 Methodist Chinese Annual Conference", route: "/blogs/:id/:title" },
 
+  { html: "event_listing.html", title: "Events - 卫理华人年议会 Methodist Chinese Annual Conference", route: "/event_listing/:id/:title" },
+  { html: "event_show.html", title: "Event - 卫理华人年议会 Methodist Chinese Annual Conference", route: "/events/:id/:title" },
+
+  { html: "blog_listing.html", title: "Blogs - 卫理华人年议会 Methodist Chinese Annual Conference", route: "/blog_listing/:id/:title" },
+  { html: "blog_show.html", title: "Blog - 卫理华人年议会 Methodist Chinese Annual Conference", route: "/blogs/:id/:title" },
   { html: "page_show.html", title: "Page - 卫理华人年议会 Methodist Chinese Annual Conference", route: "/pages/:id/:title", customNav: "blog_nav_sub.html" },
 
 ]
 
 function navigateTo(route, additionalParamString) {
+  App.show()
 
   if (route == null) {
     route = window.location.pathname
@@ -122,6 +237,8 @@ function navigateTo(route, additionalParamString) {
       $("#subcontent").html(nav)
       $("#subcontent").append(html)
 
+      App.hide()
+
     }
     return match_2[0]
   } else {
@@ -129,6 +246,9 @@ function navigateTo(route, additionalParamString) {
     var nav = App.html("blog_nav.html")
     $("#subcontent").html(nav)
     $("#subcontent").append(html)
+
+
+    App.hide()
 
 
   }
@@ -153,10 +273,10 @@ function populate_menus() {
     cat.children.forEach((child, ii) => {
       var cname = child.name
       if (child.alias != null) {
-        cname  = child.alias
+        cname = child.alias
       }
       var a = `<a class="dropdown-item navz" href="javascript:void(0);"
-      onclick='navigateTo("/blog_listing/`+child.id+`/`+child.name+`")'
+      onclick='navigateTo("/blog_listing/` + child.id + `/` + child.name + `")'
        >` + cname + `</a>`
       pages.push(a)
     })
@@ -177,6 +297,16 @@ function populate_menus() {
 
 
   })
+
+  $("ul.quick-links").html(`
+
+    <li>
+      <a href="/pages/31/special_assignment" onclick="navigateTo('/pages/31/special_assignment')">通讯录 </a>
+    </li>
+    <li><a href="javascript:void(0);" onclick="navigateTo('/pages/10/special_assignment')">派使名单 </a>
+    </li>
+
+    `)
 
 }
 // $(document).ready(() => {

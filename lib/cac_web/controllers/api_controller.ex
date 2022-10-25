@@ -8,16 +8,59 @@ defmodule CacWeb.ApiController do
   def webhook_post(conn, params) do
     final =
       case params["scope"] do
+        "delete_user_group" ->
+          Settings.get_user_group!(params["id"]) |> Settings.delete_user_group()
+          %{status: "ok"}
+
+        "update_user_group" ->
+          Settings.get_user_group!(params["id"]) |> Settings.update_user_group(params)
+          %{status: "ok"}
+
+        "create_user_group" ->
+          Settings.create_user_group(params["user_groups"])
+          %{status: "ok"}
+
+        "delete_user_venue" ->
+          Settings.delete_user_venue(params)
+          %{status: "ok"}
+
+        "create_user_venue" ->
+          Settings.create_user_venue(params)
+          %{status: "ok"}
+
+        "update_venue_user" ->
+          [parent_key] = params |> Map.get("group") |> Map.keys()
+
+          children_ids = params |> Map.get("group") |> Map.get(parent_key) |> Map.keys()
+
+          Settings.assign_venue_user(parent_key, children_ids, params)
+          %{status: "ok"}
+
+        "update_group_user" ->
+          [parent_key] = params |> Map.get("group") |> Map.keys()
+
+          children_ids = params |> Map.get("group") |> Map.get(parent_key) |> Map.keys()
+
+          Settings.assign_group_user(parent_key, children_ids, params)
+          %{status: "ok"}
+
+        "update_event_speaker" ->
+          [parent_key] = params |> Map.get("event") |> Map.keys()
+
+          children_ids = params |> Map.get("event") |> Map.get(parent_key) |> Map.keys()
+
+          Settings.assign_event_speaker(parent_key, children_ids)
+          %{status: "ok"}
+
         "update_category_children" ->
           %{
             "category" => %{"41" => %{"27" => "", "28" => "", "29" => ""}},
             "scope" => "update_children"
           }
 
-          [parent_key] = params |> Map.get("category") |> Map.keys() |> IO.inspect()
+          [parent_key] = params |> Map.get("category") |> Map.keys()
 
-          children_ids =
-            params |> Map.get("category") |> Map.get(parent_key) |> Map.keys() |> IO.inspect()
+          children_ids = params |> Map.get("category") |> Map.get(parent_key) |> Map.keys()
 
           Settings.update_category_children(parent_key, children_ids)
           %{status: "ok"}
@@ -27,12 +70,10 @@ defmodule CacWeb.ApiController do
             open(params["image"].path)
             |> resize("1200x1200")
             |> save
-            |> IO.inspect()
 
           a =
             File.read!(image.path)
             |> Base.encode64()
-            |> IO.inspect()
 
           Elixir.Task.start_link(Cac, :inspect_image, [a])
           %{status: "ok"}
@@ -83,6 +124,47 @@ defmodule CacWeb.ApiController do
   def webhook(conn, params) do
     final =
       case params["scope"] do
+        "get_group" ->
+          Settings.get_group!(params["id"])
+          |> Cac.Repo.preload(users: [:venues])
+          |> BluePotion.sanitize_struct()
+
+        "get_region" ->
+          Settings.get_region!(params["id"])
+          |> Cac.Repo.preload(venues: [:users])
+          |> BluePotion.sanitize_struct()
+
+        "regions" ->
+          Settings.list_regions()
+          |> Cac.Repo.preload(venues: [:users])
+          |> Enum.map(&(&1 |> BluePotion.sanitize_struct()))
+
+        "groups" ->
+          Settings.list_groups(params)
+          |> Cac.Repo.preload(users: [:venues])
+          |> Enum.map(&(&1 |> BluePotion.sanitize_struct()))
+
+        "venue_users" ->
+          Settings.get_venue_users(params["id"])
+          |> Enum.map(&(&1 |> BluePotion.sanitize_struct()))
+
+        "group_users" ->
+          Settings.get_group_users(params["id"])
+          |> Enum.map(&(&1 |> BluePotion.sanitize_struct()))
+
+        "event_speakers" ->
+          []
+
+        "event" ->
+          Settings.get_event!(params["id"])
+          |> Cac.Repo.preload([:organizer, :speakers, venue: [:region]])
+          |> BluePotion.sanitize_struct()
+
+        "get_events" ->
+          Settings.list_events()
+          |> Cac.Repo.preload(venue: [:region])
+          |> Enum.map(&(&1 |> BluePotion.sanitize_struct()))
+
         "blog_categories" ->
           Settings.list_categories()
           |> Cac.Repo.preload(:children)
@@ -96,7 +178,7 @@ defmodule CacWeb.ApiController do
           eventStart = DateTime.from_unix!(params["start"] |> String.to_integer(), :millisecond)
           eventEnd = DateTime.from_unix!(params["end"] |> String.to_integer(), :millisecond)
 
-          {eventStart, eventEnd} |> IO.inspect()
+          {eventStart, eventEnd}
           %{status: "ok"}
 
         "children_category" ->
@@ -351,7 +433,6 @@ defmodule CacWeb.ApiController do
         end
         |> Enum.join("")
       end
-      |> IO.inspect()
 
     preloads =
       if preloads == nil do
@@ -371,7 +452,6 @@ defmodule CacWeb.ApiController do
 
         preloads
         |> Jason.decode!()
-        |> IO.inspect()
         |> Enum.map(&(&1 |> convert_to_atom.()))
 
         # |> Enum.map(&(&1 |> String.to_atom()))
@@ -397,7 +477,7 @@ defmodule CacWeb.ApiController do
     model = Map.get(params, "model")
     preloads = Map.get(params, "preloads")
     additional_search_queries = Map.get(params, "additional_search_queries")
-    additional_join_statements = Map.get(params, "additional_join_statements") |> IO.inspect()
+    additional_join_statements = Map.get(params, "additional_join_statements")
     params = Map.delete(params, "model") |> Map.delete("preloads")
 
     additional_join_statements =
@@ -415,7 +495,6 @@ defmodule CacWeb.ApiController do
         end
         |> Enum.join("")
       end
-      |> IO.inspect()
 
     additional_search_queries =
       if additional_search_queries == nil do
@@ -466,7 +545,6 @@ defmodule CacWeb.ApiController do
         end
         |> Enum.join("")
       end
-      |> IO.inspect()
 
     preloads =
       if preloads == nil do
@@ -486,7 +564,6 @@ defmodule CacWeb.ApiController do
 
         preloads
         |> Jason.decode!()
-        |> IO.inspect()
         |> Enum.map(&(&1 |> convert_to_atom.()))
 
         # |> Enum.map(&(&1 |> String.to_atom()))

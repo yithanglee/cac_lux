@@ -1,10 +1,19 @@
 defmodule Cac.Settings.StoredMedia do
   use Ecto.Schema
   import Ecto.Changeset
+  import EctoEnum
+
+  defenum(
+    MediaEnum,
+    ~w(
+     image
+     pdf
+    )
+  )
 
   schema "stored_medias" do
     field :f_extension, :string
-    field :f_type, :string
+    field :f_type, MediaEnum, default: :image
     field :name, :string
     field :s3_url, :binary
     field :size, :integer

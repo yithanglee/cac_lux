@@ -14,8 +14,10 @@ defmodule Cac.Settings.Blog do
     belongs_to :author, Cac.Settings.Author
     # field :author_id, :integer
     # field :category_id, :integer
-    belongs_to :category, Cac.Settings.Category
 
+    belongs_to :category, Cac.Settings.Category
+    # field :attachment_id, :integer
+    belongs_to :attachment, Cac.Settings.StoredMedia
     field :blog_type, BlogType, default: "blog"
     field :content, :binary
     field :excerpt, :binary
@@ -32,6 +34,7 @@ defmodule Cac.Settings.Blog do
   def changeset(blog, attrs) do
     blog
     |> cast(attrs, [
+      :attachment_id,
       :blog_type,
       :javascript_binary,
       :thumbnail_img,

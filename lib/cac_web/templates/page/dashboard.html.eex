@@ -25,6 +25,20 @@ var route_names = [{
 
 
   {
+    html: "users.html",
+    title: "Users - CAC",
+    route: "/admin/users",
+    skipNav: true
+  },
+
+  {
+    html: "events.html",
+    title: "Events - CAC",
+    route: "/admin/events",
+    skipNav: true
+  },
+
+  {
     html: "blogs.html",
     title: "Blogs - CAC",
     route: "/admin/blogs",

@@ -81,7 +81,7 @@
   <div class="overlay"></div>
 
       <div style="bottom: 2vh;right: 6vw; z-index: 100;"  class="toTop btn btn-success position-fixed btn-sm rounded">
-        <i class="fa fa-2x fa-caret-up"></i>
+        <i class="fa fa-2x fa-caret-up" id="arc"></i>
       </div>
   <script type="text/javascript">
   $(document).ready(function() {
@@ -95,6 +95,9 @@
   })
 
   $(".toTop").click(() => {
+    $("#pdf-render").removeClass("d-block")
+    $("#arc").removeClass("fa-times")
+    $("#arc").addClass("fa-caret-up")
     $("div[aria-label='mainbar']")[0].scrollIntoView();
   })
   </script>

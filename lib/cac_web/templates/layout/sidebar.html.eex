@@ -1,3 +1,26 @@
+<style type="text/css">
+.table tr {
+  animation: fadeIn 0.5s;
+}
+
+#v-pills-tab button {
+  animation: fadeIn 0.5s;
+}
+
+a.list-group-item {
+  animation: fadeIn 0.5s;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+</style>
 <div class="bg-dark" style="height: 200px;">
   <div class="d-flex justify-content-center align-items-center pt-4 ">
     <div id="profile_pic" style="width: 100px;height: 100px;" class="rounded-circle text-center bg-primary d-flex align-items-center justify-content-center text-white">
@@ -9,40 +32,58 @@
     <a href="javascript:void(0);" onclick="navigateTo('/admin/profile')">Edit Profile</a>
   </div>
 </div>
-<div class="list-group">
-  <a href="javascript:void(0);" onclick="navigateTo('/admin/dashboard')" class="list-group-item list-group-item-action">
+<div class="list-group home">
+  <a href="javascript:void(0);" onclick="navigateTo('/admin/dashboard')" class="d-none list-group-item list-group-item-action">
+    <div class="d-flex flex-column justify-content-center align-items-center">
     <span class="badge bg-primary rounded-pill">
-      <i class="fa fa-sm fa-tachometer-alt"></i>
+      <i class="fa fa-tachometer-alt"></i>
     </span>
-    <span class="ps-2"> Dashboard</span>
+    <span class=""> Dashboard</span></div>
   </a>
-  <a href="javascript:void(0);" onclick="navigateTo('/admin/blogs')" class="list-group-item list-group-item-action">
-    <span class="badge bg-primary rounded-pill">
-      <i class="fa fa-sm fa-wrench"></i>
-    </span>
-    <span class="ps-2"> Blogs</span>
+  <a href="javascript:void(0);" onclick="navigateTo('/admin/users')" class=" d-none list-group-item list-group-item-action">
+    <div class="d-flex flex-column justify-content-center align-items-center">
+      <span class="badge bg-primary rounded-pill">
+        <i class="fa fa-users"></i>
+      </span>
+      <span class=""> Users</span>
+    </div>
   </a>
-
-  <a href="javascript:void(0);" onclick="navigateTo('/admin/departments')" class="list-group-item list-group-item-action">
-    <span class="badge bg-primary rounded-pill">
-      <i class="fa fa-sm fa-wrench"></i>
-    </span>
-    <span class="ps-2"> Departments</span>
+  <a href="javascript:void(0);" onclick="navigateTo('/admin/blogs')" class="d-none list-group-item list-group-item-action">
+    <div class="d-flex flex-column justify-content-center align-items-center">
+      <span class="badge bg-primary rounded-pill">
+        <i class="fa fa-book-open"></i>
+      </span>
+      <span class=""> Blogs</span></div>
   </a>
-
-  <a href="#" class="list-group-item list-group-item-action">
-    <span class="badge bg-primary rounded-pill">
-      <i class="fa fa-sm fa-wrench"></i>
-    </span>
-    <span class="ps-2"> Settings</span>
+  <a href="javascript:void(0);" onclick="navigateTo('/admin/events')" class="d-none list-group-item list-group-item-action">
+    <div class="d-flex flex-column justify-content-center align-items-center">
+      <span class="badge bg-primary rounded-pill">
+        <i class="fa fa-heart"></i>
+      </span>
+      <span class=""> Events</span></div>
   </a>
-  <a href="/admin/logout" class="list-group-item list-group-item-action">
-    <span class="badge bg-primary rounded-pill">
-      <i class="fa fa-sm fa-sign-out-alt"></i>
-    </span>
-    <span class="ps-2"> Logout</span>
+  <a href="javascript:void(0);" onclick="navigateTo('/admin/departments')" class="d-none list-group-item list-group-item-action">
+    <div class="d-flex flex-column justify-content-center align-items-center">
+      <span class="badge bg-primary rounded-pill">
+        <i class="fa fa-sitemap"></i>
+      </span>
+      <span class=""> Departments</span></div>
   </a>
-  <a href="#" class="list-group-item list-group-item-action disabled">
+  <a href="#" class="d-none list-group-item list-group-item-action">
+    <div class="d-flex flex-column justify-content-center align-items-center">
+      <span class="badge bg-primary rounded-pill">
+        <i class="fa fa-wrench"></i>
+      </span>
+      <span class=""> Settings</span></div>
+  </a>
+  <a href="/admin/logout" class="d-none list-group-item list-group-item-action">
+    <div class="d-flex flex-column justify-content-center align-items-center">
+      <span class="badge bg-primary rounded-pill">
+        <i class="fa fa-sign-out-alt"></i>
+      </span>
+      <span class=""> Logout</span></div>
+  </a>
+  <a href="#" class="d-none list-group-item list-group-item-action disabled">
     Support
   </a>
 </div>
@@ -61,6 +102,14 @@ $(document).ready(() => {
     $("#user_initial").hide();
     $("#cur_user").html(pdata.full_name)
   }
+
+
+  $(".home a").each((i, v) => {
+    setTimeout(() => {
+      $(v).toggleClass("d-none")
+    }, (100 * i) + 1)
+  })
+
 
 })
 </script>
