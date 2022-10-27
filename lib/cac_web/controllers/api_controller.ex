@@ -124,6 +124,10 @@ defmodule CacWeb.ApiController do
   def webhook(conn, params) do
     final =
       case params["scope"] do
+        "get_directory" ->
+          Settings.get_directory()
+          |> Enum.map(&(&1 |> BluePotion.sanitize_struct()))
+
         "get_group" ->
           Settings.get_group!(params["id"])
           |> Cac.Repo.preload(users: [:venues])
@@ -193,7 +197,7 @@ defmodule CacWeb.ApiController do
           end
 
           Settings.list_blogs(params)
-          |> Enum.map(&(&1 |> BluePotion.s_to_map()))
+          |> Enum.map(&(&1 |> BluePotion.sanitize_struct()))
           |> Enum.map(&(&1 |> put_ago.()))
 
         "get_token" ->
@@ -400,7 +404,26 @@ defmodule CacWeb.ApiController do
     model = Map.get(params, "model")
     preloads = Map.get(params, "preloads")
     additional_search_queries = Map.get(params, "additional_search_queries")
+    additional_join_statements = Map.get(params, "additional_join_statements") |> IO.inspect()
+
     params = Map.delete(params, "model") |> Map.delete("preloads")
+
+    additional_join_statements =
+      if additional_join_statements == nil do
+        ""
+      else
+        joins = additional_join_statements |> Jason.decode!()
+
+        for join <- joins do
+          key = Map.keys(join) |> List.first()
+          value = join |> Map.get(key)
+          module = Module.concat(["Cac", "Settings", key])
+
+          "|> join(:left, [a], b in #{module}, on: a.#{value} == b.id)"
+        end
+        |> Enum.join("")
+      end
+      |> IO.inspect()
 
     additional_search_queries =
       if additional_search_queries == nil do
@@ -464,6 +487,7 @@ defmodule CacWeb.ApiController do
       BluePotion.post_process_datatable(
         params,
         Module.concat(["Cac", "Settings", model]),
+        additional_join_statements,
         additional_search_queries,
         preloads
       )
@@ -489,7 +513,7 @@ defmodule CacWeb.ApiController do
         for join <- joins do
           key = Map.keys(join) |> List.first()
           value = join |> Map.get(key)
-          module = Module.concat(["United", "Settings", key])
+          module = Module.concat(["Cac", "Settings", key])
 
           "|> join(:left, [a], b in #{module}, on: a.#{value} == b.id)"
         end

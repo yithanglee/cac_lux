@@ -1,25 +1,5 @@
 <style type="text/css">
-.table tr {
-  animation: fadeIn 0.5s;
-}
 
-#v-pills-tab button {
-  animation: fadeIn 0.5s;
-}
-
-a.list-group-item {
-  animation: fadeIn 0.5s;
-}
-
-@keyframes fadeIn {
-  0% {
-    opacity: 0;
-  }
-
-  100% {
-    opacity: 1;
-  }
-}
 </style>
 <div class="bg-dark" style="height: 200px;">
   <div class="d-flex justify-content-center align-items-center pt-4 ">

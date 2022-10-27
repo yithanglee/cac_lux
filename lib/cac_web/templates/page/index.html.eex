@@ -6,8 +6,6 @@
 <script src="/vendor/raphael/raphael.js"></script>
 <script src="/js/treant.js"></script>
 <style type="text/css">
-
-
 .dropdown-toggle::after {
   display: inline-block;
   margin-left: .255em;
@@ -131,6 +129,7 @@
   </div>
 </footer>
 <!--Footer End-->
+
 <!--Wrapper End-->
 <script type="text/javascript">
 var categories = App.api("blog_categories", {})
@@ -146,7 +145,9 @@ var route_names = [
 
 ]
 
-function navigateTo(route, additionalParamString) {
+function navigateTo(route, additionalParamString, dom) {
+  console.log(dom)
+  // event.preventDefault();
   App.show()
 
   if (route == null) {
@@ -298,23 +299,21 @@ function populate_menus() {
 
   })
 
-  $("ul.quick-links").html(`
+  var directories = App.api("get_directory", {})
 
-    <li>
-      <a href="/pages/31/special_assignment" onclick="navigateTo('/pages/31/special_assignment')">通讯录 </a>
-    </li>
-    <li><a href="javascript:void(0);" onclick="navigateTo('/pages/10/special_assignment')">派使名单 </a>
-    </li>
+  $("ul.quick-links").html('')
 
-    `)
+
+  directories.forEach((v, i) => {
+    var li = ` <li class="navi">
+      <a href="/pages/` + v.id + `/` + v.title + `" >` + v.title + `</a>
+    </li>`
+
+    $("ul.quick-links").append(li)
+
+  })
+
+
 
 }
-// $(document).ready(() => {
-//     $("a.navz").click((event) => {
-//     event.preventDefault();
-//     console.log(event)
-//     url = $(this).attr("href")
-//     navigateTo(url)
-//   })
-// })
 </script>

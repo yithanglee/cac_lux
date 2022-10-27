@@ -216,6 +216,8 @@ defmodule Cac.Settings do
           "blog"
       end
 
+    only_child = opts |> Map.get("only_child", false)
+
     q =
       if category_name != nil do
         from b in Blog,
@@ -232,6 +234,14 @@ defmodule Cac.Settings do
         from b in Blog, preload: [:category, :author], limit: 10, order_by: [desc: b.inserted_at]
       end
       |> where([b], b.blog_type == ^"#{blog_type}")
+
+    q =
+      if only_child do
+        q
+        |> where([b, c, cc], c.name != ^category_name)
+      else
+        q
+      end
 
     Repo.all(q)
   end
@@ -604,5 +614,9 @@ defmodule Cac.Settings do
         preload: [:user]
 
     Repo.all(q)
+  end
+
+  def get_directory() do
+    Repo.all(from b in Blog, where: b.title in ^["派使名单", "通讯录"])
   end
 end

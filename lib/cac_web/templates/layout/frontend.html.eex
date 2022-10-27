@@ -100,6 +100,10 @@
     $("#arc").addClass("fa-caret-up")
     $("div[aria-label='mainbar']")[0].scrollIntoView();
   })
+  $(document).on("click", ".navi a", function(event) {
+    event.preventDefault();
+    navigateTo($(this).attr("href"))
+  });
   </script>
   <div class="modal" id="mySubModal">
     <div class="modal-dialog modal-lg" role="document">
