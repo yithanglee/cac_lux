@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title></title>
-  <link rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/bootstrap_lumen.min.css") %>"/>
+  <link rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/bootstrap_simplex.min.css") %>"/>
   <link rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/all.css") %>"/>
   <script type="text/javascript" src="/js/bootstrap.min.js"></script>
   <script type="text/javascript" src="/js/jquery.min.js"></script>
@@ -44,13 +44,13 @@
   <%= render("header.html", conn: @conn)%>
   <div class="container-fluid px-0">
     
-    <div class="row g-0">
-      <div class="col-12 col-lg-1 d-none d-lg-block"  id="profile_card">
+    <div class="row g-0 ">
+      <div class="col-12 col-lg-1 d-none d-lg-block " >
         <%= render("sidebar.html", conn: @conn) %>
 
 
       </div>
-      <div class="col-12 col-lg-10 p-4">
+      <div class="col-12 col-lg p-4">
           
              
            <%= @inner_content %>

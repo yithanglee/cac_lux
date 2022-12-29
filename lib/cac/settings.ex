@@ -32,8 +32,34 @@ defmodule Cac.Settings do
 
   alias Cac.Settings.Group
 
-  def list_groups(_params) do
-    Repo.all(Group)
+  def list_groups_with_service_year(year_id) do
+    Repo.all(
+      from g in Group,
+        full_join: ug in Cac.Settings.UserGroup,
+        on: ug.group_id == g.id,
+        where: ug.service_year_id == ^year_id,
+        preload: [users: [:venues]],
+        select: g,
+        group_by: g.id
+    )
+
+    # |> IO.inspect()
+  end
+
+  def list_groups(params \\ %{}) do
+    sample = %{
+      "preloads" => %{"0" => %{"users" => %{"0" => %{"venues" => ""}}}},
+      "scope" => "groups"
+    }
+
+    preloads = Map.get(params, "preloads", %{}) |> Map.to_list()
+
+    p =
+      for {k, v} = preload <- preloads do
+        {String.to_atom(k), String.to_atom(v)}
+      end
+
+    Repo.all(from g in Group, preload: ^p)
   end
 
   def get_group!(id) do
@@ -195,6 +221,30 @@ defmodule Cac.Settings do
 
   def delete_user_group(%UserGroup{} = model) do
     Repo.delete(model)
+  end
+
+  def nilify_user_group(%UserGroup{} = model) do
+    UserGroup.changeset(model, %{user_id: nil})
+    |> Repo.update()
+  end
+
+  def clone_user_groups(year_id, new_year_id) do
+    ugs =
+      Repo.all(
+        from ug in UserGroup,
+          where: ug.service_year_id == ^year_id,
+          select: %{group_id: ug.group_id, user_id: nil, remarks: ug.remarks}
+      )
+
+    list =
+      for ug <- ugs do
+        %{
+          service_year_id: new_year_id
+        }
+        |> Map.merge(ug)
+      end
+
+    Repo.insert_all(UserGroup, list)
   end
 
   alias Cac.Settings.Blog
@@ -512,6 +562,24 @@ defmodule Cac.Settings do
     Repo.get!(Region, id)
   end
 
+  def get_region_with_year(id, year_id) do
+    region = Repo.get!(Region, id)
+
+    r =
+      Repo.all(
+        from v in Venue,
+          left_join: uv in Cac.Settings.UserVenue,
+          on: uv.venue_id == v.id,
+          where: v.region_id == ^id,
+          preload: [:users],
+          group_by: v.id,
+          select: v
+      )
+      |> Enum.map(&(&1 |> BluePotion.sanitize_struct()))
+
+    region |> BluePotion.sanitize_struct() |> Map.put(:venues, r)
+  end
+
   def create_region(params \\ %{}) do
     Region.changeset(%Region{}, params) |> Repo.insert()
   end
@@ -616,7 +684,50 @@ defmodule Cac.Settings do
     Repo.all(q)
   end
 
+  def clone_user_venues(year_id, new_year_id) do
+    ugs =
+      Repo.all(
+        from ug in UserVenue,
+          where: ug.service_year_id == ^year_id,
+          select: %{venue_id: ug.venue_id, user_id: nil, remarks: ug.remarks}
+      )
+
+    list =
+      for ug <- ugs do
+        %{
+          service_year_id: new_year_id,
+          inserted_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second),
+          updated_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+        }
+        |> Map.merge(ug)
+      end
+
+    Repo.insert_all(UserVenue, list)
+  end
+
   def get_directory() do
     Repo.all(from b in Blog, where: b.title in ^["派使名单", "通讯录"])
+  end
+
+  alias Cac.Settings.ServiceYear
+
+  def list_service_years() do
+    Repo.all(ServiceYear)
+  end
+
+  def get_service_year!(id) do
+    Repo.get!(ServiceYear, id)
+  end
+
+  def create_service_year(params \\ %{}) do
+    ServiceYear.changeset(%ServiceYear{}, params) |> Repo.insert()
+  end
+
+  def update_service_year(model, params) do
+    ServiceYear.changeset(model, params) |> Repo.update()
+  end
+
+  def delete_service_year(%ServiceYear{} = model) do
+    Repo.delete(model)
   end
 end

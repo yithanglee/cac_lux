@@ -104,6 +104,10 @@
     event.preventDefault();
     navigateTo($(this).attr("href"))
   });
+  $(document).on("click", "a.navi", function(event) {
+    event.preventDefault();
+    navigateTo($(this).attr("href"))
+  });
   </script>
   <div class="modal" id="mySubModal">
     <div class="modal-dialog modal-lg" role="document">

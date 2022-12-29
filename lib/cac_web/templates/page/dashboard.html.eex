@@ -1,3 +1,4 @@
+
 <style type="text/css">
 .list-group-item {
   position: relative;
@@ -165,4 +166,9 @@ function updatePageParams(obj) {
   history.pushState(obj, obj.title, obj.route);
 }
 navigateTo();
+
+$(document).on("click", "a.navi", function(event) {
+  event.preventDefault();
+  navigateTo($(this).attr("href"))
+});
 </script>

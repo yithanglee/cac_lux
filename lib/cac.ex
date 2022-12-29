@@ -8,6 +8,17 @@ defmodule Cac do
   """
   import Mogrify
   import Ecto.Query
+  alias Cac.{Repo, Settings}
+
+  def set_all_current_service_year() do
+    query = from(ug in Settings.UserGroup)
+
+    Repo.update_all(query, set: [service_year_id: 1])
+
+    query = from(ug in Settings.UserVenue)
+
+    Repo.update_all(query, set: [service_year_id: 1])
+  end
 
   def wordpress_get(next_link \\ "per_page=10&page=2") do
     url = "http://www.methodist.org.my/wp-json/wp/v2/posts?#{next_link}"

@@ -12,6 +12,10 @@ defmodule CacWeb.ApiController do
           Settings.get_user_group!(params["id"]) |> Settings.delete_user_group()
           %{status: "ok"}
 
+        "nilify_user_group" ->
+          Settings.get_user_group!(params["id"]) |> Settings.nilify_user_group()
+          %{status: "ok"}
+
         "update_user_group" ->
           Settings.get_user_group!(params["id"]) |> Settings.update_user_group(params)
           %{status: "ok"}
@@ -134,18 +138,21 @@ defmodule CacWeb.ApiController do
           |> BluePotion.sanitize_struct()
 
         "get_region" ->
-          Settings.get_region!(params["id"])
-          |> Cac.Repo.preload(venues: [:users])
-          |> BluePotion.sanitize_struct()
+          Settings.get_region_with_year(params["id"], params["year_id"])
 
         "regions" ->
           Settings.list_regions()
           |> Cac.Repo.preload(venues: [:users])
           |> Enum.map(&(&1 |> BluePotion.sanitize_struct()))
 
-        "groups" ->
-          Settings.list_groups(params)
+        "list_groups" ->
+          Settings.list_groups()
           |> Cac.Repo.preload(users: [:venues])
+          |> Enum.map(&(&1 |> BluePotion.sanitize_struct()))
+
+        "groups" ->
+          Settings.list_groups_with_service_year(params["service_year_id"])
+          # |> Cac.Repo.preload(users: [:venues])
           |> Enum.map(&(&1 |> BluePotion.sanitize_struct()))
 
         "venue_users" ->
@@ -171,19 +178,19 @@ defmodule CacWeb.ApiController do
 
         "blog_categories" ->
           Settings.list_categories()
-          |> Cac.Repo.preload(:children)
-          |> Enum.map(&(&1 |> BluePotion.s_to_map()))
+          |> Cac.Repo.preload([:children])
+          |> Enum.map(&(&1 |> BluePotion.sanitize_struct()))
 
         "departments" ->
           Settings.list_departments()
           |> Enum.map(&(&1 |> BluePotion.s_to_map()))
 
-        "get_events" ->
-          eventStart = DateTime.from_unix!(params["start"] |> String.to_integer(), :millisecond)
-          eventEnd = DateTime.from_unix!(params["end"] |> String.to_integer(), :millisecond)
+        # "get_events" ->
+        #   eventStart = DateTime.from_unix!(params["start"] |> String.to_integer(), :millisecond)
+        #   eventEnd = DateTime.from_unix!(params["end"] |> String.to_integer(), :millisecond)
 
-          {eventStart, eventEnd}
-          %{status: "ok"}
+        #   {eventStart, eventEnd}
+        #   %{status: "ok"}
 
         "children_category" ->
           Settings.get_category_children(params["id"])
@@ -501,31 +508,50 @@ defmodule CacWeb.ApiController do
     model = Map.get(params, "model")
     preloads = Map.get(params, "preloads")
     additional_search_queries = Map.get(params, "additional_search_queries")
-    additional_join_statements = Map.get(params, "additional_join_statements")
+    additional_join_statements = Map.get(params, "additional_join_statements") |> IO.inspect()
     params = Map.delete(params, "model") |> Map.delete("preloads")
 
     additional_join_statements =
       if additional_join_statements == nil do
         ""
       else
-        joins = additional_join_statements |> Jason.decode!()
+        joins = additional_join_statements |> Poison.decode!()
 
         for join <- joins do
           key = Map.keys(join) |> List.first()
           value = join |> Map.get(key)
-          module = Module.concat(["Cac", "Settings", key])
+          # module = Module.concat(["Church", "Settings", key])
 
-          "|> join(:left, [a], b in #{module}, on: a.#{value} == b.id)"
+          config = Application.get_env(:blue_potion, :contexts)
+
+          mods =
+            if config == nil do
+              ["Settings", "Secretary"]
+            else
+              config
+            end
+
+          struct =
+            for mod <- mods do
+              Module.concat([Application.get_env(:blue_potion, :otp_app), mod, key])
+            end
+            |> IO.inspect()
+            |> Enum.filter(&(elem(Code.ensure_compiled(&1), 0) == :module))
+            |> IO.inspect()
+            |> List.first()
+
+          "|> join(:left, [a], b in assoc(a, :#{key}))"
         end
         |> Enum.join("")
       end
+      |> IO.inspect()
+
+    IO.puts("search query")
 
     additional_search_queries =
       if additional_search_queries == nil do
         ""
       else
-        # replace the data inside
-        # its a list [column1, column2]
         columns = additional_search_queries |> String.split(",")
 
         for {item, index} <- columns |> Enum.with_index() do
@@ -537,38 +563,88 @@ defmodule CacWeb.ApiController do
             """
           else
             ss = params["search"]["value"]
+            items = String.split(item, "|")
 
-            if index > 0 do
-              if item |> String.contains?("b.") do
-                item = item |> String.replace("b.", "")
+            subquery =
+              for i <- items do
+                if i |> String.contains?(".") do
+                  [prefix, i] = i |> String.split(".")
+                  # if possible, here need to add back the previous and statements
+                  [i, value] =
+                    if i |> String.contains?("=") do
+                      [i, value] = String.split(i, "=")
+                    else
+                      [i, ""]
+                    end
 
-                # if possible, here need to add back the previous and statements
+                  ss =
+                    if value != "" do
+                      value
+                    else
+                      ss
+                    end
 
-                """
-                |> or_where([a, b], ilike(b.#{item}, ^"%#{ss}%"))
-                """
-              else
-                """
-                |> or_where([a], ilike(a.#{item}, ^"%#{ss}%"))
-                """
+                  unless i |> String.contains?("_id") do
+                    """
+                    ilike(#{prefix}.#{i}, ^"%#{ss}%")
+                    """
+                  else
+                    case Integer.parse(ss) do
+                      {ss, _val} ->
+                        """
+                        #{prefix}.#{i} == ^#{ss}
+                        """
+
+                      _ ->
+                        """
+                        ilike(a.#{i}, ^"%#{ss}%")
+                        """
+                    end
+                  end
+                else
+                  [i, value] =
+                    if i |> String.contains?("=") do
+                      [i, value] = String.split(i, "=")
+                    else
+                      [i, ""]
+                    end
+
+                  ss =
+                    if value != "" do
+                      value
+                    else
+                      ss
+                    end
+
+                  unless i |> String.contains?("_id") do
+                    """
+                    ilike(a.#{i}, ^"%#{ss}%")
+                    """
+                  else
+                    case Integer.parse(ss) do
+                      {ss, _val} ->
+                        """
+                        a.#{i} == ^#{ss}
+                        """
+
+                      _ ->
+                        """
+                        ilike(a.#{i}, ^"%#{ss}%")
+                        """
+                    end
+                  end
+                end
               end
-            else
-              if item |> String.contains?("b.") do
-                item = item |> String.replace("b.", "")
+              |> Enum.join(" and ")
 
-                """
-                |> where([a, b], ilike(b.#{item}, ^"%#{ss}%"))
-                """
-              else
-                """
-                |> where([a], ilike(a.#{item}, ^"%#{ss}%"))
-                """
-              end
-            end
+            """
+            |> or_where([a,b,c], #{subquery})
+            """
           end
         end
         |> Enum.join("")
       end
+      |> IO.inspect()
 
     preloads =
       if preloads == nil do
@@ -587,19 +663,38 @@ defmodule CacWeb.ApiController do
         end
 
         preloads
-        |> Jason.decode!()
+        |> Poison.decode!()
+        |> IO.inspect()
         |> Enum.map(&(&1 |> convert_to_atom.()))
 
         # |> Enum.map(&(&1 |> String.to_atom()))
       end
       |> List.flatten()
 
-    IO.inspect(preloads)
+    config = Application.get_env(:blue_potion, :contexts)
+
+    mods =
+      if config == nil do
+        ["Settings", "Secretary"]
+      else
+        config
+      end
+
+    struct =
+      for mod <- mods do
+        Module.concat([Application.get_env(:blue_potion, :otp_app), mod, model])
+      end
+      |> IO.inspect()
+      |> Enum.filter(&(elem(Code.ensure_compiled(&1), 0) == :module))
+      |> IO.inspect()
+      |> List.first()
+
+    IO.inspect(struct)
 
     json =
       BluePotion.post_process_datatable(
         params,
-        Module.concat(["Cac", "Settings", model]),
+        struct,
         additional_join_statements,
         additional_search_queries,
         preloads

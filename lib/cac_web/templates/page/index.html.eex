@@ -62,16 +62,8 @@
       <!--Footer Widget Start-->
       <div class="col-md-3 col-sm-6">
         <div class="footer-widget">
-          <h6>Govt. Departments</h6>
-          <ul>
-            <li><a href="#"><i class="fas fa-star"></i> Agriculture & Food</a></li>
-            <li><a href="#"><i class="fas fa-star"></i> Employment Affairs</a></li>
-            <li><a href="#"><i class="fas fa-star"></i> Housing & Planning</a></li>
-            <li><a href="#"><i class="fas fa-star"></i> Education and Skills</a></li>
-            <li><a href="#"><i class="fas fa-star"></i> Health & Security</a></li>
-            <li><a href="#"><i class="fas fa-star"></i> Laws & Justice</a></li>
-            <li><a href="#"><i class="fas fa-star"></i> Roads & Transport</a></li>
-            <li><a href="#"><i class="fas fa-star"></i> Climate & Environment</a></li>
+          <h6>CAC Directory</h6>
+          <ul aria-label="cac-directory">
           </ul>
         </div>
       </div>
@@ -79,16 +71,8 @@
       <!--Footer Widget Start-->
       <div class="col-md-3 col-sm-6">
         <div class="footer-widget">
-          <h6>Explore City Highlights</h6>
-          <ul>
-            <li><a href="#"><i class="fas fa-star"></i> City Culture & Heritage</a></li>
-            <li><a href="#"><i class="fas fa-star"></i> City Events</a></li>
-            <li><a href="#"><i class="fas fa-star"></i> Jobs & Careers</a></li>
-            <li><a href="#"><i class="fas fa-star"></i> Donations</a></li>
-            <li><a href="#"><i class="fas fa-star"></i> Become a Volunteer</a></li>
-            <li><a href="#"><i class="fas fa-star"></i> Tourism Map</a></li>
-            <li><a href="#"><i class="fas fa-star"></i> Food & Restaurants</a></li>
-            <li><a href="#"><i class="fas fa-star"></i> Nightlife Entertainments</a></li>
+          <h6>Website Navigation</h6>
+          <ul aria-label="web-nav">
           </ul>
         </div>
       </div>
@@ -97,11 +81,11 @@
       <div class="col-md-3 col-sm-6">
         <div class="twitter-widget">
           <div class="tw-txt">
-            <h6>@john.flintoff</h6>
-            <a href="#" class="reply-tw"><i class="fas fa-reply"></i></a>
-            <p> The Hightst Glory of the Citizen’s revolution was this; it connected in one indissoluble bond the principles of civil govt. with humanity principles. </p>
+            <h6>订购南钟报双月刊</h6>
+            <a href="#" class="reply-tw"><i class="fas fa-user-check"></i></a>
+            <p>资讯与出版部借以各类型的媒介，如：文字刊物、视频图像、社交传媒等，传递马来西亚华人年议会各部门事工的消息动态，以及向非信徒和慕道友宣扬耶稣基督的福音。此外，本部亦为年会各部门事工提供电子科技的协助。本部通过《南钟》双月刊，按时供应灵粮，提醒各个信徒，追求灵命长进。 </p>
           </div>
-          <div class="tw-footer"> @Balad.gov <strong>3 November, 2019</strong> <i class="fab fa-twitter"></i> </div>
+          <div class="tw-footer"> <a class="text-white" target="_blank" href="https://web.facebook.com/cac.southernbell">@cac.southernbell</a> <strong id="tedate"></strong> <i class="fab fa-facebook-f"></i> </div>
         </div>
       </div>
       <!--Footer Widget End-->
@@ -129,7 +113,6 @@
   </div>
 </footer>
 <!--Footer End-->
-
 <!--Wrapper End-->
 <script type="text/javascript">
 var categories = App.api("blog_categories", {})
@@ -248,9 +231,7 @@ function navigateTo(route, additionalParamString, dom) {
     $("#subcontent").html(nav)
     $("#subcontent").append(html)
 
-
     App.hide()
-
 
   }
 
@@ -268,6 +249,8 @@ function populate_menus() {
     return cat.parent.name == cat.name
   })
   console.log(parents)
+
+  $("ul[aria-label='web-nav']").html('')
   parents.forEach((cat, i) => {
     var pages = []
 
@@ -276,8 +259,8 @@ function populate_menus() {
       if (child.alias != null) {
         cname = child.alias
       }
-      var a = `<a class="dropdown-item navz" href="javascript:void(0);"
-      onclick='navigateTo("/blog_listing/` + child.id + `/` + child.name + `")'
+      var a = `<a class="dropdown-item navi" href="/blog_listing/` + child.id + `/` + child.name + `"
+      
        >` + cname + `</a>`
       pages.push(a)
     })
@@ -290,19 +273,29 @@ function populate_menus() {
       name = cat.alias
     }
 
-    var li = `<li class="nav-item dropdown"><a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">` + name + ` <span class="caret"></span></a>` + div + `</li>`
+    var li = `
+        <li class="nav-item dropdown">
+          <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">` + name + ` <span class="caret"></span></a>
+          ` + div + `
+        </li>`
     if (cat.show_menu) {
 
       $("#nav_items").append(li)
+      $("#nav_items2").append(li)
+      var li2 = `<li><a class="navi" href="/blog_listing/` + cat.id + `/` + cat.name + `"><i class="fas fa-star"></i>` + name + `</a></li>`
+      $("ul[aria-label='web-nav']").append(li2)
     }
 
 
   })
+  populate_directory()
+  populate_footer()
+}
 
+function populate_directory() {
   var directories = App.api("get_directory", {})
 
   $("ul.quick-links").html('')
-
 
   directories.forEach((v, i) => {
     var li = ` <li class="navi">
@@ -310,10 +303,31 @@ function populate_menus() {
     </li>`
 
     $("ul.quick-links").append(li)
+    var li = ` <li class="navi nav-item">
+      <a href="/pages/` + v.id + `/` + v.title + `" >` + v.title + `</a>
+    </li>`
+
+    $("#nav_items").append(li)
 
   })
+}
 
+function populate_footer() {
 
+  var groups = App.api("list_groups", {})
 
+  $("ul[aria-label='cac-directory']").html('')
+  groups.forEach((g, i) => {
+
+    var li = `<li><a href="javascript:void(0);"><i class="fas fa-star"></i>` + g.name + `</a></li>`
+
+    $("ul[aria-label='cac-directory']").append(li)
+  })
+
+  var dt = new Date()
+
+  var edate = dt.toGMTString().split(",")[1].split(" ").splice(0, 4).join(" ")
+
+  $("#tedate").html(edate)
 }
 </script>
