@@ -43,6 +43,8 @@ config :blue_potion,
     domain_name: "localhost"
   }
 
+# config :tesla, adapter: Tesla.Adapter.Gun
+
 config :cac, :facebook,
   app_token: System.get_env("APP_TOKEN"),
   app_secret: System.get_env("APP_SECRET"),

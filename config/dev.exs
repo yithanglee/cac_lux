@@ -67,6 +67,9 @@ config :phoenix, :stacktrace_depth, 20
 # Initialize plugs at runtime for faster development compilation
 config :phoenix, :plug_init_mode, :runtime
 
+config :cac, :telegram, token: System.get_env("TME_DEV_TOKEN")
+config :ex_gram, token: System.get_env("TME_DEV_TOKEN")
+
 config :cac, :facebook,
   accounting_url: System.get_env("ACCOUNTING_URL"),
   base_url: System.get_env("FB_CALLBACK") |> String.split("/fb_callback") |> List.first(),

@@ -730,4 +730,100 @@ defmodule Cac.Settings do
   def delete_service_year(%ServiceYear{} = model) do
     Repo.delete(model)
   end
+
+  alias Cac.Settings.Member
+
+  def decode_member_token2(token) do
+    case Phoenix.Token.verify(CacWeb.Endpoint, "signature", token) do
+      {:ok, map} ->
+        map
+
+      {:error, _reason} ->
+        nil
+    end
+  end
+
+  def member_token(id) do
+    Phoenix.Token.sign(
+      CacWeb.Endpoint,
+      "member_signature",
+      %{id: id}
+    )
+  end
+
+  def list_members() do
+    Repo.all(Member)
+  end
+
+  def get_member!(id) do
+    Repo.get!(Member, id)
+  end
+
+  def create_member(params \\ %{}) do
+    Member.changeset(%Member{}, params) |> Repo.insert()
+  end
+
+  def update_member(model, params) do
+    Member.changeset(model, params) |> Repo.update()
+  end
+
+  def delete_member(%Member{} = model) do
+    Repo.delete(model)
+  end
+
+  def lazy_get_member(email, name, uid) do
+    member = Repo.get_by(Member, email: email, uid: uid)
+
+    assign_month_year = fn member ->
+      Map.put(member, :year, member.inserted_at.year)
+      |> Map.put(:month, member.inserted_at.month)
+    end
+
+    # default_group =
+    #   United.Settings.list_groups() |> Enum.filter(&(&1.name == "Default")) |> List.first()
+
+    if member == nil do
+      # Cac.Settings.list_members()
+      tcount =
+        Repo.all(from m in Member, select: %{id: m.id, inserted_at: m.inserted_at})
+        |> Enum.map(&(&1 |> assign_month_year.()))
+        |> Enum.filter(&(&1.year == Date.utc_today().year))
+        |> Enum.filter(&(&1.month == Date.utc_today().month))
+        |> Enum.count()
+
+      month = Date.utc_today().month
+
+      m_idx =
+        (100 + month)
+        |> Integer.to_string()
+        |> String.split("")
+        |> Enum.reject(&(&1 == ""))
+        |> Enum.reverse()
+        |> Enum.take(2)
+        |> Enum.reverse()
+        |> Enum.join("")
+
+      idx =
+        (10000 + tcount + 1)
+        |> Integer.to_string()
+        |> String.split("")
+        |> Enum.reject(&(&1 == ""))
+        |> Enum.reverse()
+        |> Enum.take(3)
+        |> Enum.reverse()
+        |> Enum.join("")
+
+      create_member(%{
+        phone: "n/a",
+        ic: "n/a",
+        code: "#{Date.utc_today().year}#{m_idx}-#{idx}",
+        name: name,
+        email: email,
+        uid: uid,
+        crypted_password: uid
+      })
+    else
+      update_member(member, %{name: name})
+    end
+  end
 end

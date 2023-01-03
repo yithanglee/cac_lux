@@ -20,7 +20,8 @@
   <script type="text/javascript" src="/js/app.js"></script>
   <link rel="stylesheet" href="/vendor/chartist/chartist.css" />
   <script type="text/javascript" src="/vendor/chartist/chartist.min.js"></script>
-  <script type="text/javascript" src="/js/ckeditor.js"></script>
+  <link rel="stylesheet" href="/vendor/richtext/richtext.min.css">
+  <script src="/vendor/richtext/richtext.min.js"></script>
   <link rel="stylesheet" type="text/css" href="/vendor/slick/slick.css" />
   <link rel="stylesheet" type="text/css" href="/vendor/slick/slick-theme.css" />
   <script type="text/javascript" src="/vendor/slick/slick.js"></script>

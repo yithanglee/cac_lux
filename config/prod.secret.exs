@@ -44,3 +44,6 @@ config :cac, :facebook,
   accounting_url: System.get_env("ACCOUNTING_URL_PROD"),
   base_url: System.get_env("FB_CALLBACK_PROD") |> String.split("/fb_callback") |> List.first(),
   callback_url: System.get_env("FB_CALLBACK_PROD")
+
+config :cac, :telegram, token: System.get_env("TME_TOKEN")
+config :ex_gram, token: System.get_env("TME_TOKEN")

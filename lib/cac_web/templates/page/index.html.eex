@@ -1,3 +1,4 @@
+<script src="/js/cac.js"></script>
 <!-- pdf
  -->
 <script src="/js/pdfobject.min.js"></script>
@@ -39,7 +40,7 @@
 <div class="row">
 </div>
 <!--Footer Start-->
-<footer class="home3 main-footer wf100" style="background: var(--bs-indigo-dart);">
+<footer class="main-footer my-4 py-4" style="">
   <div class="container">
     <div class="row">
       <!--Footer Widget Start-->
@@ -60,7 +61,7 @@
       </div>
       <!--Footer Widget End-->
       <!--Footer Widget Start-->
-      <div class="col-md-3 col-sm-6">
+      <div class="col-md-3 col-sm-6" style="backdrop-filter: blur(2px);">
         <div class="footer-widget">
           <h6>CAC Directory</h6>
           <ul aria-label="cac-directory">
@@ -69,7 +70,7 @@
       </div>
       <!--Footer Widget End-->
       <!--Footer Widget Start-->
-      <div class="col-md-3 col-sm-6">
+      <div class="col-md-3 col-sm-6" style="backdrop-filter: blur(2px);">
         <div class="footer-widget">
           <h6>Website Navigation</h6>
           <ul aria-label="web-nav">
@@ -79,13 +80,13 @@
       <!--Footer Widget End-->
       <!--Footer Widget Start-->
       <div class="col-md-3 col-sm-6">
-        <div class="twitter-widget">
-          <div class="tw-txt">
+        <div class="shadow-lg rounded mb-4 p-4">
+          <div class="">
             <h6>订购南钟报双月刊</h6>
             <a href="#" class="reply-tw"><i class="fas fa-user-check"></i></a>
             <p>资讯与出版部借以各类型的媒介，如：文字刊物、视频图像、社交传媒等，传递马来西亚华人年议会各部门事工的消息动态，以及向非信徒和慕道友宣扬耶稣基督的福音。此外，本部亦为年会各部门事工提供电子科技的协助。本部通过《南钟》双月刊，按时供应灵粮，提醒各个信徒，追求灵命长进。 </p>
           </div>
-          <div class="tw-footer"> <a class="text-white" target="_blank" href="https://web.facebook.com/cac.southernbell">@cac.southernbell</a> <strong id="tedate"></strong> <i class="fab fa-facebook-f"></i> </div>
+          <div class="tw-footer"> <a class="" target="_blank" href="https://web.facebook.com/cac.southernbell">@cac.southernbell</a> <strong id="tedate"></strong> <i class="fab fa-facebook-f"></i> </div>
         </div>
       </div>
       <!--Footer Widget End-->
@@ -94,7 +95,7 @@
 </footer>
 <!--Footer Start-->
 <!--Footer Start-->
-<footer class="home3 footer wf100">
+<footer class=" footer my-4 py-4">
   <div class="container">
     <div class="row">
       <div class="col-md-7 col-sm-7">
@@ -114,220 +115,5 @@
 </footer>
 <!--Footer End-->
 <!--Wrapper End-->
-<script type="text/javascript">
-var categories = App.api("blog_categories", {})
-var route_names = [
-  { html: "landing.html", title: "Home - 卫理华人年议会 Methodist Chinese Annual Conference", route: "/home" },
-
-  { html: "event_listing.html", title: "Events - 卫理华人年议会 Methodist Chinese Annual Conference", route: "/event_listing/:id/:title" },
-  { html: "event_show.html", title: "Event - 卫理华人年议会 Methodist Chinese Annual Conference", route: "/events/:id/:title" },
-
-  { html: "blog_listing.html", title: "Blogs - 卫理华人年议会 Methodist Chinese Annual Conference", route: "/blog_listing/:id/:title" },
-  { html: "blog_show.html", title: "Blog - 卫理华人年议会 Methodist Chinese Annual Conference", route: "/blogs/:id/:title" },
-  { html: "page_show.html", title: "Page - 卫理华人年议会 Methodist Chinese Annual Conference", route: "/pages/:id/:title", customNav: "blog_nav_sub.html" },
-
-]
-
-function navigateTo(route, additionalParamString, dom) {
-  console.log(dom)
-  // event.preventDefault();
-  App.show()
-
-  if (route == null) {
-    route = window.location.pathname
-  }
-  var current_pattern = route.split("/").filter((v, i) => {
-    return v != "";
-  })
-  console.log(current_pattern)
-
-  var match_1 = route_names.filter((rroute, i) => {
-    var z = rroute.route.split("/").filter((v, i) => {
-      return v != "";
-    })
-    console.log(z[z.length - 1])
-
-    if (z[z.length - 1].includes(":")) {
-      return z.length == current_pattern.length
-    } else {
-
-      return z.length == current_pattern.length && z[z.length - 1] == current_pattern[z.length - 1];
-    }
-  })
-
-  var match_2 =
-    match_1.filter((rroute, i) => {
-      console.log(rroute)
-      var z = rroute.route.split("/").filter((v, i) => {
-        return v != "";
-      })
-      return z[0] == current_pattern[0]
-    })
-
-  if (match_2.length > 0) {
-
-    var params = {}
-    match_2.forEach((rroute, i) => {
-      var z = rroute.route.split("/").forEach((v, ii) => {
-        if (v.includes(":")) {
-          params[v.replace(":", "")] = current_pattern[ii - 1]
-        }
-      })
-    })
-    console.log("params here")
-    console.log(params)
-    window.pageParams = params
-    var xParamString = ""
-    if (additionalParamString == null) {
-      xParamString = ""
-    } else {
-      xParamString = additionalParamString
-    }
-
-    if (window.back) {
-      window.back = false
-    } else {
-      var stateObj = { fn: `navigateTo('` + route + `', '` + xParamString + `')`, params: params };
-      console.log("route")
-      console.log(route)
-      window.stateObj = stateObj
-      window.matchTitle = match_2[0].title
-      window.matchRoute = route
-
-
-      if (Object.keys(params).includes("title")) {
-        $("title").html(params.title)
-        history.pushState(stateObj, params.title, route);
-      } else {
-        $("title").html(match_2[0].title)
-        history.pushState(stateObj, match_2[0].title, route);
-      }
-    }
-    var html = App.html(match_2[0].html)
-    var keys = Object.keys(match_2[0])
-    $("html")[0].scrollIntoView()
-
-
-    if (keys.includes("skipNav")) {
-      $("#subcontent").html(html)
-
-    } else {
-      var nav = App.html("blog_nav.html")
-
-      if (keys.includes("customNav")) {
-        var nav = App.html(match_2[0].customNav)
-      }
-
-      $("#subcontent").html(nav)
-      $("#subcontent").append(html)
-
-      App.hide()
-
-    }
-    return match_2[0]
-  } else {
-    var html = App.html("landing.html")
-    var nav = App.html("blog_nav.html")
-    $("#subcontent").html(nav)
-    $("#subcontent").append(html)
-
-    App.hide()
-
-  }
-
-}
-
-function updatePageParams(obj) {
-  window.stateObj = obj
-  history.pushState(obj, obj.title, obj.route);
-}
-navigateTo();
-
-
-function populate_menus() {
-  parents = categories.filter((cat, i) => {
-    return cat.parent.name == cat.name
-  })
-  console.log(parents)
-
-  $("ul[aria-label='web-nav']").html('')
-  parents.forEach((cat, i) => {
-    var pages = []
-
-    cat.children.forEach((child, ii) => {
-      var cname = child.name
-      if (child.alias != null) {
-        cname = child.alias
-      }
-      var a = `<a class="dropdown-item navi" href="/blog_listing/` + child.id + `/` + child.name + `"
-      
-       >` + cname + `</a>`
-      pages.push(a)
-    })
-
-    var div = `<div class="dropdown-menu ">` + pages.join("") + `
-                </div>`
-    var name = cat.name
-
-    if (cat.alias != null) {
-      name = cat.alias
-    }
-
-    var li = `
-        <li class="nav-item dropdown">
-          <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">` + name + ` <span class="caret"></span></a>
-          ` + div + `
-        </li>`
-    if (cat.show_menu) {
-
-      $("#nav_items").append(li)
-      $("#nav_items2").append(li)
-      var li2 = `<li><a class="navi" href="/blog_listing/` + cat.id + `/` + cat.name + `"><i class="fas fa-star"></i>` + name + `</a></li>`
-      $("ul[aria-label='web-nav']").append(li2)
-    }
-
-
-  })
-  populate_directory()
-  populate_footer()
-}
-
-function populate_directory() {
-  var directories = App.api("get_directory", {})
-
-  $("ul.quick-links").html('')
-
-  directories.forEach((v, i) => {
-    var li = ` <li class="navi">
-      <a href="/pages/` + v.id + `/` + v.title + `" >` + v.title + `</a>
-    </li>`
-
-    $("ul.quick-links").append(li)
-    var li = ` <li class="navi nav-item">
-      <a href="/pages/` + v.id + `/` + v.title + `" >` + v.title + `</a>
-    </li>`
-
-    $("#nav_items").append(li)
-
-  })
-}
-
-function populate_footer() {
-
-  var groups = App.api("list_groups", {})
-
-  $("ul[aria-label='cac-directory']").html('')
-  groups.forEach((g, i) => {
-
-    var li = `<li><a href="javascript:void(0);"><i class="fas fa-star"></i>` + g.name + `</a></li>`
-
-    $("ul[aria-label='cac-directory']").append(li)
-  })
-
-  var dt = new Date()
-
-  var edate = dt.toGMTString().split(",")[1].split(" ").splice(0, 4).join(" ")
-
-  $("#tedate").html(edate)
-}
-</script>
+<span id="sign-in-button"></span>
+<div id="recaptcha-container"></div>

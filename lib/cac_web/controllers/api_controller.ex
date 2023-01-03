@@ -8,6 +8,27 @@ defmodule CacWeb.ApiController do
   def webhook_post(conn, params) do
     final =
       case params["scope"] do
+        "google_signin" ->
+          sample = %{
+            "result" => %{
+              "email" => "yithanglee@gmail.com",
+              "name" => "damien lee",
+              "uid" => "c3x50ZfwgubqWHrqqz5VCkmkwtg2"
+            },
+            "scope" => "google_signin"
+          }
+
+          res = params["result"]
+
+          {:ok, member} = Settings.lazy_get_member(res["email"], res["name"], res["uid"])
+
+          token =
+            Phoenix.Token.sign(
+              CacWeb.Endpoint,
+              "signature",
+              BluePotion.s_to_map(member) |> Map.take([:id, :name])
+            )
+
         "delete_user_group" ->
           Settings.get_user_group!(params["id"]) |> Settings.delete_user_group()
           %{status: "ok"}
@@ -221,6 +242,7 @@ defmodule CacWeb.ApiController do
           |> BluePotion.s_to_map()
           |> Map.delete(:id)
           |> Map.put(:crypted_password, "")
+          |> Map.take([:name, :email, :code, :cname, :image_url])
 
         "get_profile" ->
           case Phoenix.Token.verify(CacWeb.Endpoint, "signature", params["token"]) do

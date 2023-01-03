@@ -61,7 +61,9 @@ defmodule Cac.MixProject do
       {:csv, "~> 2.0.0"},
       {:xlsxir, "~> 1.6.4"},
       {:joken, "~> 2.4.1"},
-      {:mogrify, "~> 0.9.1"}
+      {:mogrify, "~> 0.9.1"},
+      {:ex_gram, "~> 0.30.0"},
+      {:tesla, "~> 1.2"}
     ]
   end
 

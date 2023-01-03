@@ -11,6 +11,8 @@ defmodule CacWeb.Router do
 
   pipeline :api do
     plug :accepts, ["json"]
+
+    plug(Cac.ApiAuthorization)
   end
 
   pipeline :blank do
@@ -20,7 +22,7 @@ defmodule CacWeb.Router do
 
   pipeline :frontend do
     plug(:put_layout, {CacWeb.LayoutView, :frontend})
-    # plug(Materialize.Authorization)
+    plug(Cac.Authorization)
   end
 
   scope "/member", CacWeb do

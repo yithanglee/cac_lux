@@ -13,21 +13,19 @@ use Mix.Config
 #   url: [host: "example.com", port: 80],
 #   cache_static_manifest: "priv/static/cache_manifest.json"
 config :cac, CacWeb.Endpoint,
-  url: [host: "ww2.methodist.org.my", port: 5033],
-  http: [port: 5033]
-
-# https: [
-#   port: 5534,
-#   otp_app: :cac,
-#   keyfile: "/etc/letsencrypt/live/www.damienslab.com/privkey.pem",
-#   cacertfile: "/etc/letsencrypt/live/www.damienslab.com/fullchain.pem",
-#   certfile: "/etc/letsencrypt/live/www.damienslab.com/cert.pem"
-# ],
-# check_origin: [
-#   "https://www.damienslab.com",
-#   "https://damienslab.com",
-#   "http://damienslab.com"
-# ]
+  url: [host: "methodist.org.my", port: 5033],
+  http: [port: 5033],
+  https: [
+    port: 5034,
+    otp_app: :cac,
+    keyfile: "/etc/letsencrypt/live/www.methodist.org.my/privkey.pem",
+    cacertfile: "/etc/letsencrypt/live/www.methodist.org.my/fullchain.pem",
+    certfile: "/etc/letsencrypt/live/www.methodist.org.my/cert.pem"
+  ],
+  check_origin: [
+    "https://www.methodist.org.my",
+    "http://ww2.methodist.org.my"
+  ]
 
 # Do not print debug messages in production
 config :logger, level: :info

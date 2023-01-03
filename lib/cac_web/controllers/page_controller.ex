@@ -94,9 +94,12 @@ defmodule CacWeb.PageController do
   end
 
   def index(conn, %{"id" => id, "title" => title} = params) do
+    blog = Cac.Settings.get_blog!(id)
+
     conn
     |> put_session(:title, title)
-    |> put_session(:image, Cac.Settings.get_blog!(id).img_url)
+    |> put_session(:image, blog.img_url)
+    |> put_session(:description, blog.excerpt || blog.title)
     |> render("index.html")
   end
 
