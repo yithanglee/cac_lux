@@ -1,0 +1,166 @@
+<div class="row gx-0">
+  
+  <div class="fresh shadow offset-lg-2 my-4 col-12 col-lg-8" style="padding-top: 2vh">
+    <div class="text-center p-4">
+      <div class="fs-3">Timer</div>
+      <span>Focus, get things done</span>
+    </div>
+    <div class="row gx-0">
+      <div class="col-12 offset-lg-3 col-lg-6 text-center">
+        <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+          <input type="radio" onclick="toggleSection()" class="btn-check" name="btnradio" id="btnradio1" value="plan" autocomplete="off" checked="">
+          <label class="btn btn-outline-primary" for="btnradio1">Plan</label>
+          <input type="radio" onclick="toggleSection()" class="btn-check" name="btnradio" id="btnradio2" value="due_date" autocomplete="off">
+          <label class="btn btn-outline-primary" for="btnradio2">Execute</label>
+          <input type="radio" onclick="toggleSection()" class="btn-check" name="btnradio" id="btnradio3" value="review" autocomplete="off">
+          <label class="btn btn-outline-primary" for="btnradio3">Review</label>
+        </div>
+      </div>
+    </div>
+    <section id="plan" class="">
+      <div class="py-4">
+        <form action="javascript:void(0);">
+          <div class="row gx-0 ">
+            <div class="col-12 offset-lg-3 col-lg-6">
+              <input type="text" name="todo" placeholder="I want to clear..." class="form-control">
+              <div class="text-center py-4">
+                <p>What do you like to do today?</p>
+                <button class="btn btn-primary" onclick="addTodo();">DO IT</button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="row gx-0 px-4">
+        <div class="col-12 offset-lg-4 col-lg-4">
+          <ol id="todos">
+          </ol>
+        </div>
+      </div>
+    </section>
+    <section id="due_date" class="d-none">
+      <div id="cd_timer" class="py-4">
+      </div>
+      <div class="py-4 text-center ">
+        <div class="btn" onclick="restartTimer()">
+          <i class="fa fa-redo text-primary" style="font-size: 3em;"></i>
+        </div>
+      </div>
+      <div class="row gx-0 py-4">
+        <div class="col-12 offset-lg-4 col-lg-4">
+          <select class="form-control text-lg text-center" id="task_list">
+          </select>
+        </div>
+      </div>
+      <div class="col-12 offset-lg-4 col-lg-4">
+        <ol id="todos2">
+        </ol>
+      </div>
+    </section>
+    <section id="review" class="d-none">
+      <div class="row gx-0 py-4">
+        <div class="col-12 offset-lg-4 col-lg-4">
+          <ol id="todos3">
+          </ol>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<script type="text/javascript">
+Cd.init("#cd_timer", { "wholeTime": (25 * 60) })
+
+function restartTimer() {
+  // check has stopped;
+  if (window.isPaused) {
+
+    Cd.init("#cd_timer", { "wholeTime": (25 * 60) })
+  } else {
+    App.notify("Not paused")
+  }
+}
+drawTodo();
+
+function toggleSection() {
+  $("#subcontent section").addClass("d-none")
+  $("input[name='btnradio']").each((i, v) => {
+    var a = $(v).prop("checked")
+    if (a) {
+      var val = $(v).val()
+      $("#" + val).removeClass("d-none")
+    }
+
+  })
+
+}
+
+function doneSelf(dom, index) {
+  $(dom).closest("li").remove()
+  window.doneList.push(window.todo[index])
+  window.todo.splice(index, 1)
+  drawTodo();
+  localStorage.setItem("done", JSON.stringify(window.doneList))
+}
+
+function removeSelf(dom, index) {
+  $(dom).closest("li").remove()
+  window.todo.splice(index, 1)
+  drawTodo();
+}
+
+function addTodo() {
+  var todo_item = $("input[name='todo']").val()
+  if (todo_item != "") {
+    window.todo.push(todo_item)
+
+    $("input[name='todo']").val("")
+  } else {
+    App.notify("its empty")
+  }
+  drawTodo();
+}
+
+function drawTodo() {
+  $("ol#todos").html('')
+  $("ol#todos2").html('')
+  $("ol#todos3").html('')
+  $("select#task_list").html('')
+  window.todo.forEach((v, i) => {
+    var li = `<li >
+                <div class="d-flex justify-content-between align-items-center">
+                  <span>` + v + `</span> 
+                  <div class="btn " onclick="removeSelf(this, '` + i + `');">
+                      <i class=" fa fa-times text-danger"></i>
+                  </div>
+                </div>
+              </li>`
+    $("ol#todos").append(li)
+
+    var option = `
+    <option>` + v + `</option>
+    `
+    $("select#task_list").append(option)
+
+    var li = `<li >
+                <div class="d-flex justify-content-between align-items-center">
+                  <span>` + v + `</span> 
+                  <div class="btn " onclick="doneSelf(this, '` + i + `');">
+                      <i class=" fa fa-check text-success"></i>
+                  </div>
+                </div>
+              </li>`
+    $("ol#todos2").append(li)
+
+  })
+  window.doneList.forEach((v, i) => {
+    var li = `<li >
+                <div class="d-flex justify-content-between align-items-center">
+                  <span>` + v + `</span> 
+                  
+                </div>
+              </li>`
+    $("ol#todos3").append(li)
+  })
+}
+</script>

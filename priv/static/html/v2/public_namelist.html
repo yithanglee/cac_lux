@@ -1,0 +1,245 @@
+<style type="text/css">
+div[aria-label="content"] {
+  line-height: 24px;
+}
+</style>
+<div class="d-flex justify-content-between align-items-center ">
+  <div class="align-items-center d-flex">
+    <label class="pe-2">Service Year</label>
+    <select id="service_years" class="form-control">
+    </select>
+  </div>
+  <div class="align-items-center d-flex gap-4">
+    <a href="javascript:void(0);" onclick="showAll()">Show All</a>
+    <a href="javascript:void(0);" onclick="collapseAll()">Collapse All</a>
+  </div>
+</div>
+<div class=" align-items-center d-flex justify-content-end">
+</div>
+<div id="church_entry">
+</div>
+<script type="text/javascript">
+function collapseAll() {
+  $(".region").addClass("d-none")
+  $(".regionz").addClass("fa-eye-slash")
+
+  $(".regionz").removeClass("fa-eye")
+}
+
+function showAll() {
+  $(".region").removeClass("d-none")
+  $(".regionz").removeClass("fa-eye-slash")
+
+  $(".regionz").addClass("fa-eye")
+}
+
+function toggleRegion(id) {
+  $(".region.list_" + id).toggleClass("d-none")
+  $(".fa.list_" + id).toggleClass("fa-eye-slash")
+
+  $(".fa.list_" + id).toggleClass("fa-eye")
+}
+
+
+var s = new Date()
+var currentYear = s.getFullYear()
+var year_id;
+service_yearSource = new phoenixModel({
+  columns: [
+    { label: 'id', data: 'id' },
+    { label: 'Action', data: 'id' }
+  ],
+  moduleName: "ServiceYear",
+  link: "ServiceYear",
+  tableSelector: "#sy"
+})
+
+
+populateTableData(service_yearSource, 100, () => {
+  service_yearSource.allData.forEach((year, i) => {
+    if (year.year == currentYear) {
+      year_id = year.id
+    }
+    $("#service_years").append(`
+        <option value="` + year.id + `" year="` + year.year + `">` + year.year + `</option>
+      `)
+  })
+  $("#service_years").val(year_id)
+})
+
+
+
+function deleteButton(user_id, venue_id, role, region_id) {
+  return `
+            `
+}
+
+
+
+function populateNamelist() {
+  $("#church_entry").html('')
+  var regions = App.api("regions", {})
+  regions.forEach((region, i) => {
+    $("#church_entry").append(`
+      <div id="region_` + region.id + `">
+      </div>
+      `)
+    populateRegion({ region_id: region.id })
+  })
+}
+var roles = ['主理', '协理', '代理', '副理', '传道']
+
+function pastorCard(user, placeholder, remarks) {
+
+  var colors = ['primary', 'success', 'warning', 'danger', 'info']
+  var color = "success"
+
+  var int = roles.indexOf(remarks)
+
+  var r = remarks != "" ? " <span class='text-sm  text-" + colors[int] + "'>" + remarks + "</span>" : "";
+
+  return `
+
+            <div class="d-flex justify-content-start align-items-center gap-2 p-lg-2 p-1">
+              <div style="background-size: cover; background-image: url('` + user.image_url + `'); height: 48px;width: 48px" class="mb-lg-2 mb-0   rounded-circle text-center bg-primary d-flex align-items-center justify-content-center text-white">
+                ` + placeholder + `
+
+              </div>
+
+              <div>
+                <span class="d-flex gap-2 align-items-center"><span>` + user.chinese_name + `</span> ` + r + `</span>
+                <span class="text-sm">` + user.full_name + `</span><br>
+              </div>
+            </div>
+  `
+}
+
+function populateRegion(j) {
+  var region = App.api("get_region", { id: j.region_id, year_id: $("#service_years").val() })
+  var venues = region.venues
+  var venues_list = []
+  var venues_list2 = []
+  venues.sort(function(b, a) {
+    return b.id - a.id;
+  })
+  venues.forEach((venue, ii) => {
+    var user_venues = venue.user_venues
+
+    var tds = []
+    var tds2 = []
+    roles.forEach((role, ri) => {
+      var user_venue = user_venues.filter((uv, iuv) => {
+        return uv.remarks == role && uv.service_year_id == parseInt($("#service_years").val());
+      })
+      if (user_venue.length > 0 && user_venue[0].user != null) {
+        var user = user_venue[0].user
+        var placeholder = ""
+        if (user.image_url == null) {
+          var initials = []
+          user.full_name.split(" ").forEach((v, i) => {
+            initials.push(v.split("")[0])
+          })
+
+          placeholder = `<span style="font-size: 1em;" >` + initials.join("") + `</span>`
+        }
+        tds.push(`
+                <td>
+                  ` + pastorCard(user, placeholder, "") + `
+             
+                </td>
+                `)
+        tds2.push(`
+          <div class="d-flex justify-content-between align-items-center pt-lg-3 pt-1">
+            ` + pastorCard(user, placeholder, user_venue[0].remarks) + `
+            
+          </div>
+                `)
+      } else {
+        tds.push(`<td> </td>`)
+      }
+    })
+    var vdesc = venue.desc != null ? venue.desc : "";
+    var vreg_no = venue.reg_no != null ? venue.reg_no : "";
+    venues_list2.push(`
+      
+          <div class="py-2">
+            <div class="d-flex flex-column border-bottom ">
+              <div class="d-flex gap-2"> 
+                <div class="text-primary">` + (ii + 1) + `</div> 
+                <span class="text-primary">` + venue.name + `</span> 
+              </div>
+              <span class="text-sm"> ` + vdesc + `</span>
+              <span class="text-sm text-secondary">` + vreg_no + `</span>
+
+               ` + tds2.join("") + `
+            </div>
+          </div>
+      
+      `)
+
+    venues_list.push(`
+      <tr>
+        <td style="width:  48px;">` + (ii + 1) + `</td>
+        <td>
+          <div class="d-flex flex-column  ">
+            <span>` + venue.name + ` </span>
+            <span class="text-sm"> ` + vdesc + `</span>
+            <span class="text-sm text-secondary">` + vreg_no + `<span>
+          </div>
+        </td>
+        ` + tds.join("") + `
+      </tr>`)
+
+
+  })
+
+
+  $("div#region_" + j.region_id).html(`
+        <div class="py-4 pb-2 d-flex  align-items-center gap-2">
+            <div class="fs-2 d-flex flex-column">
+              <span>` + region.name + `</span>
+              <span class="text-sm py-2">` + region.alias + `</span>
+            </div>
+            <div class="flex-grow-1 d-flex align-items-center justify-content-between">
+             <div style="height: 0px;width: 100%;" class="mx-4 border-bottom"></div>
+              <div class="btn btn-round btn-outline-primary" onclick="toggleRegion('` + j.region_id + `')" >
+                <i class="regionz fa fa-eye-slash list_` + j.region_id + `"></i>
+              </div>
+            </div>
+         
+         
+        </div>
+        <div class="d-none region list_` + j.region_id + `">
+          <div class="d-lg-none d-block">
+          ` + venues_list2.join("") + `
+          </div>
+          <div class="d-none d-lg-block">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th colspan=2 style="width: 280px;">牧区</th>
+                  <th >主理</th>
+                  <th >协理</th>
+                  <th >代理</th>
+                  <th >副理</th>
+                  <th >传道</th>
+                </tr>
+              </thead>
+              <tbody  class="">
+                ` + venues_list.join("") + `
+              </tbody>
+            </table>
+          </div>
+        </div>
+      `)
+}
+
+
+populateNamelist()
+
+
+$("#service_years").unbind()
+$("#service_years").on("change", function() {
+  populateNamelist()
+})
+</script>

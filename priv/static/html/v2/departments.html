@@ -1,0 +1,268 @@
+
+<div id="departments_content" class="p-4 ps-0">
+</div>
+<script type="text/javascript">
+var tab_list = [{
+    title: "Departments",
+    icon: "fa fa-list",
+    content: `<div id="tab1">
+    </div>`,
+  },
+  {
+    title: "SubDepartments",
+    icon: "fa fa-users",
+    content: `<div id="tab2"></div>`,
+  },
+
+  {
+    title: "Blogs",
+    icon: "fa fa-image",
+    content: `<div id="tab4"></div>`,
+  }
+
+]
+App.Page.tablist("#departments_content", tab_list, "Departments")
+var customCols = null
+
+var random_id = "dpt"
+departmentSource = new phoenixModel({
+ 
+  columns: [
+
+    { label: 'id', data: 'id' },
+    { label: 'name', data: 'name' },
+    { label: 'desc', data: 'desc' },
+    { label: 'Action', data: 'id' }
+
+  ],
+  moduleName: "Department",
+  link: "Department",
+  customCols: customCols,
+  buttons: [{
+    buttonType: "grouped",
+    name: "Manage",
+    color: "outline-warning",
+    buttonList: [
+
+      {
+        name: "Edit",
+        iconName: "fa fa-edit",
+        color: "btn-sm btn-outline-warning",
+        onClickFunction: editData,
+        fnParams: {
+          drawFn: enlargeModal,
+          customCols: customCols
+        }
+      },
+      {
+        name: "Delete",
+        iconName: "fa fa-trash",
+        color: "outline-danger",
+        onClickFunction: deleteData,
+        fnParams: {}
+      }
+    ],
+    fnParams: {
+
+    }
+  }, ],
+  tableSelector: "#" + random_id
+})
+departmentSource.load(random_id, "#tab1")
+customCols = [
+
+  {
+    name: "General",
+    list: [
+
+      'img_url',
+      'name',
+      'cname',
+      'desc',
+      'icon',
+
+      { label: 'department_id', selection: departmentSource.allData },
+      { label: 'blog.title', onClickFn: 'callBlog();', alias: true, alt_name: "Source" },
+      'blog_id',
+      'id',
+    ]
+  }
+]
+random_id = "sdpt"
+sub_departmentSource = new phoenixModel({
+    data: {
+
+      preloads: ["blog", "department"]
+    },
+  columns: [
+
+    { label: 'id', data: 'id' },
+    { label: 'name', data: 'name' },
+    { label: 'desc', data: 'desc' },
+    { label: 'Action', data: 'id' }
+
+  ],
+  moduleName: "SubDepartment",
+  link: "SubDepartment",
+  customCols: customCols,
+  buttons: [{
+    buttonType: "grouped",
+    name: "Manage",
+    color: "outline-warning",
+    buttonList: [
+
+      {
+        name: "Edit",
+        iconName: "fa fa-edit",
+        color: "btn-sm btn-outline-warning",
+        onClickFunction: editData,
+        fnParams: {
+          drawFn: enlargeModal,
+          customCols: customCols
+        }
+      },
+      {
+        name: "Delete",
+        iconName: "fa fa-trash",
+        color: "outline-danger",
+        onClickFunction: deleteData,
+        fnParams: {}
+      }
+    ],
+    fnParams: {
+
+    }
+  }, ],
+  tableSelector: "#" + random_id
+})
+sub_departmentSource.load(random_id, "#tab2")
+
+
+
+
+
+random_id = "blog"
+blogSource = new phoenixModel({
+  columns: [
+
+    { label: 'id', data: 'id' },
+    { label: 'Action', data: 'id' }
+
+  ],
+  moduleName: "Blog",
+  link: "Blog",
+  customCols: customCols,
+  buttons: [{
+    buttonType: "grouped",
+    name: "Manage",
+    color: "outline-warning",
+    buttonList: [
+
+      {
+        name: "Edit",
+        iconName: "fa fa-edit",
+        color: "btn-sm btn-outline-warning",
+        onClickFunction: editData,
+        fnParams: {
+          drawFn: enlargeModal,
+          customCols: customCols
+        }
+      },
+      {
+        name: "Delete",
+        iconName: "fa fa-trash",
+        color: "outline-danger",
+        onClickFunction: deleteData,
+        fnParams: {}
+      }
+    ],
+    fnParams: {
+
+    }
+  }, ],
+  tableSelector: "#" + random_id
+})
+blogSource.load(random_id, "#tab4")
+
+
+
+function callBlog() {
+  blogSource2 = new phoenixModel({
+
+    additional_search_queries: ["title"],
+    columns: [{
+        label: 'Title',
+        data: 'title'
+      },
+      {
+        label: 'Action',
+        data: 'id'
+      }
+    ],
+    moduleName: "Blog",
+    link: "Blog",
+    buttons: [{
+      name: "Select",
+      iconName: "fa fa-check",
+      color: "btn-sm btn-outline-success",
+      onClickFunction: (params) => {
+        var dt = params.dataSource;
+        var table = dt.table;
+        var data = table.data()[params.index]
+        console.log(data.id)
+
+        $("input[name='SubDepartment[blog][title]']").val(data.title)
+        $("input[name='SubDepartment[blog_id]']").val(data.id)
+        $("#myModal").modal('hide')
+      },
+      fnParams: {
+
+      }
+    }, ],
+    tableSelector: "#" + "subBlog"
+  })
+  App.modal({
+    selector: "#myModal",
+    autoClose: false,
+    header: "Search Blog",
+    content: `
+        <div id="subBlog">
+
+        </div>`
+  })
+  blogSource2.load(makeid(4), '#subBlog')
+  blogSource2.table.on("draw", function() {
+    if ($("#search_blog").length == 0) {
+      $(".module_buttons").prepend(`
+            <label class="col-form-label " for="inputSmall">Blog </label>
+            <input class="mx-4 form-control form-control-sm" id="search_blog"></input>
+                      `)
+    }
+    $('input#search_blog').on('change', function(e) {
+      var query = $(this).val()
+      blogSource2.table
+        .search(query)
+        .draw();
+    })
+  })
+}
+
+
+function toggleSearch(dom) {
+
+  App.modal({ selector: "#mySubModal", autoClose: false, header: "Search shop product", content: `<input class="form-control form-control-sm"  placeholder="ie: Milk tea" id="search_sp"></input>` })
+
+
+  $('input#search_sp').unbind();
+  $('input#search_sp').on('keyup', function(e) {
+    var query = $(this).val()
+    var tarMod = window.phoenixModels.filter((v, i) => {
+      return v.moduleName == 'ShopProduct' && v.tableSelector == '#pss'
+    })[0]
+    tarMod.table
+      .search(query)
+      .draw();
+  })
+
+}
+</script>

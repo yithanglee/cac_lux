@@ -1,0 +1,77 @@
+<section id="s1" class=" vh-75 d-flex flex-column justify-content-center align-items-center">
+</section>
+<section class="position-fixed w-100" style="bottom: 8px;left: auto;right: auto;">
+  <div class="d-flex justify-content-center">
+    <button class="rounded-3 btn btn-primary" onclick="next();"><span>Next</span> <i class="fa fa-chevron-right"></i></button>
+  </div>
+</section>
+<script type="text/javascript">
+var content = `
+
+  <div class="row gx-0 fresh p-4 p-lg-0 rounded">
+    <div class="col-12  shadow rounded-3">
+      <div class="">
+        <div style="
+        background-image: url('/images/forest_sd.jpg');
+        height: 300px;
+        background-position: center;
+        background-size: cover;
+        " class=" w-100 ">
+        </div>
+        <div class="text-center p-4">
+          <div class="fs-2">
+            Damiens Lab
+          </div>
+          <div class="text-muted d-flex flex-column gap-2">
+          <span class="">
+            Minimal code web application development
+          </span>
+
+          <span><i class="fa fa-phone"></i> 012 2664 254</span>
+          <span class="d-flex align-items-center justify-content-center gap-2">
+          <i class="fab fa-facebook"></i>
+          <span><a href="https://web.facebook.com/damienslab" target="_blank">Facebook</span>
+          </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+`
+$("#s1").html(content)
+var step = 0
+
+var list = [
+  {
+    title: "not just its cheap",
+    subtitle: "Just the core function feature, then slowly expand. So your test market knows the value you're dellivering."
+  },
+  {
+    title: "short development time",
+    subtitle: "Only 3-5 core features to be tasted by the market, if its feasible, then expand."
+  },
+  {
+    title: "minimal UI, like the ones you see now.",
+    subtitle: "simple UI will eliminate the complexity faced by users, so that owner can focus on core features."
+  },
+
+
+]
+
+
+function next() {
+  var text = list[step];
+  if (text == null) {
+    step = 0
+    // text = list[step]
+
+    $("#s1").html(content)
+  } else {
+
+    $("#s1").html(`
+      <div class="fresh d-flex flex-column align-items-center text-center " style="width: 300px; line-height: 2.5em;"><span class="fs-3">` + text.title + `</span><span class="text-muted  pt-2" >` + text.subtitle + `</span></div>
+    `)
+    step += 1;
+  }
+}
+</script>

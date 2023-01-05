@@ -1,0 +1,445 @@
+<div class="card">
+  <div class="card-body">
+    <div class="d-flex justify-content-between gap-2 align-items-center">
+      <div class="fs-5">Directory</div>
+      <div class="row  w-100 text-end">
+        <div class="col-12 col-lg-6 align-items-center d-flex">
+          <label class=" px-2" style="min-width: 100px;">Service Year</label>
+          <select id="service_years" class="form-control">
+          </select>
+        </div>
+        <div class="col-12 col-lg-6">
+          <div onclick='createGroup()' class="text-sm btn btn-outline-primary">
+            <i class="fa fa-plus"></i>
+            Region/District
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="row gx-0">
+      <div class="col-3">
+        <ul class="nav nav-pills flex-column" id="group_li">
+        </ul>
+      </div>
+      <div class="col-9">
+        <ul id="entry">
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+var s = new Date()
+var currentYear = s.getFullYear()
+var year_id;
+service_yearSource.allData.forEach((year, i) => {
+  if (year.year == currentYear) {
+    year_id = year.id
+  }
+
+  $("#service_years").append(`
+      <option value="` + year.id + `" year="` + year.year + `">` + year.year + `</option>
+    `)
+
+})
+$("#service_years").val(year_id)
+
+function addGroup(group_id) {
+  $("#service_years").val()
+  App.modal({
+    autoClose: false,
+    header: "Create Position",
+    selector: "#mySubModal",
+    drawFn: regularModal,
+    content: `
+      <form id="user_group">
+        <div class="form-group">
+            <div class="form-floating mb-3">
+                <input type="hidden" name="user_groups[group_id]" value="` + group_id + `">
+                <input type="hidden" name="user_groups[service_year_id]" value="` + $("#service_years").val() + `">
+                <input type="type" name="user_groups[remarks]" class="form-control" id="floatingInput" placeholder="name@example.com">
+                <label for="floatingInput">Position</label>
+            </div>
+        </div>
+        <div>
+          <div class="btn btn-primary" onclick="App.form('#user_group', 'create_user_group'); $('#mySubModal').modal('hide'); populateGroup(` + group_id + `) ">Submit</div>
+        </div>
+      </form>
+
+  `
+  })
+}
+
+function setWorkerBcode(params) {
+  var dt = params.dataSource;
+  window.currentSelector = dt.tableSelector
+  var table = dt.table;
+  var r = table.row(params.row);
+  var rowData = table.data()[params.index]
+
+  App.post("update_user_group", {
+    user_id: rowData.id,
+    id: window.ug_id
+  })
+  populateGroup(window.group_id)
+  $("#mySubModal").modal("hide")
+}
+
+function chooseWorker(ug_id, group_id) {
+  window.ug_id = ug_id
+  window.group_id = group_id
+  queryWorker()
+}
+
+function nilifyWorker(ug_id, group_id) {
+  App.post("nilify_user_group", {
+    id: ug_id
+
+  })
+  populateGroup(group_id)
+}
+
+function deleteWorker(ug_id, group_id) {
+  App.modal({ autoClose: false, selector: "#mySubModal", header: "Confirm?", drawFn: regularModal, content: `
+<center>
+    <div id="confirm"></div>
+</center>
+
+    ` })
+
+
+  var div = document.createElement("div")
+  div.innerHTML = "Confirm"
+  div.setAttribute("class", "btn btn-primary")
+
+  div.onclick = () => {
+
+    App.post("delete_user_group", {
+      id: ug_id
+
+    })
+    populateGroup(group_id)
+    $("#mySubModal").modal('hide')
+  }
+
+  console.log(div)
+
+
+  $("#confirm").append(div)
+}
+
+function checkWParams(j) {
+  console.log(j)
+  var user = j
+  App.post("update_user_group", {
+    user_id: user.id,
+    id: window.ug_id
+
+  })
+  populateGroup(window.group_id)
+}
+
+function createWorker(ug_id, group_id) {
+  window.group_id = group_id
+  window.ug_id = ug_id
+  form_new("#users", {}, null, checkWParams)
+}
+
+
+function queryWorker() {
+  App.modal({ drawFn: regularModal, autoClose: false, selector: "#mySubModal", header: `Query Member`, footer: `<button class="btn btn-primary" onclick='  $("#mySubModal").modal("hide")'>Close</button>`, content: `<div id="tab2w">Member</div>` })
+  random_id = makeid(4)
+  memberSource = new phoenixModel({
+    onDrawFn: () => {
+      if ($("#member_book").length == 0) {
+        $("#mg").closest(".table-responsive").find(".module_buttons").prepend(`
+        <label class="col-form-label " for="inputSmall">Member </label>
+        <input class="mx-4 form-control form-control-sm" id="member_book"></input>
+                  `)
+      }
+      $('input#member_book').unbind();
+      $('input#member_book').on('change', function(e) {
+        var query = $(this).val()
+        var tarMod = window.phoenixModels.filter((v, i) => {
+          return v.moduleName == 'User' && v.tableSelector == '#mg'
+        })[0]
+        tarMod.table
+
+          .search(query)
+          .draw();
+      })
+
+    },
+    data: {
+      preloads: ["role"],
+      additional_search_queries: ["full_name"],
+      // sorts: [
+      //   [6, 'desc']
+      // ]
+    },
+    columns: [{
+        label: 'Name',
+        data: 'full_name',
+        showSubtitle: true,
+        subtitle: 'chinese_name'
+      },
+      {
+        label: 'cname',
+        data: 'chinese_name',
+        className: 'd-none'
+      },
+      {
+        label: 'Action',
+        data: 'id'
+      }
+    ],
+    moduleName: "User",
+    link: "User",
+    customCols: null,
+    buttons: [
+
+      {
+        name: "Insert",
+        iconName: "fa fa-check",
+        color: "btn-sm btn-outline-success",
+        onClickFunction: setWorkerBcode,
+        fnParams: {}
+      },
+
+    ],
+    tableSelector: "#" + 'mg'
+  })
+
+  memberSource.load('mg', "#tab2w")
+
+
+}
+
+function selectWorkerButton(ug_id, group_id) {
+  return `
+              <div onclick="chooseWorker('` + ug_id + `', '` + group_id + `')"  
+                class="az opacity-25 btn btn-sm btn-outline-warning ">
+                <i class="fa fa-user-plus text-sm"> </i>
+              </div>
+            `
+}
+
+function addWorkerButton(ug_id, group_id) {
+  return `
+              <div onclick="createWorker('` + ug_id + `', '` + group_id + `')"  
+                class="az opacity-25 btn btn-sm btn-outline-primary ">
+                <i class="fa fa-user-plus text-sm"> </i>
+              </div>
+            `
+}
+
+function nilifyWorkerButton(ug_id, group_id) {
+  return `
+              <div onclick="nilifyWorker('` + ug_id + `', '` + group_id + `')"  
+                class="az opacity-25 btn btn-sm btn-outline-danger ">
+                <i class="fa fa-user-minus text-sm"> </i>
+              </div>
+            `
+}
+
+function deleteWorkerButton(ug_id, group_id) {
+  return `
+              <div onclick="deleteWorker('` + ug_id + `', '` + group_id + `')"  
+                class="az opacity-25 btn btn-sm btn-outline-danger ">
+                <i class="fa fa-times text-sm"> </i>
+              </div>
+            `
+}
+
+
+function populateUserGroup(ug, ug_id) {
+  var user_group
+  if (ug != null) {
+    user_group = ug
+  } else {
+
+  }
+
+  var user = user_group.user
+  var venue_list = []
+  var cname = ""
+  var remarks = ""
+  var placeholder = ""
+  var bio = ""
+  if (user_group.remarks != null) {
+    remarks = user_group.remarks
+  }
+  console.log(user_group)
+  if (user != null) {
+    if (user.bio != null) {
+      bio = user.bio
+    }
+    if (user.chinese_name != null) {
+      cname = user.chinese_name
+    }
+    var venues = user.venues
+
+    venues.forEach((venue, i) => {
+      venue_list.push(`
+            <li class="fw-bold">` + venue.desc + `</li>
+            <li class="text-secondary">` + venue.name + `</li>
+            <li>` + venue.address + `</li>`)
+    })
+
+    if (user.image_url == null) {
+      var initials = []
+      user.full_name.split(" ").forEach((v, i) => {
+        initials.push(v.split("")[0])
+      })
+
+      placeholder = `<span style="font-size: 1em;" >` + initials.join("") + `</span>`
+    }
+
+    $("section#group_" + user_group.group_id).append(`
+              <span class=" text-primary flex-grow-1 py-2">` + remarks + `</span> 
+              <div class="dir_entry pt-2 pb-4 d-flex align-items-center gap-2 justify-content-between">
+                  <div class="d-flex flex-column w-50">
+                    <div class="d-flex justify-content-start gap-2">
+
+                        <div style="background-size: cover; background-image: url('` + user.image_url + `'); height: 50px;width: 50px" class=" rounded-circle text-center bg-primary d-flex align-items-center justify-content-center text-white">
+                          ` + placeholder + `
+                        </div>
+                      <div class="d-flex flex-column">
+                        <span>` + cname + `</span>
+                        <span class="text-sm">` + user.full_name + `</span>
+                      </div>
+                    </div>
+                  </div>
+            
+                  <div class=" d-flex align-items-top justify-content-start w-50">
+                    <div class="ps-0" >
+
+                      <div class="d-flex flex-column">
+                        <span class="text-sm">HP: ` + user.phone + `</span>
+                        <span class="text-sm">Email: ` + user.email + `</span>
+                      </div>
+                    </div>
+              
+                    <div class="d-none">
+                      <div >
+                        ` + venue_list.join("") + `
+                      </div>
+                    </div>
+                    <div  class="d-none">
+                      <ol style="list-style: none;">
+                        <li><div>` + bio + `<div></li>
+                      </ol>
+                    </div>
+                  </div>
+                  <div class="d-flex justify-content-start gap-2" >
+                   ` + nilifyWorkerButton(user_group.id, user_group.group_id) + `
+                    ` + deleteWorkerButton(user_group.id, user_group.group_id) + `
+                  </div>
+                
+              </div>`)
+  } else {
+    $("section#group_" + user_group.group_id).append(`<div class="pb-4 d-flex align-items-center gap-2 justify-content-between">
+                  <div class="d-flex flex-column ">
+                    <span class=" text-primary flex-grow-1 py-2">` + remarks + `</span> 
+                    <div class="dir_entry">
+                      ` + addWorkerButton(user_group.id, user_group.group_id) + `
+                      ` + selectWorkerButton(user_group.id, user_group.group_id) + `
+                       ` + deleteWorkerButton(user_group.id, user_group.group_id) + `
+                    </div>
+                  </div>
+                </div>`)
+  }
+
+}
+
+
+function populateGroup(group_id) {
+
+  var group = App.api("get_group", { id: group_id, service_year_id: $("#service_years").val() })
+  $("section#group_" + group_id).html('')
+  group.user_groups.sort(function(b, a) {
+
+    return b.id - a.id;
+  })
+  group.user_groups.forEach((user_group, ii) => {
+    if (user_group.service_year_id == parseInt($("#service_years").val())) {
+
+      populateUserGroup(user_group, user_group.id)
+    }
+  })
+
+
+}
+
+function createGroup() {
+  form_new("#grps", {}, null, loadGroups)
+}
+
+
+function loadGroups(year_id) {
+  var groups = App.api("groups", { service_year_id: year_id, preloads: { users: "venues" } })
+  $("#entry").html('')
+  $("#group_li").html('')
+  groups.forEach((group, i) => {
+
+
+    $("#entry").append(`
+        <div class="content-group p-2 my-2" id="group_` + group.id + `">
+          <div class="d-flex align-items-center justify-content-end gap-2">
+                <span class="text-primary">` + group.name + `</span>
+                <div onclick="addGroup('` + group.id + `')" class="btn btn-outline-primary btn-sm"> <i class=" fa fa-user-plus"></i></div>
+          </div>
+          <section id="group_` + group.id + `">
+          </section>
+        </div>`)
+
+    group.user_groups.sort(function(b, a) {
+      console.log(b)
+      return b.id - a.id;
+    })
+
+    group.user_groups.forEach((user_group, ii) => {
+      if (user_group.service_year_id == year_id) {
+
+        populateUserGroup(user_group, user_group.id)
+      }
+    })
+
+
+    $(".dir_entry ").on("mouseenter", function() {
+      $(this).find(".az").removeClass("opacity-25")
+    })
+    $(".dir_entry ").on("mouseleave", function() {
+      $(this).find(".az").addClass("opacity-25")
+    })
+
+
+
+    $("#group_li").append(`
+
+          <li class="nav-item" group-id="` + group.id + `">
+            <a class="group nav-link" group-id="` + group.id + `" href="javascript:void(0);">` + group.name + `</a>
+          </li>
+
+      `)
+
+
+  })
+  $(document).on("click", "a.group", function() {
+    var r_id = $(this).attr("group-id")
+    $("a.group").removeClass("active")
+
+    $("div.content-group").addClass("d-none")
+    $(this).addClass("active")
+    $("div.content-group#group_" + r_id).removeClass("d-none")
+  })
+}
+loadGroups(year_id)
+
+$("#service_years").unbind()
+$("#service_years").on("change",  function() {
+  loadGroups($("#service_years").val())
+})
+</script>

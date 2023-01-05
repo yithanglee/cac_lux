@@ -1,0 +1,156 @@
+<span class="post-thumbnail full-width-image"></span>
+<div class="container-fluid">
+  <div class="progress-container fixed-top">
+    <span class="progress-bar bg-info" style="height: 8px;"></span>
+  </div>
+  <style type="text/css">
+  div[aria-label="content"] {
+    line-height: 1.7em;
+  }
+  </style>
+  <div class="d-block row gx-0 pt-4">
+    <div class="col-10 offset-1 col-lg-10 offset-lg-2 pt-4 mt-4">
+      <span class="badge bg-primary rounded-pill my-2" aria-label="category"></span>
+      <h2 aria-label="title">Show Event</h2>
+      <span aria-label="subtitle" class="text-muted"></span>
+      <div class="row">
+        <div class="col-lg-7">
+          <div aria-label="img" class="d-none d-lg-block my-4" style="
+          background-image: linear-gradient(rgba(255, 255, 255, 0.59), rgba(255, 255, 255, 0.91)), url('/images/daniel-tseng-QCjC1KpA4nA-unsplash.webp');background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+          
+            height: 500px;">
+          </div>
+          <div aria-label="img" class="d-lg-none d-block my-4" style="
+          background-image: linear-gradient(rgba(255, 255, 255, 0.59), rgba(255, 255, 255, 0.91)), url('/images/daniel-tseng-QCjC1KpA4nA-unsplash.webp');background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+          
+            height: 200px;">
+          </div>
+          <div aria-label="content" class="pt-4 fs-5">
+            <div class="d-flex justify-content-center align-items-center " style="height: 400px;">
+              <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 sidebar pt-4">
+          <div class="widget" id="organizer">
+
+          </div>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row gx-0 pt-4">
+    <div class="col-12 col-lg-8 offset-lg-2">
+      <div class="event-speakers">
+        <h3>讲员&嘉宾</h3>
+        <div class="row" id="l7">
+          <!--Speaker Box Start-->
+
+          <!--Speaker Box End-->
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row gx-0">
+    <div class="col-12 col-lg-10 offset-lg-1">
+      <div class="row gx-0" id="l6">
+      </div>
+    </div>
+  </div>
+  <script type="text/javascript">
+  $(document).ready(() => {
+
+    window.currentEvent = App.api("event", { id: window.pageParams.id })
+    var event = window.currentEvent
+    $("h2[aria-label='title']").html(event.title)
+    $("title").html(event.title)
+    var url = '/images/daniel-tseng-QCjC1KpA4nA-unsplash.webp'
+    if (event.img_url != null) {
+      url = event.img_url
+    }
+    $("div[aria-label='img']").css("background-image", "url('" + url + "')")
+    var dt = event.start_datetime.split("T")
+
+var dt = new Date(event.start_datetime)
+
+var edate = dt.toGMTString().split(",")[1].split(" ").splice(0,4).join(" ")
+var etime = dt .toLocaleTimeString() 
+
+    $("div[aria-label='content']").html(
+      `<div class="pb-3 mb-4 border-bottom d-flex gap-3 fw-light">
+        <div><span class="text-primary">Datetime: </span><span> ` + edate + ` ` + etime + `</span></div>
+        <div><span  class="text-primary">Location: </span><span> ` + event.venue.name + ` </span></div>
+      </div>` +
+      event.description)
+    // var adder2 = new Function(currentEvent.javascript_binary);
+    // adder2();
+    $("span[aria-label='subtitle']").html(
+      event.subtitle)
+    // $("span[aria-label='category']").html(event.category.name)
+
+    $("blockquote").addClass("d-flex flex-column justify-content-between")
+
+
+  event.speakers.forEach((speaker,i) => {
+    var sdiv = `
+
+          <div class="col-md-3 col-sm-3">
+            <div class="h3-team-box">
+              <div class="team-info">
+                <h5>`+speaker.name+`</h5>
+                <strong>`+speaker.title+`</strong>
+                <p> `+speaker.bio+` </p>
+                <ul>
+                  <li><strong>Connect:</strong></li>
+                  <li><a href="#"><i class="fab fa-facebook-f"></i></a></li>
+                  <li><a href="#"><i class="fab fa-twitter"></i></a></li>
+                  <li><a href="#"><i class="fab fa-linkedin-in"></i></a></li>
+                  <li><a href="#"><i class="fab fa-instagram"></i></a></li>
+                </ul>
+              </div>
+              <div style="
+                  height: 400px;
+
+                  background-repeat: no-repeat;
+                  background-position: top;
+                  background-size: cover;
+                  background-image: url('` + speaker.img_url + `')
+                ">
+              </div>
+           
+            </div>
+          </div>
+    `
+
+    $("#l7").append(sdiv)
+  })
+
+
+if (event.organizer != null) {
+
+  var organizer = event.organizer 
+  var org = `
+
+            <div class="p-3 pb-0 fs-4">About Organizer</div>
+            <div class="about-widget inner">
+              <img src="`+organizer.img_url+`" alt="">
+              `+organizer.desc+`
+            </div>
+  `
+  $("#organizer").html(org)
+}
+
+
+    App.Page.scrollProgressBar(".progress-bar")
+
+  })
+  </script>
+  <script type="text/javascript" aria-label="content"></script>
+</div>

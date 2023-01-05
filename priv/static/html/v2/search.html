@@ -1,0 +1,125 @@
+<div class="row">
+  <div class="col-12 col-lg-4">
+    <div class="card">
+      <div class=" card-header bg-secondary d-flex justify-content-between align-items-center">
+        <div class="d-flex flex-column">
+          <span class="fs-4 text-white">
+            Search
+          </span>
+          <div class="text-muted">Find books, members</div>
+        </div>
+        <i class="fa fa-2x fa-search text-muted"></i>
+      </div>
+      <div class="card-body">
+        <form id="search_all" class="d-flex flex-column justify-content-between align-items-center gap-4" action="javascript:void(0);">
+          <div class="form-group w-100">
+            <label>Query</label>
+            <input type="text" class="form-control" name="query">
+          </div>
+          <div class="">
+            <button onclick="strongSearch();" class="btn btn-outline-primary">Search <i class="ps-2 fa fa-caret-right"></i></button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="col-12 col-lg-6 pt-4 pt-lg-0">
+    <div class="card " style="min-height: 200px;">
+      <div id="book_result" class="card-body">
+        <div class="d-flex flex-column justify-content-center align-items-center text-muted">
+          <i class="fa fa-2x fa-barcode"> </i>
+          <p> Search query</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+function processSearchForm(dom) {
+
+  var formData = new FormData($(dom)[0])
+
+  formData.append("scope", "strong_search")
+
+  $.ajax({
+      url: "/api/webhook",
+      dataType: "json",
+      headers: {
+        "Authorization": "Basic " + window.userToken
+      },
+      method: "POST",
+      enctype: "multipart/form-data",
+      processData: false, // tell jQuery not to process the data
+      contentType: false,
+      data: formData
+    })
+    .done(function(j) {
+      var count = j.length
+      App.notify("Searched! Found: " + count, {placement: {
+      from: "bottom",
+      align: "center"
+    },
+  
+        type: "success"
+      });
+      $("#book_result").html(``)
+      j.forEach((bookInventory, i) => {
+
+        var images_list = []
+
+
+        bookInventory.book_images.forEach((images, i) => {
+          images_list.push(`<div style="width: 100px; height: 150px; background-size: cover; background-position: center; background-image: url('` + images.img_url + `')"></div>`)
+        })
+
+        var card = `
+
+      	<div class="d-flex align-items-center py-2">
+
+	      	<div class=" flex-grow-1" aria-label="book">
+	      		<div class="fs-5" aria-label="title">` + bookInventory.book.title + `</div>
+	      		<div class="fw-bold" aria-label="author">` + bookInventory.code + `</div>
+	      		<div class="fw-semi-bold" aria-label="author">` + bookInventory.book.isbn + `</div>
+	      		<div aria-label="author">` + bookInventory.author.name + `</div>
+	      		<div aria-label="publisher">` + (bookInventory.publisher == null ? '' : bookInventory.publisher.name) + `</div>
+	      	</div>
+	      	<div class="img flex-grow-2">
+	      	` + images_list.join("") + `
+
+	      	</div>
+
+      	</div>`
+
+
+        $("#book_result").append(card)
+      })
+
+    }).fail(() => {
+      App.notify("Not found!", {
+        type: "danger"
+      });
+
+      $("#book_result").html(`
+
+        <div class="d-flex flex-column justify-content-center align-items-center text-muted">
+          <i class="fa fa-2x fa-barcode"> </i>
+          <p> Search query</p>
+        </div>
+      	`)
+
+    })
+
+}
+
+function strongSearch() {
+
+  processSearchForm("#search_all")
+}
+
+$(document).ready(() => {
+  // $("input#query").html(val)
+  var val = $("input#tsearch").val()
+  $("input[name='query']").val(val)
+  strongSearch()
+})
+</script>

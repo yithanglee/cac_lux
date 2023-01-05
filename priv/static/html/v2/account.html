@@ -1,0 +1,79 @@
+
+<div class="container-fluid" style="padding:  10vh 0vh;">
+  <section class="row gx-0 pt-2 pt-lg-4" style="">
+    <div class="col-12 col-lg-8 offset-lg-2">
+      <div class="row gx-0">
+        <div class="col-10 offset-1">
+          <div class=" d-flex justify-content-start">
+            <h2 class="ms-4 pb-2 border-bottom border-5 border-primary mb-4 ms-lg-0">Account</h2>
+          </div>
+          <div class="card-body" id="edit_profile">
+            <form class="with_mod" id="Member" module="Member">
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+<script type="text/javascript">
+
+$(document).ready(() => {
+  function processUserForm(dom) {
+    var formData = new FormData($(dom)[0])
+    formData.append("token", window.userToken)
+    formData.append("scope", "update_profile")
+    $.ajax({
+        url: "/api/webhook",
+        dataType: "json",
+        headers: {
+          "Authorization": "Basic " + window.userToken
+        },
+        method: "POST",
+        enctype: "multipart/form-data",
+        processData: false, // tell jQuery not to process the data
+        contentType: false,
+        data: formData
+      })
+      .done(function(j) {
+        if (j.status == "ok") {
+          App.notify("Added!", {
+            type: "success"
+          });
+        } else {
+          App.notify("Not added!", {
+            type: "danger"
+          });
+        }
+        // clear_book();
+      }).fail(() => {
+        App.notify("Not added!", {
+          type: "danger"
+        });
+      })
+
+  }
+
+  data = App.api("get_member_profile", { token: window.userToken }, () => {
+    App.notify("You need to login first.  ")
+    navigateTo("/home")
+  })
+  data["id"] = window.userToken
+
+  createForm(data, null, ['id', 'name', 'phone', 'email', 'address', 'city', {
+    label: 'image_url',
+    upload: true
+  }], () => {
+    navigateTo("/home");
+  }, () => {
+    $("input[aria-label='name']").attr("disabled", "")
+    $("input[aria-label='email']").attr("disabled", "")
+
+    $(".subm").after(`<button onclick="logout()" class='ms-2 btn btn-outline-primary btn-sm'>Logout</button>`)
+
+  });
+
+
+
+})
+</script>

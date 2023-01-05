@@ -1,0 +1,456 @@
+
+<div id="event_content" class="p-4 ps-0">
+</div>
+<script type="text/javascript">
+var tab_list = [{
+    title: "Events",
+    icon: "fa fa-list",
+    content: `<div id="tab1">
+    </div>`,
+  },
+
+  {
+    title: "Venues",
+    icon: "fa fa-users",
+    content: `<div id="tab2a"></div>`,
+  },
+  {
+    title: "Speakers",
+    icon: "fa fa-users",
+    content: `<div id="tab2"></div>`,
+  },
+  {
+    title: "Organizers",
+    icon: "fa fa-tags",
+    content: `<div id="tab3"></div>`,
+  },
+  {
+    title: "Region",
+    icon: "fa fa-tags",
+    content: `<div id="tab3a"></div>`,
+  },
+
+  {
+    title: "StoredMedia",
+    icon: "fa fa-image",
+    content: `<div id="tab4"></div>`,
+  }
+
+]
+App.Page.tablist("#event_content", tab_list, "Events")
+
+$("button#Categories-tab").click(() => {
+  $("button#AssignSpeakers-tab").remove()
+})
+
+
+function assignChildren(params) {
+
+  var title = "AssignSpeakers"
+  var i = 1
+  var icon = "fa fa-tags"
+  $("button#AssignSpeakers-tab").remove()
+  $(".tab-pane#AssignSpeakers").remove()
+  var content = `<div id="tab54"></div>`
+  var b = `
+          <div class="tab-pane fade ` + (i == 0 ? 'show active' : '') + `" 
+          id="` + title + `"
+          role="tabpanel" 
+          aria-labelledby="` + title + `-tab"
+          href="#` + title + `"
+          >` + content + `
+          </div>
+          `
+  console.log(b)
+  $("#v-pills-tabContent").append(b)
+
+
+  var assignParentContent = `
+                            <div class="row">
+                              <div class="col-12">
+                                <div class="card">
+                                  <div class="card-body" >
+                                    <form id="assign-children" >
+                                      
+                                    </form>
+                                    <div class="btn btn-primary" onclick='App.form("#assign-children", "update_event_speaker")'>
+                                      Update
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                              `
+
+
+
+
+  $("#tab54").html(assignParentContent)
+
+  var dt = params.dataSource;
+  window.currentSelector = dt.tableSelector
+  var table = dt.table;
+  var r = table.row(params.row);
+  var rowData = table.data()[params.index]
+  console.log(rowData)
+  var a = `<button  
+              class="p-2 d-flex justify-content-between align-items-center nav-link  text-center  ` + (i == 0 ? 'active' : '') + `"       
+              id="` + title + `-tab"
+              data-bs-toggle="pill"  
+              data-bs-target="#` + title + `"
+              type="button"
+              role="tab" > 
+              <i class="` + icon + `"> </i>
+              <span class="px-3">` + title + `</span>
+          </button>`
+  $("button#Events-tab").after(a)
+  $("#AssignSpeakers-tab").click()
+  $("#assign-children").before(`<h3>` + rowData.title + `</h3>`)
+  var children = App.api("event_speakers", { id: rowData.id })
+  speakerSource.allData.forEach((v, i) => {
+
+    var res =
+      children.filter((cv, ci) => {
+        return cv.id == v.random_id
+      })
+
+    if (res.length > 0) {
+      $("#assign-children").append(`
+          <div class="form-check">
+                        <input class="form-check-input" type="checkbox" checked value="" id="` + v.id + `" name="event[` + rowData.id + `][` + v.id + `]">
+                        <label class="form-check-label" for="` + v.id + `">
+                         ` + v.name + `
+                        </label>
+                      </div>`)
+    } else {
+
+      $("#assign-children").append(`
+          <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="` + v.id + `" name="event[` + rowData.id + `][` + v.id + `]">
+                        <label class="form-check-label" for="` + v.id + `">
+                         ` + v.name + `
+                        </label>
+                      </div>`)
+    }
+  })
+}
+
+
+
+var customCols = [
+  'id',
+  'name',
+
+  { label: 'desc', editor: true },
+  { label: 'contact_html', binary: true },
+  { label: 'img_url', upload: true }
+]
+var random_id = 'org'
+var organizerSource = new phoenixModel({
+  columns: [
+
+    { label: 'id', data: 'id' },
+    { label: 'Name', data: 'name' },
+    { label: 'Action', data: 'id' }
+
+  ],
+  moduleName: "Organizer",
+  link: "Organizer",
+  customCols: customCols,
+  buttons: [{
+    buttonType: "grouped",
+    name: "Manage",
+    color: "outline-warning",
+    buttonList: [
+
+      {
+        name: "Edit",
+        iconName: "fa fa-edit",
+        color: "btn-sm btn-outline-warning",
+        onClickFunction: editData,
+        fnParams: {
+          drawFn: enlargeModal,
+          customCols: customCols
+        }
+      },
+      {
+        name: "Delete",
+        iconName: "fa fa-trash",
+        color: "outline-danger",
+        onClickFunction: deleteData,
+        fnParams: {}
+      }
+    ],
+    fnParams: {
+
+    }
+  }, ],
+  tableSelector: "#" + random_id
+})
+organizerSource.load(random_id, "#tab3")
+
+
+
+customCols = null
+random_id = 'regi'
+regionSource = new phoenixModel({
+
+  columns: [
+
+    { label: 'id', data: 'id' },
+    { label: 'Name', data: 'name' },
+    { label: 'Alias', data: 'alias' },
+    { label: 'Action', data: 'id' }
+
+  ],
+  moduleName: "Region",
+  link: "Region",
+  customCols: customCols,
+  buttons: [{
+    buttonType: "grouped",
+    name: "Manage",
+    color: "outline-warning",
+    buttonList: [
+
+      {
+        name: "Edit",
+        iconName: "fa fa-edit",
+        color: "btn-sm btn-outline-warning",
+        onClickFunction: editData,
+        fnParams: {
+          drawFn: enlargeModal,
+          customCols: customCols
+        }
+      },
+      {
+        name: "Delete",
+        iconName: "fa fa-trash",
+        color: "outline-danger",
+        onClickFunction: deleteData,
+        fnParams: {}
+      }
+    ],
+    fnParams: {
+
+    }
+  }, ],
+  tableSelector: "#" + random_id
+})
+regionSource.load(random_id, "#tab3a")
+
+
+
+
+customCols = [
+  'name',
+  'title',
+  'bio',
+  'contact_email',
+  'contact_phone',
+  { label: 'contact_html', editor: true },
+  'id',
+  { label: 'img_url', upload: true }
+]
+random_id = 'speakers'
+speakerSource = new phoenixModel({
+  columns: [
+
+    { label: 'id', data: 'id' },
+
+    { label: 'Name', data: 'name' },
+    { label: 'Bio', data: 'bio' },
+    { label: 'Phone', data: 'contact_phone' },
+    { label: 'Action', data: 'id' }
+
+  ],
+  moduleName: "Speaker",
+  link: "Speaker",
+  customCols: customCols,
+  buttons: [{
+    buttonType: "grouped",
+    name: "Manage",
+    color: "outline-warning",
+    buttonList: [
+
+      {
+        name: "Edit",
+        iconName: "fa fa-edit",
+        color: "btn-sm btn-outline-warning",
+        onClickFunction: editData,
+        fnParams: {
+          drawFn: enlargeModal,
+          customCols: customCols
+        }
+      },
+      {
+        name: "Delete",
+        iconName: "fa fa-trash",
+        color: "outline-danger",
+        onClickFunction: deleteData,
+        fnParams: {}
+      }
+    ],
+    fnParams: {
+
+    }
+  }, ],
+  tableSelector: "#" + random_id
+})
+speakerSource.load(random_id, "#tab2")
+
+customCols = [{
+  name: "General",
+  list: [
+
+    'address',
+    'desc',
+    'email', 'id',
+    'img_url',
+    'lat',
+    'long',
+    'name',
+    'phone',
+    'reg_no',
+    { label: 'region_id', selection: regionSource.allData },
+    { label: 'venue_type', selection: ['Church', 'Recreation', 'Park'] }
+  ]
+}]
+
+random_id = 'venues'
+venueSource = new phoenixModel({
+  data: { preloads: ['region'] },
+  columns: [
+
+    { label: 'id', data: 'id' },
+    { label: 'Name', data: 'name' , showSubtitle: true, subtitle: 'reg_no'},
+     { label: 'reg_no', data: 'reg_no' , className: 'd-none'},
+    { label: 'Address', data: 'address' },
+    { label: 'Region', data: 'region_id', showChild: true, xdata: { child: 'region', data: 'name' } },
+    { label: 'Action', data: 'id' }
+
+  ],
+  moduleName: "Venue",
+  link: "Venue",
+  customCols: customCols,
+  buttons: [{
+    buttonType: "grouped",
+    name: "Manage",
+    color: "outline-warning",
+    buttonList: [
+
+      {
+        name: "Edit",
+        iconName: "fa fa-edit",
+        color: "btn-sm btn-outline-warning",
+        onClickFunction: editData,
+        fnParams: {
+          drawFn: enlargeModal,
+          customCols: customCols
+        }
+      },
+      {
+        name: "Delete",
+        iconName: "fa fa-trash",
+        color: "outline-danger",
+        onClickFunction: deleteData,
+        fnParams: {}
+      }
+    ],
+    fnParams: {
+
+    }
+  }, ],
+  tableSelector: "#" + random_id
+})
+venueSource.load(random_id, "#tab2a")
+
+customCols = [{
+  name: "General",
+  list: [
+
+    'title',
+    'subtitle',
+    { label: 'description', editor: true },
+    { label: 'img_url', upload: true },
+    'id',
+
+  ]
+}, {
+  name: "Details",
+  list: [{
+      label: 'start_datetime',
+      date: true,
+      alt_name: "Start"
+    },
+    {
+      label: 'end_datetime',
+      date: true,
+      alt_name: "End"
+    },
+
+    { label: 'organizer_id', selection: organizerSource.allData, alt_name: "Organizer" },
+    { label: 'venue_id', selection: venueSource.allData, alt_name: "Venue" },
+  ]
+}]
+
+random_id = 'events'
+eventSource = new phoenixModel({
+  data: {
+    preloads: ['venue']
+  },
+  columns: [
+
+    { label: 'id', data: 'id' },
+
+    { label: 'Image', data: 'img_url', showImg: true },
+    { label: 'Title', data: 'title', showSubtitle: true, subtitle: 'subtitle' },
+    { label: 'subtitle', data: 'subtitle', className: "d-none" },
+    { label: 'Start', data: 'start_datetime', formatDateTime: true },
+    { label: 'End', data: 'end_datetime', formatDateTime: true },
+    { label: 'Venue', data: 'id', showChild: true, xdata: { child: 'venue', data: 'name' } },
+    { label: 'Action', data: 'id' }
+
+  ],
+  moduleName: "Event",
+  link: "Event",
+  customCols: customCols,
+  buttons: [{
+    buttonType: "grouped",
+    name: "Manage",
+    color: "outline-warning",
+    buttonList: [{
+        name: "Assign Children",
+        iconName: "fa fa-edit",
+        color: "btn-sm btn-outline-warning",
+        onClickFunction: assignChildren,
+        fnParams: {
+
+
+        }
+      },
+      {
+        name: "Edit",
+        iconName: "fa fa-edit",
+        color: "btn-sm btn-outline-warning",
+        onClickFunction: editData,
+        fnParams: {
+          drawFn: enlargeModal,
+          customCols: customCols
+        }
+      },
+      {
+        name: "Delete",
+        iconName: "fa fa-trash",
+        color: "outline-danger",
+        onClickFunction: deleteData,
+        fnParams: {}
+      }
+    ],
+    fnParams: {
+
+    }
+  }, ],
+  tableSelector: "#" + random_id
+})
+eventSource.load(random_id, "#tab1")
+</script>

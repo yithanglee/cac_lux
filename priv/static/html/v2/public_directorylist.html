@@ -1,0 +1,205 @@
+<style type="text/css">
+div[aria-label="content"] {
+  line-height: 1.2em;
+}
+</style>
+<div class="row gx-0">
+  <div class=" align-items-center d-flex justify-content-end">
+    <div class="align-items-center d-flex">
+      <label class=" px-2" style="min-width: 160px;">Service Year</label>
+      <select id="service_years" class="form-control">
+      </select>
+    </div>
+  </div>
+  <div class="col-12 col-lg-10 offset-lg-1" id="entry">
+  </div>
+</div>
+<script type="text/javascript">
+function populateUserGroup(ug, ug_id) {
+  var user_group
+  if (ug != null) {
+    user_group = ug
+  } else {
+
+  }
+
+  var user = user_group.user
+  var venue_list = []
+  var cname = ""
+  var remarks = ""
+  var placeholder = ""
+  var bio = ""
+  if (user_group.remarks != null) {
+    remarks = user_group.remarks
+  }
+  console.log(user_group)
+  if (user != null) {
+    if (user.bio != null) {
+      bio = user.bio
+    }
+    if (user.chinese_name != null) {
+      cname = user.chinese_name
+    }
+    var venues = user.venues
+
+    venues.forEach((venue, i) => {
+      venue_list.push(`
+	      		<div class="">` + venue.name + `</div>
+	      		<div class="text-sm text-secondary">` + venue.desc + `</div>
+	      		<div class="text-sm">` + venue.address + `</div>`)
+    })
+
+    if (user.image_url == null) {
+      var initials = []
+      user.full_name.split(" ").forEach((v, i) => {
+        initials.push(v.split("")[0])
+      })
+
+      placeholder = `<span style="font-size: 0.8em;" >` + initials.join("") + `</span>`
+    }
+
+    $("#group_" + user_group.group_id).append(`
+    		<div class="col-12 ">
+						
+    	        <div class="dir_entry pt-2 pb-4 d-flex align-items-center  gap-4 justify-content-start">
+						   
+
+
+										<div 
+											class="d-none rounded-circle text-center bg-primary d-lg-flex align-items-center justify-content-center text-white"
+											style="background-size: cover; background-image: url('` + user.image_url + `'); height: 60px;width: 60px"
+											>
+										  ` + placeholder + `
+										</div>
+
+
+										<div class="d-flex flex-column">
+											<span class=" text-primary flex-grow-1 py-2">` + remarks + `</span> 
+										<div 
+											class="d-lg-none my-3 rounded-circle text-center bg-primary d-flex align-items-center justify-content-center text-white"
+											style="background-size: cover; background-image: url('` + user.image_url + `'); height: 60px;width: 60px"
+											>
+										  ` + placeholder + `
+										</div>
+
+											<div class="d-flex justify-content-start gap-4">
+																<div class="d-flex flex-column">
+																			<span>` + cname + `</span>
+																			<span class="text-sm">` + user.full_name + `</span>
+																</div>
+																<div class="d-flex flex-column">		
+																	<span class="text-sm">HP: ` + user.phone + `</span>
+																	<span class="text-sm">Email: ` + user.email + `</span>
+																</div>
+											</div>
+										</div>
+						    	</div>
+							</div>
+    		</div>
+
+							`)
+  } else {
+    $("#group_" + user_group.group_id).append(`
+
+					<div class="col-12 ">
+    				<div class="pb-4 d-flex align-items-center gap-2 justify-content-between">
+						    	<div class="d-flex flex-column w-50">
+										<span class=" text-primary flex-grow-1 py-2">` + remarks + `</span> 
+										<div class="dir_entry">
+										</div>
+						    	</div>
+						</div>
+					</div>
+						`)
+  }
+
+}
+
+var s = new Date()
+var currentYear = s.getFullYear()
+var year_id;
+service_yearSource = new phoenixModel({
+  columns: [
+    { label: 'id', data: 'id' },
+    { label: 'Action', data: 'id' }
+  ],
+  moduleName: "ServiceYear",
+  link: "ServiceYear",
+  tableSelector: "#sy"
+})
+
+
+populateTableData(service_yearSource, 100, () => {
+
+  service_yearSource.allData.forEach((year, i) => {
+    if (year.year == currentYear) {
+      year_id = year.id
+    }
+    $("#service_years").append(`
+	      <option value="` + year.id + `" year="` + year.year + `">` + year.year + `</option>
+	    `)
+  })
+  $("#service_years").val(year_id)
+  loadGroups()
+})
+
+
+function populateGroup(group_id) {
+
+  var group = App.api("get_group", { id: group_id, service_year_id: $("#service_years").val() })
+  $("section#group_" + group_id).html('')
+
+  group.user_groups.sort(function(b, a) {
+    return b.id - a.id;
+  })
+
+  group.user_groups.forEach((user_group, ii) => {
+    if (user_group.service_year_id == parseInt($("#service_years").val())) {
+      populateUserGroup(user_group, user_group.id)
+    }
+  })
+
+
+}
+
+
+function loadGroups() {
+  $("#entry").html('')
+  var groups = App.api("groups", { service_year_id: year_id, preloads: { users: "venues" } })
+  groups.sort(function(b, a) {
+    return b.id - a.id;
+  })
+  groups.forEach((group, i) => {
+
+    $("#entry").append(`
+				<div class=" p-2 my-2">
+
+				<div class="d-flex">
+					<div class="py-4 d-flex justify-content-start gap-2">
+								<span class="fs-2">` + group.name + `</span>
+					</div>
+			   <div class="flex-grow-1 d-flex align-items-center justify-content-between">
+             <div style="height: 0px;width: 100%;" class="mx-4 border-bottom"></div>
+         </div>
+				</div>
+					<section class="row" id="group_` + group.id + `">
+					</section>
+				</div>`)
+    group.user_groups.sort(function(b, a) {
+      return b.id - a.id;
+    })
+
+    group.user_groups.forEach((user_group, ii) => {
+      if (user_group.service_year_id == parseInt($("#service_years").val())) {
+        populateUserGroup(user_group, user_group.id)
+      }
+    })
+
+
+  })
+}
+$("#service_years").unbind()
+$("#service_years").on("change", function() {
+  loadGroups()
+})
+</script>

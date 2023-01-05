@@ -1,0 +1,332 @@
+<div class="card">
+  <div class="card-body">
+    <div class="d-flex justify-content-between gap-2 align-items-center">
+      <div class="fs-5">Special Appointments</div>
+      <div class="row  w-100 text-end">
+        <div class="col-12 col-lg-8 align-items-center d-flex">
+          <label class=" px-2" style="min-width: 100px;">Service Year</label>
+          <select id="service_years2" class="form-control">
+          </select>
+        </div>
+        <div class="col-12 col-lg-4">
+          <div onclick='form_new("#regi", {}, null, populateNamelist)' class="text-sm btn btn-outline-primary">
+            <i class="fa fa-plus"></i>
+            Region/District
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="row">
+      <div class="col-3">
+        <ul class="nav nav-pills flex-column" id="region_li">
+        </ul>
+      </div>
+      <div class="col-9">
+        <ul id="church_entry">
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+service_yearSource.allData.forEach((year, i) => {
+  $("#service_years2").append(`
+      <option value="` + year.id + `">` + year.year + `</option>
+    `)
+})
+$("#service_years2").val(year_id)
+
+function pastorButton(venue_id, role, region_id) {
+  return `
+        
+              <div onclick="createPastor('` + venue_id + `', '` + role + `', '` + region_id + `')"  
+                class="az opacity-0 btn btn-sm btn-outline-success ">
+                <i class="fa fa-user-plus text-sm"> </i>
+              </div>
+            
+
+            `
+}
+
+function chooseButton(venue_id, role, region_id) {
+  return `
+          
+              <div onclick="choosePastor('` + venue_id + `', '` + role + `', '` + region_id + `')"  
+                class="az opacity-0 btn btn-sm btn-outline-warning ">
+                <i class="fa fa-user-plus text-sm"> </i>
+              </div>
+           
+
+            `
+}
+
+function deleteButton(user_id, venue_id, role, region_id) {
+  return `
+          
+              <div onclick="deletePastor('` + user_id + `','` + venue_id + `', '` + role + `', '` + region_id + `')"  
+                class="az opacity-0 btn btn-sm btn-outline-danger ">
+                <i class="fa fa-user-minus text-sm"> </i>
+              </div>
+           
+
+            `
+}
+
+
+
+function populateNamelist(year_id) {
+  $("#church_entry").html('')
+  $("#region_li").html('')
+  var regions = App.api("regions", {})
+  regions.forEach((region, i) => {
+    $("#church_entry").append(`
+      <li class="d-none content-region" id="region_` + region.id + `">
+      </li>
+      `)
+    populateRegion({ region_id: region.id, year_id: year_id })
+
+    $("#region_li").append(`
+
+          <li class="nav-item" region-id="` + region.id + `">
+            <a class="region nav-link" region-id="` + region.id + `" href="javascript:void(0);">` + region.name + `</a>
+          </li>
+
+      `)
+  })
+
+  $(document).on("click", "a.region", function() {
+    var r_id = $(this).attr("region-id")
+    $("a.region").removeClass("active")
+
+    $("li.content-region").addClass("d-none")
+    $(this).addClass("active")
+    $("li.content-region#region_" + r_id).removeClass("d-none")
+  })
+}
+
+function populateRegion(j) {
+  var region = App.api("get_region", { id: j.region_id, year_id: j.year_id })
+  var venues = region.venues
+  var venues_list = []
+  venues.sort(function(b, a) {
+    return b.id - a.id;
+  })
+  venues.forEach((venue, ii) => {
+    var user_venues = venue.user_venues
+    var roles = ['主理', '协理', '代理', '副理', '传道']
+    var tds = []
+    roles.forEach((role, ri) => {
+      var user_venue = user_venues.filter((uv, iuv) => {
+        return uv.remarks == role && uv.service_year_id == parseInt(j.year_id);
+      })
+      if (user_venue.length > 0 && user_venue[0].user != null) {
+        var user = user_venue[0].user
+        tds.push(`
+                <td>
+                  ` + user.chinese_name + `<br>
+                  ` + user.full_name + `<br>
+                  ` + deleteButton(user.id, venue.id, role, region.id) + `
+                </td>
+                `)
+      } else {
+        tds.push(`<td>` + pastorButton(venue.id, role, region.id) + `` + chooseButton(venue.id, role, region.id) + ` </td>`)
+      }
+    })
+    var vdesc = venue.desc != null ? venue.desc : "";
+    var vreg_no = venue.reg_no != null ? venue.reg_no : "";
+    venues_list.push(`
+      <tr>
+        <td>` + (ii + 1) + `</td>
+        <td>
+          <div class="d-flex flex-column  ">
+            <span>` + venue.name + ` </span>
+            <span class="text-sm"> ` + vdesc + `</span>
+            <span class="text-secondary">` + vreg_no + `<span>
+          </div>
+        </td>
+        ` + tds.join("") + `
+      </tr>`)
+
+  })
+  $("li#region_" + j.region_id).html(`
+        <div class="p-4 d-flex justify-content-between align-items-center gap-2">
+          <div class="fs-4">
+            ` + region.name + ` ` + region.alias + `
+          </div>
+          <div>
+            <div 
+              onclick='form_new("#venues", {venue_type: "Church", region_id: ` + region.id + `}, null, populateRegion)'
+              class="text-sm btn btn-outline-warning">
+              <i class="fa fa-plus"></i>
+                Church
+            </div>
+            <div 
+              onclick='populateRegion({region_id: ` + region.id + `, year_id: ` + $("#service_years2").val() + `});'
+              class="text-sm btn btn-outline-warning">
+              <i class="fa fa-refresh"></i>
+                Refresh
+            </div>
+          </div>
+        </div>
+        <table class="table">
+          <thead>
+            <tr>
+              <th></th>
+              <th>牧区</th>
+              <th>主理</th>
+              <th>协理</th>
+              <th>代理</th>
+              <th>副理</th>
+              <th>传道</th>
+            </tr>
+          </thead>
+          <tbody>
+            ` + venues_list.join("") + `
+          </tbody>
+        </table>
+      `)
+
+
+  $("#church_entry tr").on("mouseenter", function() {
+    $(this).find(".az").removeClass("opacity-0")
+
+  })
+  $("#church_entry tr").on("mouseleave", function() {
+
+    $(this).find(".az").addClass("opacity-0")
+  })
+}
+$("#service_years2").unbind()
+$("#service_years2").on("change", function() {
+  populateNamelist($("#service_years2").val())
+})
+
+populateNamelist(year_id)
+
+function checkParams(j) {
+  console.log(j)
+  var user = j
+  App.post("create_user_venue", {
+    user_id: user.id,
+    venue_id: window.venue_id,
+    remarks: window.role_name,
+    service_year_id: $("#service_years2").val()
+
+  })
+  populateRegion({ region_id: window.region_id, year_id: $("#service_years2").val() })
+}
+
+function setMemberBcode(params) {
+  var dt = params.dataSource;
+  window.currentSelector = dt.tableSelector
+  var table = dt.table;
+  var r = table.row(params.row);
+  var rowData = table.data()[params.index]
+
+  App.post("create_user_venue", {
+    user_id: rowData.id,
+    venue_id: window.venue_id,
+    remarks: window.role_name,
+    service_year_id: $("#service_years2").val()
+
+  })
+  populateRegion({ region_id: window.region_id, year_id: $("#service_years2").val() })
+  $("#mySubModal").modal("hide")
+
+}
+
+function choosePastor(venue_id, role, region_id) {
+  window.role_name = role
+  window.venue_id = venue_id
+  window.region_id = region_id
+  queryMember()
+}
+
+function deletePastor(user_id, venue_id, role, region_id) {
+  App.post("delete_user_venue", {
+    user_id: user_id,
+    venue_id: venue_id,
+    remarks: role
+
+  })
+  populateRegion({ region_id: region_id, year_id: $("#service_years2").val() })
+}
+
+function createPastor(venue_id, role, region_id) {
+  window.role_name = role
+  window.venue_id = venue_id
+  window.region_id = region_id
+  form_new("#users", {}, null, checkParams)
+}
+
+function queryMember() {
+  App.modal({ drawFn: regularModal, autoClose: false, selector: "#mySubModal", header: `Query Member`, footer: `<button class="btn btn-primary" onclick='  $("#mySubModal").modal("hide")'>Close</button>`, content: `<div id="tab2w">Member</div>` })
+  random_id = makeid(4)
+  memberSource = new phoenixModel({
+    onDrawFn: () => {
+      if ($("#member_book").length == 0) {
+        $("#mg").closest(".table-responsive").find(".module_buttons").prepend(`
+        <label class="col-form-label " for="inputSmall">Member </label>
+        <input class="mx-4 form-control form-control-sm" id="member_book"></input>
+                  `)
+      }
+      $('input#member_book').unbind();
+      $('input#member_book').on('change', function(e) {
+        var query = $(this).val()
+        var tarMod = window.phoenixModels.filter((v, i) => {
+          return v.moduleName == 'User' && v.tableSelector == '#mg'
+        })[0]
+        tarMod.table
+
+          .search(query)
+          .draw();
+      })
+
+    },
+    data: {
+      preloads: ["role"],
+      additional_search_queries: ["full_name"],
+      // sorts: [
+      //   [6, 'desc']
+      // ]
+    },
+    columns: [{
+        label: 'Name',
+        data: 'full_name',
+        showSubtitle: true,
+        subtitle: 'chinese_name'
+      },
+      {
+        label: 'cname',
+        data: 'chinese_name',
+        className: 'd-none'
+      },
+      {
+        label: 'Action',
+        data: 'id'
+      }
+    ],
+    moduleName: "User",
+    link: "User",
+    customCols: null,
+    buttons: [
+
+      {
+        name: "Insert",
+        iconName: "fa fa-check",
+        color: "btn-sm btn-outline-success",
+        onClickFunction: setMemberBcode,
+        fnParams: {}
+      },
+
+    ],
+    tableSelector: "#" + 'mg'
+  })
+
+  memberSource.load('mg', "#tab2w")
+
+
+}
+</script>

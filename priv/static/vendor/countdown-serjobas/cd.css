@@ -1,0 +1,50 @@
+  .container {
+    position: relative;
+    top: 30px;
+    width: 300px;
+    margin: 0 auto;
+  }
+
+  .display-remain-time {
+    font-weight: 100;
+    font-size: 65px;
+    color: var(--bs-primary);
+  }
+
+  #pause {
+    outline: none;
+    background: transparent;
+    border: none;
+    margin-top: 10px;
+    width: 50px;
+    height: 50px;
+    position: relative;
+    font-size:  3em;
+  }
+
+  #pause:hover {
+    opacity: 0.8;
+  }
+
+  .e-c-base {
+    fill: none;
+    stroke: var(--bs-primary);
+    stroke-width: 4px
+  }
+
+  .e-c-progress {
+    fill: none;
+    stroke: var(--bs-primary);
+    stroke-width: 4px;
+    transition: stroke-dashoffset 0.7s;
+  }
+
+  .e-c-pointer {
+    fill: var(--bs-secondary);
+    stroke: var(--bs-primary);
+    stroke-width: 2px;
+  }
+
+  #e-pointer {
+    transition: transform 0.7s;
+  }

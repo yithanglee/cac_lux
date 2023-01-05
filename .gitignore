@@ -27,4 +27,4 @@ cac-*.tar
 # this depending on your deployment strategy.
 
 .env
-/priv/static/
+# /priv/static/

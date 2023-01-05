@@ -1,0 +1,81 @@
+<script type="text/javascript" src="/js/chart.min.js"></script>
+<div class="row gx-0 pt-4">
+  <div class="col-10 offset-1 min-vh-100">
+    <h1>Dashboard</h1>
+    <div class="row gx-0" >
+      <div class="col-10">
+        <canvas id="myChart" ></canvas>
+      </div>
+    </div>
+    <div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+// need to convert into a seconds framework
+// has 1 machine
+// has 6 items to monitor
+// need a live dashboard for the 6 item
+// historical view for past 3 hours, 6 hours, 12 hours, 24 hours
+
+// 1 machine 
+
+
+
+var genericOptions = {
+  fill: false,
+  interaction: {
+    intersect: false
+  },
+  radius: 1,
+  tension: 0.2,
+  scales: {
+    y: {
+      min: -1,
+      max: 6,
+    }
+  }
+};
+
+
+var timestapms = ["100", "200", "300", "400", "500", "600", "700", "800", "900", "1000", "100", "200", "300", "400", "500", "600", "700", "800", "900", "1000"]
+var plc_io_data = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+
+var skipped = (ctx, value) => ctx.p0.skip || ctx.p1.skip ? value : undefined;
+var down = (ctx, value) => ctx.p0.parsed.y > ctx.p1.parsed.y ? value : undefined;
+var config2 = {
+  type: 'line',
+  data: {
+    labels: timestapms,
+    datasets: [{
+      label: 'Power current (Amp)',
+      data: plc_io_data,
+      borderColor: 'rgb(75, 192, 192)',
+      segment: {
+        borderColor: ctx => skipped(ctx, 'rgb(0,0,0,0.2)') || down(ctx, 'rgb(192,75,75)'),
+        borderDash: ctx => skipped(ctx, [6, 6]),
+      },
+      spanGaps: true
+    }]
+  },
+  options: genericOptions
+};
+
+
+
+
+var myChart = new Chart(
+  document.getElementById('myChart'),
+  config2
+);
+
+
+setInterval(() => {
+  // myChart.data.datasets[0].data.pop();
+
+  myChart.data.datasets[0].data.splice(0, 1)
+
+  myChart.data.datasets[0].data.push(Math.round(Math.random() * 10) / 2)
+  myChart.update()
+}, 800)
+</script>

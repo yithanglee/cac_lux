@@ -1,0 +1,486 @@
+
+<div id="blog_content" class="p-4 ps-0">
+</div>
+<script type="text/javascript">
+var tab_list = [{
+    title: "Blogs",
+    icon: "fa fa-list",
+    content: `<div id="tab1">
+    </div>`,
+  },
+  {
+    title: "Authors",
+    icon: "fa fa-users",
+    content: `<div id="tab2"></div>`,
+  },
+  {
+    title: "Categories",
+    icon: "fa fa-tags",
+    content: `<div id="tab3"></div>`,
+  },
+
+  {
+    title: "StoredMedia",
+    icon: "fa fa-image",
+    content: `<div id="tab4"></div>`,
+  }
+
+]
+App.Page.tablist("#blog_content", tab_list, "Blogs")
+
+$("button#Categories-tab").click(() => {
+  $("button#AssignCategories-tab").remove()
+})
+
+function assignChildren(params) {
+
+  var title = "AssignCategories"
+  var i = 1
+  var icon = "fa fa-tags"
+  $("button#AssignCategories-tab").remove()
+  $(".tab-pane#AssignCategories").remove()
+  var content = `<div id="tab54"></div>`
+  var b = `
+          <div class="tab-pane fade ` + (i == 0 ? 'show active' : '') + `" 
+          id="` + title + `"
+          role="tabpanel" 
+          aria-labelledby="` + title + `-tab"
+          href="#` + title + `"
+          >` + content + `
+          </div>
+          `
+  console.log(b)
+  $("#v-pills-tabContent").append(b)
+
+
+  var assignParentContent = App.html("assign_parent_category.html")
+  $("#tab54").html(assignParentContent)
+
+  var dt = params.dataSource;
+  window.currentSelector = dt.tableSelector
+  var table = dt.table;
+  var r = table.row(params.row);
+  var rowData = table.data()[params.index]
+  console.log(rowData)
+  var a = `<button  
+              class="p-2 d-flex justify-content-between align-items-center nav-link  text-center  ` + (i == 0 ? 'active' : '') + `"       
+              id="` + title + `-tab"
+              data-bs-toggle="pill"  
+              data-bs-target="#` + title + `"
+              type="button"
+              role="tab" > 
+              
+              <i class="` + icon + `"> </i>
+              <span class="px-3">` + title + `</span>
+          </button>`
+  $("button#Categories-tab").after(a)
+  $("#AssignCategories-tab").click()
+  $("#assign-children").before(`<h3>` + rowData.name + `</h3>`)
+  var children = App.api("children_category", { id: rowData.id })
+  categorySource1.allData.forEach((v, i) => {
+
+    var res =
+      children.filter((cv, ci) => {
+        return cv.id == v.random_id
+      })
+
+    if (res.length > 0) {
+      $("#assign-children").append(`
+          <div class="form-check">
+                        <input class="form-check-input" type="checkbox" checked value="" id="` + v.id + `" name="category[` + rowData.id + `][` + v.id + `]">
+                        <label class="form-check-label" for="` + v.id + `">
+                         ` + v.name + `
+                        </label>
+                      </div>`)
+    } else {
+
+      $("#assign-children").append(`
+          <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="` + v.id + `" name="category[` + rowData.id + `][` + v.id + `]">
+                        <label class="form-check-label" for="` + v.id + `">
+                         ` + v.name + `
+                        </label>
+                      </div>`)
+    }
+  })
+}
+
+var readyTables = [];
+var random_id = "smm"
+var customCols = [
+  'id',
+  'name', {label: 'f_type', selection: ["image", "pdf"]},
+  's3_url',
+  { label: 'img_url', upload: true }
+]
+stored_mediaSource = new phoenixModel({
+  columns: [
+
+    { label: 'id', data: 'id' },
+
+    { label: 'Filename', data: 'name' },
+    { label: 'Type', data: 'f_type' },
+    { label: 's3_url', data: 's3_url', showImg: true },
+    { label: 'Action', data: 'id' }
+
+  ],
+  moduleName: "StoredMedia",
+  link: "StoredMedia",
+  customCols: customCols,
+  buttons: [{
+    buttonType: "grouped",
+    name: "Manage",
+    color: "outline-warning",
+    buttonList: [
+
+      {
+        name: "Edit",
+        iconName: "fa fa-edit",
+        color: "btn-sm btn-outline-warning",
+        onClickFunction: editData,
+        fnParams: {
+          drawFn: enlargeModal,
+          customCols: customCols
+        }
+      },
+      {
+        name: "Delete",
+        iconName: "fa fa-trash",
+        color: "outline-danger",
+        onClickFunction: deleteData,
+        fnParams: {}
+      }
+    ],
+    fnParams: {
+
+    }
+  }, ],
+  tableSelector: "#" + random_id
+})
+stored_mediaSource.load(random_id, "#tab4")
+
+var random_id = "aths"
+var customCols = ['id', 'name', 'bio', { label: 'img_url', upload: true }]
+authorSource = new phoenixModel({
+  onDrawFn: () => {
+    readyTables.push(true)
+  },
+  columns: [
+
+    { label: 'Name', data: 'name' },
+    { label: 's3_url', data: 'img_url', showImg: true },
+    { label: 'Action', data: 'id' }
+
+  ],
+  moduleName: "Author",
+  link: "Author",
+  customCols: customCols,
+  buttons: [{
+    buttonType: "grouped",
+    name: "Manage",
+    color: "outline-warning",
+    buttonList: [
+
+      {
+        name: "Edit",
+        iconName: "fa fa-edit",
+        color: "btn-sm btn-outline-warning",
+        onClickFunction: editData,
+        fnParams: {
+          drawFn: enlargeModal,
+          customCols: customCols
+        }
+      },
+      {
+        name: "Delete",
+        iconName: "fa fa-trash",
+        color: "outline-danger",
+        onClickFunction: deleteData,
+        fnParams: {}
+      }
+    ],
+    fnParams: {
+
+    }
+  }, ],
+  tableSelector: "#" + random_id
+})
+authorSource.load(random_id, "#tab2")
+
+
+categorySource1 = new phoenixModel({
+  onDrawFn: () => {
+
+  },
+  columns: [
+
+    { label: 'Action', data: 'id' }
+  ],
+  moduleName: "Category",
+  link: "Category",
+  customCols: customCols,
+  buttons: [],
+  tableSelector: "#1c"
+})
+getTableData(categorySource1)
+
+
+var random_id = makeid(4)
+var customCols = [
+
+  'name',
+  'alias',
+  'sort_no',
+  'show_menu',
+  'desc',
+  'id',
+  'content',
+  'img_url',
+  { label: 'parent_id', selection: categorySource1.allData }
+
+]
+categorySource = new phoenixModel({
+  data: { preloads: ["parent"] },
+  onDrawFn: () => {
+    readyTables.push(true)
+  },
+  columns: [
+    { label: 'ID', data: 'id' },
+    { label: 'Name', data: 'name' },
+    { label: 'Alias', data: 'alias' },
+    { label: 'Parent', data: 'id', showChild: true, xdata: { child: "parent", data: "name" } },
+    { label: 'Action', data: 'id' }
+  ],
+  moduleName: "Category",
+  link: "Category",
+  customCols: customCols,
+  buttons: [{
+    buttonType: "grouped",
+    name: "Manage",
+    color: "outline-warning",
+    buttonList: [
+
+      {
+        name: "Assign Children",
+        iconName: "fa fa-edit",
+        color: "btn-sm btn-outline-warning",
+        onClickFunction: assignChildren,
+        fnParams: {
+
+
+        }
+      }, {
+        name: "Edit",
+        iconName: "fa fa-edit",
+        color: "btn-sm btn-outline-warning",
+        onClickFunction: editData,
+        fnParams: {
+          drawFn: enlargeModal,
+          customCols: customCols
+        }
+      },
+      {
+        name: "Delete",
+        iconName: "fa fa-trash",
+        color: "outline-danger",
+        onClickFunction: deleteData,
+        fnParams: {}
+      }
+    ],
+    fnParams: {
+
+    }
+  }, ],
+  tableSelector: "#" + random_id
+})
+categorySource.load(random_id, "#tab3")
+
+
+var random_id = "bgs"
+var customCols = [
+
+  {
+    name: "General",
+    list: ['id',
+      { label: 'author_id', selection: authorSource.allData },
+      { label: 'category_id', selection: categorySource.allData },
+      { label: 'blog_type', selection: ['blog', 'page'] },
+      'title',
+      { label: 'subtitle', binary: true },
+      'excerpt',
+    ]
+  },
+  {
+    name: "Content",
+    list: [
+      { label: 'content', editor: true },
+
+      { label: 'img_url', upload: true },
+      { label: 'thumbnail_img', upload: true },
+    ]
+  },
+  {
+    name: "Js",
+    list: [
+
+     { label: 'attachment_id', selection: stored_mediaSource.allData },
+      { label: 'javascript_binary', binary: true },
+
+    ]
+  }
+
+
+
+
+
+];
+blogSource = new phoenixModel({
+  data: { preloads: ["category"] },
+  columns: [
+    { label: 'Img', data: 'img_url', showImg: true },
+    { label: 'Title', data: 'title', showSubtitle: true, subtitle: 'img_url' },
+    { label: 'Subtitle', className: 'd-none', data: 'img_url' },
+    {
+      label: 'Category',
+      data: 'category_id',
+      showChild: true,
+      xdata: {
+        child: "category",
+        data: "name"
+      }
+    },
+    { label: 'Date', data: 'inserted_at', formatDateTime: true },
+    { label: 'Action', data: 'id' }
+
+  ],
+  moduleName: "Blog",
+  link: "Blog",
+  customCols: customCols,
+  buttons: [{
+    buttonType: "grouped",
+    name: "Manage",
+    color: "outline-warning",
+    buttonList: [{
+        name: "Edit",
+        iconName: "fa fa-edit",
+        color: "btn-sm btn-outline-warning",
+        onClickFunction: editData,
+        fnParams: {
+          drawFn: enlargeModal,
+          customCols: customCols
+        }
+      },
+      {
+        name: "Delete",
+        iconName: "fa fa-trash",
+        color: "outline-danger",
+        onClickFunction: deleteData,
+        fnParams: {}
+      }
+    ],
+    fnParams: {
+
+    }
+  }, ],
+  tableSelector: "#" + random_id
+})
+
+setInterval(() => {
+  if (blogSource.table == null) {
+    if (readyTables.length == 2) {
+      blogSource.load(random_id, "#tab1")
+    }
+  }
+}, 500)
+
+// App.modal({selector: "#myModal", header: "Choose Image"})
+function callStoredMedia(editor) {
+  stored_mediaSource2 = new phoenixModel({
+    columns: [{
+        label: 's3_url',
+        data: 's3_url',
+        showImg: true
+      },
+      {
+        label: 'Name',
+        data: 'name'
+      },
+      {
+        label: 'Action',
+        data: 'id'
+      }
+    ],
+    moduleName: "StoredMedia",
+    link: "StoredMedia",
+    buttons: [{
+      name: "Select",
+      iconName: "fa fa-check",
+      color: "btn-sm btn-outline-success",
+      onClickFunction: (params) => {
+        var dt = params.dataSource;
+        var table = dt.table;
+        var data = table.data()[params.index]
+        console.log(data.id)
+        // $("input[name='Book[stored_media][name]']").val(data.name)
+
+        editor.insertHtml(`
+                  <div class="d-lg-none d-block"
+                    style="
+                  overflow: hidden;
+                  background: #C04848;
+                  background: linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 0), rgba(2,2,2, 0.1)), url('` + data.s3_url + `');
+                  height: 200px;
+                  background-size: cover;
+                  background-repeat: no-repeat;
+                  background-position: center;
+                    ">
+                  </div>
+                  <div class="d-none d-lg-block"
+                    style="
+                  overflow: hidden;
+                  background: #C04848;
+                  background: linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 0), rgba(2,2,2, 0.1)), url('` + data.s3_url + `');
+                  height: 400px;
+                  background-size: cover;
+                  background-repeat: no-repeat;
+                  background-position: center;
+                    ">
+                  </div>
+
+              `);
+
+        $("#myModal").modal('hide')
+      },
+      fnParams: {
+
+      }
+    }, ],
+    tableSelector: "#" + random_id
+  })
+  App.modal({
+    selector: "#myModal",
+    autoClose: false,
+    header: "Search StoredMedia",
+    content: `
+        <div id="stored_media">
+
+        </div>`
+  })
+  stored_mediaSource2.load(makeid(4), '#stored_media')
+  stored_mediaSource2.table.on("draw", function() {
+    if ($("#stored_media").length == 0) {
+      $(".module_buttons").prepend(`
+            <label class="col-form-label " for="inputSmall">StoredMedia </label>
+            <input class="mx-4 form-control form-control-sm" id="stored_media"></input>
+                      `)
+    }
+    $('input#stored_media').on('change', function(e) {
+      var query = $(this).val()
+      stored_mediaSource2.table
+        .columns(0)
+        .search(query)
+        .draw();
+    })
+  })
+}
+</script>

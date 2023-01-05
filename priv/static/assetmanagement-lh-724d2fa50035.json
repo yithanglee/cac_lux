@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "assetmanagement-lh",
+  "private_key_id": "724d2fa50035a193e020c847c305635253b76938",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDBzi1rnk3SdUsy\nVsFUPrWsecb1NYC0ywykZ6O/O+CZGJ5/T4xyyJXlenzXfRLteQWN1SOd3w/RlUV+\nH6cN9jMM2BngWbBXDJm1jiWhExyvL67Nvh0+NN3ODzYx+7nVmICRI1NeXpLe4zV8\nRGyUS6b+96197ddjV7sPX+bNhN2rVsPGNAfra6kM2XwCau1ggyS+s/3diZ6x1GJT\neM9Fv5oSXgKerGRCwe5MTRqtOGk4XIiuIHS3K2biTKCk/fGiU6uc/Re4e/mXUDtH\nDLMIuYD9sHa24lNBWi1Ow1Vpdlk4h/oWBL38J3xSzrMHRc0o7YwQTAJpX68eP6v+\n7wOnsTxbAgMBAAECggEAFh5JOcCJ4iyHxfl3u/0iL8qAJekSxM9tpG+9lOwpAF/6\nas4x2cHBtbxqdg9ssxR+SUcbdv+HpyQxl6jWIHZKMjuRjHS/9tdVzY4pBj6PpgC7\noviBDuHqtIMw7LhtZ46tkaLl9120xmJI7uNCPxR5PR0YPEiCLfDLxP/tb+QrhkvA\nI9soofcQiHRK7C8au9bsPza6qLfryQPPDEi8WG3FTLLZfxMGf8DKDRn5UmDf9Yaz\nCic0uViwqZM4auK/39CL2jDXoJMoPeBuol3sVn4Xe0waKb75xzf01+/XUMfkeJKF\nDJ7BhK+7Xy0ITbe0Qs0lrozWyOmyyzHWLE+pPTCc4QKBgQDz59N9V8x3icXsACI2\ny5iuqACKzt/zhqQLQ4L0KuAWPIpMYfD1lOFXjLWD3NmGQVhv3YhGZa48W3LmrRkd\nYBDpZpPyW0HYA/KbHIzZyhujXOPX3N+59mAPStAi8dNCh3NSyT5f0RvwoWw4UFh+\nnqNT2bvL7VW+MdxPNqlWgEqCewKBgQDLal85VbuecD2QKer39PxBnTsGyEW+PDsI\nqZhcVw6e12EUT/vpzQfwelms4NO5wlXc2rea/KS3CUJKMmHD9vJ9qkMXhbDNUzOT\n2ekFVOr609Qm23onCXENtcCZ5ZV1LR6GGFQupWXMy6yZL18CXjnXtCQc5Cy5xTpl\nukMOaip3oQKBgCNqSf8tPHcu/hoietVSAr15j3qYR1Ro/HDWQLGLeDZCXCJzJjXC\nhGXd/I1FCCDCZED5/cubAA2riaeNAtSNGmeJiXnrXkgrapKzNpB5FEJIPp0daS7r\nY09VIZuxWWeTm18t8WygRFpQVhJnODJKfpSyTN5ze7u+Kasm2LfCsQ75AoGBAKoO\nOp+PKfPx97W/JX24JO+hx8gKxCue5OeACS0hZsqqWrGFkJ/MVdfYIYIizz6b1fZ2\nL0r17apLpkyrRAp1OBKQtdhDXyS4awUvBtz7OhsJ3nHByKQ8A3SnvuWqBsHYP41x\nZ2c7xRhqKdhCvxYWuhq3sf0pUK7Z0NFc31R8sxYhAoGAdcpbvbFbZI1kffpvaRAF\nv5WazadPVynTeDrkwCb+XZUk484mB0na2woyTkvg1IMk0sIF0w5Gf+ANmMq/d0lm\nSUO2vAYE+OxL8cPpN0sBfcfIJAJZSKYyhgwKvmqkD2zoPlE7J/gBeuM84SK4LzTP\nTGf1XjP/ptCPlSQg+WeBwk8=\n-----END PRIVATE KEY-----\n",
+  "client_email": "phoenix-apps@assetmanagement-lh.iam.gserviceaccount.com",
+  "client_id": "110897733249388653114",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/phoenix-apps%40assetmanagement-lh.iam.gserviceaccount.com"
+}

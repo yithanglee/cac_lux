@@ -1,0 +1,418 @@
+<style type="text/css">
+.Mayor-video-msg {
+  background-color: var(--bs-indigo-dart);
+  padding: 40px 0 60px;
+}
+
+.reveal .slides>section,
+.reveal .slides>section>section {
+  padding: 0px !important;
+}
+
+.accordion-button::after {
+  -ms-flex-negative: 0;
+  flex-shrink: 0;
+  width: 1.25rem;
+  height: 1.25rem;
+  margin-left: auto;
+  content: "";
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23fff'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-size: 1.25rem;
+  /* transition: -webkit-transform .2s ease-in-out; */
+  /* transition: transform .2s ease-in-out; */
+  transition: transform .2s ease-in-out, -webkit-transform .2s ease-in-out;
+}
+
+.accordion-button:not(.collapsed)::after {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23ffffff'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
+  -webkit-transform: rotate(-180deg);
+  transform: rotate(-180deg);
+}
+
+.accordion-button:focus {
+  z-index: 3;
+  border-color: #f4aa90;
+  outline: 0;
+  box-shadow: 0 0 0 .25rem rgba(249, 249, 249, 0.25);
+}
+
+body a:focus {
+  color: #fff;
+}
+</style>
+<!--Slider Start-->
+<div style="height: 75vh; width: 100vw;position: relative;display: flex;">
+  <div class="reveal" style="">
+    <div class="slides ">
+      <section data-transition-speed="slow" class="flex-collumn align-items-center h-100 justify-content-center w-100" data-autoslide="3000">
+        <div class="row pt-4">
+          <span class=" col-12 ">
+            <div class="d-flex flex-column align-items-center justify-content-center">
+              <h3 class="fragment fade-up" data-fragment-index="1" data-autoslide="500">马来西亚基督教卫理公会华人年议会
+              </h3>
+              <span class="fs-3 fragment fade-up" data-fragment-index="2" data-autoslide="2000">Chinese Annual Conference,
+                The Methodist Church In Malaysia</span>
+              
+            </div>
+          </span>
+        </div>
+      </section>
+      <section class="flex-collumn align-items-center h-100 justify-content-center w-100" data-background-size="cover" data-background-repeat="none" data-background-color="#111" data-background-image='/images/akira-hojo-_86u_Y0oAaM-unsplash.webp' data-autoslide="4000" data-transition-speed="slow" style=" background: linear-gradient(
+          rgba(64, 64, 126, 0.82), 
+          rgba(64, 64, 126, 0.72), 
+          rgba(64, 64, 126, 0.62), 
+          rgba(64, 64, 126, 0));">
+        <div class="row pt-4">
+          <span class=" col-12 text-white ">
+            <div class=" d-flex flex-column align-items-center justify-content-center">
+              <h3>马来西亚基督教卫理公会华人年议会
+              </h3>
+              <span class="fs-3 ">Chinese Annual Conference,
+                The Methodist Church In Malaysia</span>
+            </div>
+          </span>
+        </div>
+      </section>
+      
+    </div>
+  </div>
+</div>
+<!--Slider End-->
+<script type="text/javascript">
+var deck = new Reveal({
+  disableLayout: true,
+  margin: 0.00,
+  center: false,
+  keyboard: true,
+  embedded: true,
+  autoSlide: 5000,
+  loop: true,
+  display: 'flex'
+});
+deck.initialize();
+deck.on( 'slidechanged', event => {
+  console.log( event.currentSlide );
+
+
+$(event.currentSlide) .find(".visible").removeClass("visible")
+
+});
+</script>
+<!--Main Content Start-->
+<div class="main-content">
+  <!--Mayor Msg with Video Start-->
+  <section class="Mayor-video-msg">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4 col-sm-5">
+          <!--Mayor Msg Start-->
+          <div class="city-tour gallery"> <strong>华人年议会 会督 </strong> <a href="http://youtu.be/VVvgm7AhFc8" data-rel="prettyPhoto" title="City Tour"><img src="/assets/playicon.png" alt=""></a> <img class="w-100" src="/images/daniel-tseng-QCjC1KpA4nA-unsplash.webp" alt=""> </div>
+          <!--Mayor Msg End-->
+        </div>
+        <div class="col-md-8 col-sm-7">
+          <div class="Mayor-welcome">
+            <h5>马来西亚基督教卫理公会华人年议会</h5>
+            <p>The Hightst Glory of the Citizen’s revolution was this; it connected in one indissoluble bond the principles of civil government with the principles of humanity. Saepe eveniet ut et voluptates etena repudiandae sint et molestiae non recusandae.</p>
+            <h6>廖克民牧师</h6>
+            <strong>华人年议会 代理会督</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!--Mayor Msg with Video End-->
+  <!--City News Start-->
+  <section class="wf100 city-news p75">
+    <div class="container">
+      <div class="title-style-3">
+        <h3>年会活动报导</h3>
+        <p></p>
+      </div>
+      <div class="row" id="l3">
+      </div>
+    </div>
+  </section>
+  <!--City News End-->
+  <!--Recent Events Start-->
+  <section class="wf100 p75 recent-events">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-5">
+          <h3>年会活动报导</h3>
+          <div class="recent-event-block">
+            <!--Slider Big Slider Start-->
+            <div class="recent-event-slider" aria-label="recent-events">
+            </div>
+            <!--Slider Big Slider End-->
+            <div class="row g-1" aria-label="event-gallery">
+            </div>
+          </div>
+        </div>
+        <div class="col-md-7">
+          <h3>年会活动与讲座</h3>
+          <nav class="nav nav-tabs" role="tablist">
+            <a href="#Events" class="active p-3" aria-controls="Events" role="tab" aria-selected="true" data-bs-toggle="tab">活动</a>
+            <a href="#Meetings" class="p-3" aria-controls="Meetings" role="tab" aria-selected="false" data-bs-toggle="tab">讲座</a>
+          </nav>
+          <!-- Tab panes -->
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active show" id="Events">
+              <!--Event List Start-->
+              <!--Event List End-->
+            </div>
+            <div role="tabpanel" class="tab-pane " id="Meetings">
+              <!--Event List Start-->
+              <ul class="event-list">
+                <li> <strong class="edate">30 Jan, 2019</strong> <strong class="etime">09:00 pm</strong> </li>
+                <li><img src="/assets/upce-2.jpg" alt=""></li>
+                <li class="el-title">
+                  <h6><a href="#">Seminar on Child Labour held in next month</a></h6>
+                  <p><i class="fas fa-map-marker-alt"></i> Mayor Office, New York</p>
+                </li>
+                <li> <a href="#" class="joinnow">Join Now</a> </li>
+              </ul>
+              <!--Event List End-->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!--Recent Events End-->
+  <!--City News Start-->
+  <section class="wf100 city-news p75">
+    <div class="container">
+      <div class="title-style-3">
+        <h3>南钟报特选文章</h3>
+        <p>双月刊南钟报</p>
+      </div>
+      <div class="row" id="l4">
+      </div>
+    </div>
+  </section>
+  <!--City News End-->
+  <script type="text/javascript">
+  var events = App.api("get_events", {});
+
+  events.forEach((event, i) => {
+    var dt = new Date(event.start_datetime)
+
+    var edate = dt.toGMTString().split(",")[1].split(" ").splice(0, 4).join(" ")
+    var etime = dt.toLocaleTimeString()
+    var card = `
+
+              <ul class="event-list">
+                <li> <strong class="edate">` + edate + `</strong> <strong class="etime">` + etime + `</strong> </li>
+                <li><img style="height: 56px" src="` + event.img_url + `" alt=""></li>
+                <li class="el-title">
+                  <h6><a class="navi" href="/events/` + event.id + `/` + event.title + `">` + event.title + `</a></h6>
+                  <p><i class="fas fa-map-marker-alt"></i>` + event.venue.name + `</p>
+                </li>
+                <li> <a href="#" class="joinnow">Join Now</a> </li>
+              </ul>
+  `
+
+    $("div#Events").append(card)
+  })
+
+  var blogs = App.api("blogs", { category: "年会动态" });
+  // ------- Event Slider Start ------- //
+  $("div[aria-label='recent-events']").html('')
+  blogs.forEach((blog, i) => {
+    var excerpt = blog.excerpt
+    if (excerpt == null) {
+      excerpt = blog.subtitle
+    }
+    if (excerpt == null) {
+      excerpt = blog.title
+    }
+    var navcard = `
+      <div class="col-3" >
+
+                  <div class="new-thumb" style="
+                      cursor: pointer;
+                      height: 100px;
+                      background-repeat: no-repeat;
+                      background-position: center;
+                      background-size: cover;
+                      background-image: url('` + blog.img_url + `')
+                    " onclick="$('.recent-event-slider').slick('slickGoTo', ` + i + `)"> 
+                    <div >
+      </div>
+    `
+    var card = `
+                <div class="event-big">
+                  <div class="event-cap">
+                    <h5  >
+                      <a class="navi" href='/blogs/` + blog.id + `/` + blog.title + `'>` + blog.title + `</a></h5>
+                    <ul class="d-none">
+                      <li><i class="fas fa-image"></i> 83 Photos</li>
+                      <li><i class="fas fa-play-circle"></i> 16 Videos</li>
+                    </ul>` + excerpt + `
+                  </div>
+                  <div class="new-thumb" style="
+                      height: 500px;
+                      z-index: -1;
+                      background-repeat: no-repeat;
+                      background-position: center;
+                      background-size: cover;
+                      background-image: url('` + blog.img_url + `')
+                    " onclick="navigateTo('/blogs/` + blog.id + `/` + blog.title + `')"> 
+                    <div >
+                </div>
+              `
+    $("div[aria-label='recent-events']").append(card)
+    $("div[aria-label='event-gallery']").append(navcard)
+  })
+
+  if ($('.recent-event-slider').length) {
+    window.event_slider = $('.recent-event-slider').slick({
+      slidesToShow: 1,
+      slidesToScroll: 1,
+      arrows: false,
+    });
+  }
+  // ------- Event Slider End ------- //  
+
+  // ---- highlights ----
+  blogs.forEach((blog, i) => {
+
+    if (i < 4) {
+
+      var author_img = '/assets/tuser1.jpg'
+      var author_name = 'Reporter'
+      var excerpt = blog.excerpt
+      if (excerpt == null) {
+        excerpt = blog.subtitle
+      }
+      if (excerpt == null) {
+        excerpt = blog.title
+      }
+      if (blog.author != null) {
+        if (blog.author.img_url != null) {
+          author_img = blog.author.img_url
+        }
+        author_name = blog.author.name
+      }
+
+      var box = `
+          <div class="col-md-3 col-sm-6" data-title="` + blog.title + `"
+              data-blog-id="` + blog.id + `">
+            <div class="news-box">
+              <div class="new-thumb" style="
+                  height: 360px;
+                  background-repeat: no-repeat;
+                  background-position: center;
+                  background-size: contain;
+                  background-image: url('` + blog.img_url + `')
+                " onclick="navigateTo('/blogs/` + blog.id + `/` + blog.title + `')"> 
+                <span class="cat c2">` + blog.category.name + `</span> 
+            
+                <div >
+                </div> 
+              </div>
+              <div class="new-txt">
+                <ul class="news-meta">
+                  <li>` + blog.ago + ` ago</li>
+                  <li></li>
+                </ul>
+                <div class="navi" style="height: 100px;" >
+                <h6><a href='/blogs/` + blog.id + `/` + blog.title + `' >` + blog.title + `</a></h6>
+                </div
+                <p> ` + excerpt + ` </p>
+              </div>
+              <div class="news-box-f"> <img src="` + author_img + `" alt=""> ` + author_name + ` <a href="javascript:void(0);" onclick="navigateTo('/blogs/` + blog.id + `/` + blog.title + `')"><i class="fas fa-arrow-right"></i></a> </div>
+            </div>
+          </div>
+          `
+      $("#l3").append(box)
+    }
+
+  })
+
+  var blogs = App.api("blogs", { only_child: true, category: "e_southernbell" });
+  // ---- highlights ----
+  blogs.forEach((blog, i) => {
+
+    if (i < 8) {
+
+      var author_img = '/assets/tuser1.jpg'
+      var author_name = 'Reporter'
+      var excerpt = blog.excerpt
+      if (excerpt == null) {
+        excerpt = blog.subtitle
+      }
+      if (excerpt == null) {
+        excerpt = blog.title
+      }
+      if (blog.author != null) {
+        if (blog.author.img_url != null) {
+          author_img = blog.author.img_url
+        }
+        author_name = blog.author.name
+      }
+
+      var box = `
+          <div class="pt-4 col-md-3 col-sm-6" data-title="` + blog.title + `"
+              data-blog-id="` + blog.id + `">
+            <div class="news-box">
+              <div class="new-thumb" style="
+                  height: 100px;
+                  background-repeat: no-repeat;
+                  background-position: center;
+                  background-size: contain;
+                  background-image: url('` + blog.img_url + `')
+                " onclick="navigateTo('/blogs/` + blog.id + `/` + blog.title + `')"> 
+                <span class="cat c2">` + blog.category.name + `</span> 
+            
+                <div >
+                </div> 
+              </div>
+              <div class="new-txt">
+                <ul class="news-meta">
+                  <li>` + blog.ago + ` ago</li>
+                  <li></li>
+                </ul>
+                <div class="navi" style="height: 100px;" >
+                <h6><a href='/blogs/` + blog.id + `/` + blog.title + `' >` + blog.title + `</a></h6>
+                </div
+                <p> ` + excerpt + ` </p>
+              </div>
+              <div class="news-box-f"> <img src="` + author_img + `" alt=""> ` + author_name + ` <a href="javascript:void(0);" onclick="navigateTo('/blogs/` + blog.id + `/` + blog.title + `')"><i class="fas fa-arrow-right"></i></a> </div>
+            </div>
+          </div>
+          `
+      $("#l4").append(box)
+    }
+
+  })
+  </script>
+</div>
+<!--Main Content End-->
+<script type="text/javascript">
+if ($('#h3team-slider').length) {
+  $('#h3team-slider').owlCarousel({
+    loop: true,
+    margin: 30,
+
+    dots: false,
+    responsiveClass: true,
+    responsive: {
+      0: {
+        items: 1,
+        nav: true
+      },
+      600: {
+        items: 2,
+        nav: true
+      },
+      1000: {
+        items: 2,
+        nav: true,
+        loop: false
+      }
+    }
+  })
+}
+</script>
