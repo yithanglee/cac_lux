@@ -1,4 +1,3 @@
-
 <div id="blog_content" class="p-4 ps-0">
 </div>
 <script type="text/javascript">
@@ -12,6 +11,11 @@ var tab_list = [{
     title: "Authors",
     icon: "fa fa-users",
     content: `<div id="tab2"></div>`,
+  },
+  {
+    title: "Sitemaps",
+    icon: "fa fa-users",
+    content: `<div id="tabsitemap"></div>`,
   },
   {
     title: "Categories",
@@ -31,6 +35,10 @@ App.Page.tablist("#blog_content", tab_list, "Blogs")
 $("button#Categories-tab").click(() => {
   $("button#AssignCategories-tab").remove()
 })
+
+
+
+
 
 function assignChildren(params) {
 
@@ -109,7 +117,7 @@ var readyTables = [];
 var random_id = "smm"
 var customCols = [
   'id',
-  'name', {label: 'f_type', selection: ["image", "pdf"]},
+  'name', { label: 'f_type', selection: ["image", "pdf"] },
   's3_url',
   { label: 'img_url', upload: true }
 ]
@@ -323,7 +331,7 @@ var customCols = [
     name: "Js",
     list: [
 
-     { label: 'attachment_id', selection: stored_mediaSource.allData },
+      { label: 'attachment_id', selection: stored_mediaSource.allData },
       { label: 'javascript_binary', binary: true },
 
     ]
@@ -483,4 +491,61 @@ function callStoredMedia(editor) {
     })
   })
 }
+
+var random_id = 'sitemaps'
+var customCols = [
+
+
+  'description',
+  'id',
+  'img_url',
+  'is_latest',
+  'name',
+  'start_date',
+
+  { label: 'status', selection: ['active', 'discarded'] },
+
+  'weight', 'weight_in_float'
+]
+sitemapSource = new phoenixModel({
+  columns: [
+
+    { label: 'id', data: 'id' },
+    { label: 'Action', data: 'id' }
+
+  ],
+  moduleName: "Sitemap",
+  link: "Sitemap",
+  customCols: customCols,
+  buttons: [{
+    buttonType: "grouped",
+    name: "Manage",
+    color: "outline-warning",
+    buttonList: [
+
+      {
+        name: "Edit",
+        iconName: "fa fa-edit",
+        color: "btn-sm btn-outline-warning",
+        onClickFunction: editData,
+        fnParams: {
+          drawFn: enlargeModal,
+          customCols: customCols
+        }
+      },
+      {
+        name: "Delete",
+        iconName: "fa fa-trash",
+        color: "outline-danger",
+        onClickFunction: deleteData,
+        fnParams: {}
+      }
+    ],
+    fnParams: {
+
+    }
+  }, ],
+  tableSelector: "#" + random_id
+})
+sitemapSource.load(random_id, "#tabsitemap")
 </script>

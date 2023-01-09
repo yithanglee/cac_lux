@@ -13,9 +13,7 @@ defmodule CacWeb.PageController do
     IO.inspect(redir)
 
     link =
-      "https://www.facebook.com/v13.0/dialog/oauth?client_id=#{@app_id}&auth_type=rerequest&scope=pages_show_list,pages_read_engagement,pages_read_user_content&redirect_uri=#{
-        redir
-      }&state={user_id=#{user_id}}"
+      "https://www.facebook.com/v13.0/dialog/oauth?client_id=#{@app_id}&auth_type=rerequest&scope=pages_show_list,pages_read_engagement,pages_read_user_content&redirect_uri=#{redir}&state={user_id=#{user_id}}"
 
     IO.inspect(link)
 
@@ -31,9 +29,7 @@ defmodule CacWeb.PageController do
     IO.inspect(redir)
 
     link =
-      "https://www.facebook.com/v13.0/dialog/oauth?client_id=#{@app_id}&redirect_uri=#{redir}&state={user_id=#{
-        user_id
-      }}"
+      "https://www.facebook.com/v13.0/dialog/oauth?client_id=#{@app_id}&redirect_uri=#{redir}&state={user_id=#{user_id}}"
 
     IO.inspect(link)
 
@@ -47,9 +43,7 @@ defmodule CacWeb.PageController do
     redir = @fb_callback
 
     url =
-      "https://graph.facebook.com/v13.0/oauth/access_token?client_id=#{@app_id}&redirect_uri=#{
-        redir
-      }&client_secret=#{@app_secret}&code=#{code}"
+      "https://graph.facebook.com/v13.0/oauth/access_token?client_id=#{@app_id}&redirect_uri=#{redir}&client_secret=#{@app_secret}&code=#{code}"
 
     # conn
     # |> redirect(external: url)
@@ -109,6 +103,10 @@ defmodule CacWeb.PageController do
 
   def show_page(conn, params) do
     render(conn, "show.html", params)
+  end
+
+  def author_dashboard(conn, _params) do
+    render(conn, "author_dashboard.html", layout: {CacWeb.LayoutView, "author.html"})
   end
 
   def member_dashboard(conn, _params) do

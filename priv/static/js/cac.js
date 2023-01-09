@@ -1,5 +1,6 @@
 var categories = App.api("blog_categories", {})
 var route_names = [
+  { html: "landing2.html", title: "Home - 卫理华人年议会 Methodist Chinese Annual Conference", route: "/home2" },
   { html: "landing.html", title: "Home - 卫理华人年议会 Methodist Chinese Annual Conference", route: "/home" },
   { html: "account.html", title: "Account - 卫理华人年议会 Methodist Chinese Annual Conference", route: "/account" },
   { html: "event_listing.html", title: "Events - 卫理华人年议会 Methodist Chinese Annual Conference", route: "/event_listing/:id/:title" },

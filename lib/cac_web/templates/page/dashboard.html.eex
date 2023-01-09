@@ -30,7 +30,17 @@
 var profile_data =
   App.api("get_corporate_account_profile", { token: window.userToken })
 
-var route_names = [{
+var route_names = [
+{
+    html: "author_blogs.html",
+    title: "Author Blogs - CAC",
+    route: "/admin/author_blogs",
+    skipNav: false
+
+  },
+
+
+{
     html: "dashboard.html",
     title: "Home - CAC",
     route: "/admin/dashboard",

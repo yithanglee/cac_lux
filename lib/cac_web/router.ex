@@ -35,6 +35,17 @@ defmodule CacWeb.Router do
     get("/logout", LoginController, :logout)
   end
 
+  scope "/author", CacWeb do
+    pipe_through :browser
+    get("/dashboard", PageController, :author_dashboard)
+    get("/login", LoginController, :index)
+    get("/register", LoginController, :register)
+    post("/register", LoginController, :create)
+    post("/authenticate", LoginController, :authenticate)
+    get("/logout", LoginController, :logout)
+    get "/*path", PageController, :dashboard
+  end
+
   scope "/admin", CacWeb do
     pipe_through :browser
     get("/dashboard", PageController, :dashboard)
