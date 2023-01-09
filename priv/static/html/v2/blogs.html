@@ -12,11 +12,7 @@ var tab_list = [{
     icon: "fa fa-users",
     content: `<div id="tab2"></div>`,
   },
-  {
-    title: "Sitemaps",
-    icon: "fa fa-users",
-    content: `<div id="tabsitemap"></div>`,
-  },
+
   {
     title: "Categories",
     icon: "fa fa-tags",
@@ -492,60 +488,5 @@ function callStoredMedia(editor) {
   })
 }
 
-var random_id = 'sitemaps'
-var customCols = [
 
-
-  'description',
-  'id',
-  'img_url',
-  'is_latest',
-  'name',
-  'start_date',
-
-  { label: 'status', selection: ['active', 'discarded'] },
-
-  'weight', 'weight_in_float'
-]
-sitemapSource = new phoenixModel({
-  columns: [
-
-    { label: 'id', data: 'id' },
-    { label: 'Action', data: 'id' }
-
-  ],
-  moduleName: "Sitemap",
-  link: "Sitemap",
-  customCols: customCols,
-  buttons: [{
-    buttonType: "grouped",
-    name: "Manage",
-    color: "outline-warning",
-    buttonList: [
-
-      {
-        name: "Edit",
-        iconName: "fa fa-edit",
-        color: "btn-sm btn-outline-warning",
-        onClickFunction: editData,
-        fnParams: {
-          drawFn: enlargeModal,
-          customCols: customCols
-        }
-      },
-      {
-        name: "Delete",
-        iconName: "fa fa-trash",
-        color: "outline-danger",
-        onClickFunction: deleteData,
-        fnParams: {}
-      }
-    ],
-    fnParams: {
-
-    }
-  }, ],
-  tableSelector: "#" + random_id
-})
-sitemapSource.load(random_id, "#tabsitemap")
 </script>
