@@ -13,7 +13,9 @@ defmodule CacWeb.PageController do
     IO.inspect(redir)
 
     link =
-      "https://www.facebook.com/v13.0/dialog/oauth?client_id=#{@app_id}&auth_type=rerequest&scope=pages_show_list,pages_read_engagement,pages_read_user_content&redirect_uri=#{redir}&state={user_id=#{user_id}}"
+      "https://www.facebook.com/v13.0/dialog/oauth?client_id=#{@app_id}&auth_type=rerequest&scope=pages_show_list,pages_read_engagement,pages_read_user_content&redirect_uri=#{
+        redir
+      }&state={user_id=#{user_id}}"
 
     IO.inspect(link)
 
@@ -29,7 +31,9 @@ defmodule CacWeb.PageController do
     IO.inspect(redir)
 
     link =
-      "https://www.facebook.com/v13.0/dialog/oauth?client_id=#{@app_id}&redirect_uri=#{redir}&state={user_id=#{user_id}}"
+      "https://www.facebook.com/v13.0/dialog/oauth?client_id=#{@app_id}&redirect_uri=#{redir}&state={user_id=#{
+        user_id
+      }}"
 
     IO.inspect(link)
 
@@ -43,7 +47,9 @@ defmodule CacWeb.PageController do
     redir = @fb_callback
 
     url =
-      "https://graph.facebook.com/v13.0/oauth/access_token?client_id=#{@app_id}&redirect_uri=#{redir}&client_secret=#{@app_secret}&code=#{code}"
+      "https://graph.facebook.com/v13.0/oauth/access_token?client_id=#{@app_id}&redirect_uri=#{
+        redir
+      }&client_secret=#{@app_secret}&code=#{code}"
 
     # conn
     # |> redirect(external: url)
@@ -88,17 +94,19 @@ defmodule CacWeb.PageController do
   end
 
   def index(conn, %{"id" => id, "title" => title} = params) do
-    blog = Cac.Settings.get_blog!(id)
+    blog = Cac.Settings.get_blog!(id) |> Cac.Repo.preload(:cache_page)
+    cache = blog.cache_page
 
     conn
     |> put_session(:title, title)
     |> put_session(:image, blog.img_url)
     |> put_session(:description, blog.excerpt || blog.title)
-    |> render("index.html")
+    |> render("index.html", cache: cache)
   end
 
   def index(conn, _params) do
-    render(conn, "index.html")
+    c = Cac.Settings.get_cache_page_by_name("landing") |> IO.inspect()
+    render(conn, "index.html", cache: c)
   end
 
   def show_page(conn, params) do

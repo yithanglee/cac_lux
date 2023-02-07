@@ -1,4 +1,4 @@
-<script src="/js/cac.js"></script>
+
 <!-- pdf
  -->
 <script src="/js/pdfobject.min.js"></script>
@@ -36,7 +36,9 @@
 </style>
 <!--Wrapper Start-->
 <div class="" id="subcontent" aria-label="mainbar">
+  <%= render("show_blog.html", cache: @cache)%>
 </div>
+<script src="/js/cac.js"></script>
 <div class="row">
 </div>
 <!--Footer Start-->

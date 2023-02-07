@@ -10,6 +10,45 @@ defmodule Cac do
   import Ecto.Query
   alias Cac.{Repo, Settings}
 
+  def generate_sitemap() do
+    # create a filepath for sitemap
+    # write into the sitemap
+    # xml version 
+
+    base_url = Application.get_env(:cac, :endpoint)[:url]
+    blogs = Repo.all(Settings.Blog)
+
+    pages =
+      if blogs != [] do
+        for blog <- blogs do
+          title =
+            if blog.title != nil do
+              blog.title |> String.replace("<", "") |> String.replace(">", "") |> IO.inspect()
+            else
+              "blog-#{blog.id}"
+            end
+
+          ~s(    
+  <url>
+    <loc>#{base_url}/blogs/#{blog.id}/#{title}</loc>
+    <lastmod>#{blog.updated_at |> NaiveDateTime.to_date() |> Date.to_string()}</lastmod>
+  </url>)
+        end
+      else
+        []
+      end
+
+    final_pages = pages |> Enum.join("")
+
+    ori = ~s(<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+#{final_pages}
+</urlset>)
+    path = Application.app_dir(:cac, "priv/static/sitemap.xml")
+    File.touch!(path)
+    File.write!(path, ori)
+  end
+
   def set_all_current_service_year() do
     query = from(ug in Settings.UserGroup)
 

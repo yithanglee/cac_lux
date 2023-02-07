@@ -8,6 +8,28 @@ defmodule CacWeb.ApiController do
   def webhook_post(conn, params) do
     final =
       case params["scope"] do
+        "cache" ->
+          if params["title"] != nil do
+            c = Cac.Settings.get_cache_page_by_name(params["title"])
+
+            if c != nil do
+              Cac.Settings.update_cache_page(c, %{content: params["content"]})
+            else
+              Cac.Settings.create_cache_page(%{
+                title: params["title"],
+                blog_id: 0,
+                content: params["content"]
+              })
+            end
+          else
+            Cac.Settings.create_cache_page(%{
+              blog_id: params["blog_id"],
+              content: params["content"]
+            })
+          end
+
+          %{status: "ok"}
+
         "google_signin" ->
           sample = %{
             "result" => %{

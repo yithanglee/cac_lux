@@ -164,6 +164,9 @@
 
     App.Page.scrollProgressBar(".progress-bar")
 
+    App.post("cache", {blog_id: window.currentBlog.id ,content: $("#subcontent").html() })
+  
+
   })
   </script>
   <script type="text/javascript" aria-label="content"></script>

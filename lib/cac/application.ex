@@ -14,10 +14,10 @@ defmodule Cac.Application do
       # Start the PubSub system
       {Phoenix.PubSub, name: Cac.PubSub},
       # Start the Endpoint (http/https)
-      CacWeb.Endpoint,
+      CacWeb.Endpoint
       # This will setup the Registry.ExGram
-      ExGram,
-      {Cac.Bot, [method: :polling, token: Application.get_env(:cac, :telegram)[:token]]}
+      # ExGram,
+      # {Cac.Bot, [method: :polling, token: Application.get_env(:cac, :telegram)[:token]]}
       # Start a worker by calling: Cac.Worker.start_link(arg)
       # {Cac.Worker, arg}
     ]

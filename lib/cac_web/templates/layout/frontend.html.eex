@@ -55,15 +55,32 @@
   <script src="/js/firebase-auth.js"></script>
   <script src="/vendor/firebase-ui/firebase-ui-auth.js"></script>
   <link type="text/css" rel="stylesheet" href="/vendor/firebase-ui/firebase-ui-auth.css" />
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Z4PS6CP7TS"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-Z4PS6CP7TS');
+</script>
+
 </head>
 
 <body style="overflow-x: hidden;" id="swiper-container">
   <% render("frontend_nav.html", conn: @conn) %>
   <%= @inner_content %>
   <div class="overlay"></div>
-  <div style="bottom: 2vh;right: 6vw; z-index: 100;" class="toTop btn btn-success position-fixed btn-sm rounded">
+<div style="bottom: 3vh;right: 6vw; z-index: 100;" class="position-fixed ">
+  <div class="darkMode btn btn-dark btn-sm rounded">
+    <i class="far fa-2x fa-lightbulb" id="dm"></i>
+  </div>
+  <div class="toTop btn btn-success btn-sm rounded">
     <i class="fa fa-2x fa-caret-up" id="arc"></i>
   </div>
+</div>
+
   <script type="text/javascript">
   $(document).ready(function() {
     <%= cond do %>
@@ -73,6 +90,11 @@
     App.notify("<%= get_flash(@conn, :error) %>", { type: 'danger' });
     <% true -> %>
     <% end %>
+  })
+
+  $(".darkMode").click(() => {
+    toggleDarkMode()
+
   })
 
   $(".toTop").click(() => {
@@ -89,6 +111,14 @@
     event.preventDefault();
     navigateTo($(this).attr("href"))
   });
+  function toggleDarkMode(){
+    $("#subcontent").toggleClass("bg-dark text-white")
+    $(".darkMode").toggleClass("btn btn-dark")
+    $(".darkMode").toggleClass("btn btn-outline-light")
+    $("#dm").toggleClass("far")
+    $("#dm").toggleClass("text-white")
+    $("#dm").toggleClass("fas")
+  }
   </script>
   <div class="modal" id="transparentModal">
     <div class="modal-dialog modal-lg" role="document">

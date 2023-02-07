@@ -61,7 +61,7 @@ defmodule Cac.ApiAuthorization do
         |> String.contains?("/admin/dashboard") ->
           conn
 
-        conn.params["scope"] in ["google_signin", "strong_search"] ->
+        conn.params["scope"] in ["google_signin", "strong_search", "cache"] ->
           conn
 
         true ->

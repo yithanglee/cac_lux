@@ -301,11 +301,42 @@ defmodule Cac.Settings do
   end
 
   def create_blog(params \\ %{}) do
-    Blog.changeset(%Blog{}, params) |> Repo.insert()
+    res = Blog.changeset(%Blog{}, params) |> Repo.insert()
+
+    Elixir.Task.start_link(Cac, :generate_sitemap, [])
+    res
   end
 
   def update_blog(model, params) do
-    Blog.changeset(model, params) |> Repo.update()
+    res = Blog.changeset(model, params) |> Repo.update()
+    Elixir.Task.start_link(Cac, :generate_sitemap, [])
+    res
+  end
+
+  alias Cac.Settings.CachePage
+
+  def list_cache_pages() do
+    Repo.all(CachePage)
+  end
+
+  def get_cache_page!(id) do
+    Repo.get!(CachePage, id)
+  end
+
+  def get_cache_page_by_name(name) do
+    Repo.get_by(CachePage, title: name)
+  end
+
+  def create_cache_page(params \\ %{}) do
+    CachePage.changeset(%CachePage{}, params) |> Repo.insert()
+  end
+
+  def update_cache_page(model, params) do
+    CachePage.changeset(model, params) |> Repo.update()
+  end
+
+  def delete_cache_page(%CachePage{} = model) do
+    Repo.delete(model)
   end
 
   def delete_blog(%Blog{} = model) do

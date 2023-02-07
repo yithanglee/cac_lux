@@ -14,7 +14,7 @@ defmodule Cac.Settings.Blog do
     belongs_to :author, Cac.Settings.Author
     # field :author_id, :integer
     # field :category_id, :integer
-
+    has_one :cache_page, Cac.Settings.CachePage
     belongs_to :category, Cac.Settings.Category
     # field :attachment_id, :integer
     belongs_to :attachment, Cac.Settings.StoredMedia

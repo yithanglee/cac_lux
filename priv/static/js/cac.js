@@ -104,6 +104,7 @@ function navigateTo(route, additionalParamString, dom) {
 
       $("#subcontent").html(nav)
       $("#subcontent").append(html)
+      populate_menus()
 
       App.hide()
 
@@ -116,7 +117,7 @@ function navigateTo(route, additionalParamString, dom) {
     var nav = App.html("blog_nav.html")
     $("#subcontent").html(nav)
     $("#subcontent").append(html)
-
+    populate_menus()
     checkLoginUser();
 
     App.hide()
@@ -198,6 +199,7 @@ $(document).ready(() => {
     }
   );
   ui = new firebaseui.auth.AuthUI(firebase.auth());
+
   navigateTo();
 
 })
@@ -257,7 +259,7 @@ function populate_menus() {
 
 }
 
-function checkLogin(){
+function checkLogin() {
   if (localStorage.pkey != null) {
     navigateTo("/account")
   } else {
