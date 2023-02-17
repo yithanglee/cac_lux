@@ -25,13 +25,14 @@ defmodule CacWeb.PageController do
 
   def fb_login(conn, _params) do
     # redir = "https://ff57-115-164-74-68.ngrok.io/fb_callback"
-    redir = @fb_callback
+    redir = Application.get_env(:cac, :facebook)[:callback_url]
+    app_id = Application.get_env(:cac, :facebook)[:app_id]
     user_id = conn.private.plug_session["current_user"].id
 
     IO.inspect(redir)
 
     link =
-      "https://www.facebook.com/v13.0/dialog/oauth?client_id=#{@app_id}&redirect_uri=#{redir}&state={user_id=#{
+      "https://www.facebook.com/v13.0/dialog/oauth?client_id=#{app_id}&redirect_uri=#{redir}&state={user_id=#{
         user_id
       }}"
 

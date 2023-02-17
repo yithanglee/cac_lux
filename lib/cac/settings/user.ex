@@ -24,6 +24,8 @@ defmodule Cac.Settings.User do
     has_many :user_venues, Cac.Settings.UserVenue
     has_many :venues, through: [:user_venues, :venue]
 
+    has_many :facebook_pages, Cac.Settings.FacebookPage
+
     timestamps()
   end
 

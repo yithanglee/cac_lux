@@ -9,6 +9,10 @@ defmodule CacWeb.Router do
     plug :put_secure_browser_headers
   end
 
+  pipeline :blank_api do
+    plug :accepts, ["json"]
+  end
+
   pipeline :api do
     plug :accepts, ["json"]
 
@@ -58,9 +62,14 @@ defmodule CacWeb.Router do
   end
 
   scope "/api", CacWeb do
+    pipe_through :blank_api
+    get("/webhook/fb", ApiController, :fb_webhook)
+    post("/webhook/fb", ApiController, :fb_webhook_post)
+  end
+
+  scope "/api", CacWeb do
     pipe_through :api
-    # get("/webhook/fb", ApiController, :fb_webhook)
-    # post("/webhook/fb", ApiController, :fb_webhook_post)
+
     get("/webhook", ApiController, :webhook)
     post("/webhook", ApiController, :webhook_post)
     delete("/webhook", ApiController, :webhook_delete)

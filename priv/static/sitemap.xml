@@ -128,5 +128,9 @@
   <url>
     <loc>http://localhost:8501/blogs/2/《南钟》2022年第四期</loc>
     <lastmod>2022-11-15</lastmod>
+  </url>    
+  <url>
+    <loc>http://localhost:8501/blogs/34/关于我们</loc>
+    <lastmod>2023-02-12</lastmod>
   </url>
 </urlset>

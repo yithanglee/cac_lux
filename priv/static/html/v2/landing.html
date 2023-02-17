@@ -233,14 +233,14 @@ deck.on('slidechanged', event => {
   </section>
   <!--Recent Events End-->
   <script type="text/javascript">
-  var events = App.api("get_events", {});
+  $(document).ready(() => {
+    var events = App.api("get_events", {});
+    events.forEach((event, i) => {
+      var dt = new Date(event.start_datetime)
 
-  events.forEach((event, i) => {
-    var dt = new Date(event.start_datetime)
-
-    var edate = dt.toGMTString().split(",")[1].split(" ").splice(0, 4).join(" ")
-    var etime = dt.toLocaleTimeString()
-    var card = `
+      var edate = dt.toGMTString().split(",")[1].split(" ").splice(0, 4).join(" ")
+      var etime = dt.toLocaleTimeString()
+      var card = `
 
               <ul class="event-list">
                 <li> <strong class="edate">` + edate + `</strong> <strong class="etime">` + etime + `</strong> </li>
@@ -253,21 +253,21 @@ deck.on('slidechanged', event => {
               </ul>
   `
 
-    $("div#Events").append(card)
-  })
+      $("div#Events").append(card)
+    })
 
-  var blogs = App.api("blogs", { category: "年会动态" });
-  // ------- Event Slider Start ------- //
-  $("div[aria-label='recent-events']").html('')
-  blogs.forEach((blog, i) => {
-    var excerpt = blog.excerpt
-    if (excerpt == null) {
-      excerpt = blog.subtitle
-    }
-    if (excerpt == null) {
-      excerpt = blog.title
-    }
-    var navcard = `
+    var blogs = App.api("blogs", { category: "年会动态" });
+    // ------- Event Slider Start ------- //
+    $("div[aria-label='recent-events']").html('')
+    blogs.forEach((blog, i) => {
+      var excerpt = blog.excerpt
+      if (excerpt == null) {
+        excerpt = blog.subtitle
+      }
+      if (excerpt == null) {
+        excerpt = blog.title
+      }
+      var navcard = `
       <div class="col-3" >
 
                   <div class="new-thumb" style="
@@ -281,7 +281,7 @@ deck.on('slidechanged', event => {
                     <div >
       </div>
     `
-    var card = `
+      var card = `
                 <div class="event-big">
                   <div class="event-cap">
                     <h5  >
@@ -302,38 +302,38 @@ deck.on('slidechanged', event => {
                     <div >
                 </div>
               `
-    $("div[aria-label='recent-events']").append(card)
-    $("div[aria-label='event-gallery']").append(navcard)
-  })
+      $("div[aria-label='recent-events']").append(card)
+      $("div[aria-label='event-gallery']").append(navcard)
+    })
 
 
-  // ------- Event Slider End ------- //  
+    // ------- Event Slider End ------- //  
 
 
 
-  var blogs = App.api("blogs", { only_child: true, category: "e_southernbell" });
-  // ---- highlights ----
-  blogs.forEach((blog, i) => {
+    var blogs = App.api("blogs", { only_child: true, category: "e_southernbell" });
+    // ---- highlights ----
+    blogs.forEach((blog, i) => {
 
-    if (i < 12) {
+      if (i < 12) {
 
-      var author_img = '/assets/tuser1.jpg'
-      var author_name = 'Reporter'
-      var excerpt = blog.excerpt
-      if (excerpt == null) {
-        excerpt = blog.subtitle
-      }
-      if (excerpt == null) {
-        excerpt = blog.title
-      }
-      if (blog.author != null) {
-        if (blog.author.img_url != null) {
-          author_img = blog.author.img_url
+        var author_img = '/assets/tuser1.jpg'
+        var author_name = 'Reporter'
+        var excerpt = blog.excerpt
+        if (excerpt == null) {
+          excerpt = blog.subtitle
         }
-        author_name = blog.author.name
-      }
+        if (excerpt == null) {
+          excerpt = blog.title
+        }
+        if (blog.author != null) {
+          if (blog.author.img_url != null) {
+            author_img = blog.author.img_url
+          }
+          author_name = blog.author.name
+        }
 
-      var box = `
+        var box = `
           <div class="pt-4 col-md-2 col-sm-6" data-title="` + blog.title + `"
               data-blog-id="` + blog.id + `">
             <div class="shadow-lg rounded mb-4 p-4">
@@ -363,9 +363,9 @@ deck.on('slidechanged', event => {
             </div>
           </div>
           `
-      $("#l4").append(box)
+        $("#l4").append(box)
 
-      var box = `
+        var box = `
           <div class="px-4" data-title="` + blog.title + `"
               data-blog-id="` + blog.id + `">
             <div class="shadow rounded mb-4 p-4" style="backdrop-filter: blur(10px);">
@@ -396,70 +396,13 @@ deck.on('slidechanged', event => {
             </div>
           </div>
           `
-      $("#m4").append(box)
-    }
-
-  })
-
-
-
-
-  function memberLogin() {
-    App.modal({
-      selector: "#transparentModal",
-      autoClose: false,
-      header: 'Login',
-      content: `
-
-      <div id="firebaseui-auth-container"></div>
-    `
+        $("#m4").append(box)
+      }
 
     })
-    ui.start('#firebaseui-auth-container', {
-      callbacks: {
-        signInSuccessWithAuthResult: function(authResult, redirectUrl) {
-          window.user = authResult.user
-          window.userToken = authResult.user.uid
-          var res = App.post("google_signin", {
-            result: {
-              uid: authResult.user.uid,
-              email: authResult.user.email,
-              name: authResult.user.displayName
-            }
-          })
-          window.userToken = res
-          localStorage.setItem("pkey", res)
-          checkLoginUser();
-          navigateTo("/home")
-          $("#transparentModal").modal('hide')
-          // $("#xr").addClass("d-none")
-          // $("#axr").removeClass("d-none")
-          $("#axr").find("span[aria-label='displayName']").html("Hi, " + authResult.user.displayName)
-          // $("#aax").addClass("d-none")
-          App.notify("Welcome back!")
 
 
-          // $(".bnn").addClass("d-none")
-          // $("div[aria-label='mainbar']")[0].scrollIntoView();
-        },
-        uiShown: function() {
-          App.hide();
 
-
-          // $("div[aria-label='mainbar']")[0].scrollIntoView();
-
-        }
-      },
-      signInFlow: 'popup',
-      signInSuccessUrl: '/home',
-      signInOptions: [
-        firebase.auth.EmailAuthProvider.PROVIDER_ID
-      ]
-    });
-  }
-
-
-  $(document).ready(() => {
     App.post("cache", { title: "landing", content: $("#subcontent").html() })
     if ($('.recent-event-slider').length) {
       window.event_slider = $('.recent-event-slider').slick({

@@ -4,6 +4,143 @@ defmodule CacWeb.ApiController do
   alias Cac.{Settings}
 
   require Logger
+  @app_secret Application.get_env(:cac, :facebook)[:app_secret]
+  @app_id Application.get_env(:cac, :facebook)[:app_id]
+  @page_access_token "EAAHu7jvjr2EBAPGJNtq3ZBZAeKk4z3yYz0ymcrZBZAV30eTvWLxIdHHI773apJAgvDmfm8vZC0MjNOJVVQbg3cR91eGM8HcC9H0w0PvAMKWbx17lZARyONS9CGO5jg860mEqMYW7CkGZAWXe39qqapZBHDnc5dcrZCXZCFEZAawrJvl1HeCjeaNtmPSdHnuaSeAZAgZCnXTwhuFNGpwZDZD"
+
+  import FacebookHelper
+
+  def fb_webhook(conn, params) do
+    # parameter = Repo.get_by(Settings.Parameter, name: "page_access_token")
+
+    # pat = parameter.cvalue
+
+    challenge = params["hub.challenge"]
+    mode = params["hub.mode"]
+    token = params["hub.verify_token"]
+
+    if mode != nil and token != nil do
+      IO.puts(mode)
+
+      if mode == "subscribe" and token == @page_access_token do
+        IO.puts("WEBHOOK_VERIFIED")
+        send_resp(conn, 200, challenge)
+      else
+        send_resp(conn, 500, [])
+      end
+    else
+      send_resp(conn, 500, [])
+    end
+  end
+
+  def fb_webhook_post(conn, params) do
+    IO.inspect(params)
+
+    sample = %{
+      "entry" => [
+        %{
+          "changes" => [
+            %{
+              "field" => "live_videos",
+              "value" => %{"id" => "4444444444", "status" => "live_stopped"}
+            }
+          ],
+          "id" => "0",
+          "time" => 1_645_812_508
+        }
+      ],
+      "object" => "page"
+    }
+
+    case params["object"] do
+      "page" ->
+        entry_list = params["entry"]
+
+        for %{"changes" => changes} = item <- entry_list do
+          cond do
+            changes |> Enum.map(&(&1["field"] == "live_videos")) ->
+              IO.inspect(List.first(changes)["value"])
+          end
+        end
+
+        for %{"messaging" => messaging2} = item <- entry_list do
+          %{
+            "time" => time,
+            "messaging" => messages,
+            "id" => fb_page_id
+          } = item
+
+          page = Cac.Repo.get_by(Cac.Settings.FacebookPage, page_id: fb_page_id)
+
+          if page != nil do
+            set_ps = fn sender_psid ->
+              page_visitor =
+                Cac.Repo.get_by(Cac.Settings.PageVisitor,
+                  facebook_page_id: page.id,
+                  psid: sender_psid
+                )
+
+              page_visitor =
+                if page_visitor == nil do
+                  existing_page_commenter =
+                    Cac.Repo.get_by(Cac.Settings.PageVisitor,
+                      psid: sender_psid
+                    )
+
+                  {:ok, p} =
+                    if existing_page_commenter == nil do
+                      Cac.Settings.create_page_visitor(%{
+                        facebook_page_id: page.id,
+                        psid: sender_psid
+                      })
+                    else
+                      Cac.Settings.update_page_visitor(existing_page_commenter, %{
+                        facebook_page_id: page.id
+                      })
+                    end
+
+                  p
+                else
+                  page_visitor
+                end
+            end
+
+            for %{"message" => content, "sender" => %{"id" => psid}} = message <- messages do
+              Logger.info("[FB MESSENGER]: Sender PSID: " <> psid)
+
+              handleMessage(page, set_ps.(psid), content)
+            end
+
+            for %{"postback" => postback, "sender" => %{"id" => psid}} = message <- messages do
+              Logger.info("[FB MESSENGER]: Sender PSID: " <> psid)
+
+              handlePostback(page, set_ps.(psid), postback)
+            end
+          end
+        end
+
+        send_resp(conn, 200, "EVENT_RECEIVED")
+
+      "user" ->
+        entry_list = params["entry"]
+        IO.puts(Jason.encode!(entry_list))
+
+        for item <- entry_list do
+          fb_user_id = item["uid"]
+
+          if Enum.any?(item["changed_fields"], fn x -> x == "live_videos" end) do
+            company_name = params["company_name"]
+
+            # check_user_live_video(fb_user_id, company_name)
+          end
+        end
+
+        send_resp(conn, 200, "EVENT_RECEIVED")
+
+      _ ->
+        send_resp(conn, 500, [])
+    end
+  end
 
   def webhook_post(conn, params) do
     final =
@@ -171,6 +308,36 @@ defmodule CacWeb.ApiController do
   def webhook(conn, params) do
     final =
       case params["scope"] do
+        "show_fb_page_posts" ->
+          FacebookHelper.page_post(params["page_id"], params["page_access_token"])
+
+        "get_existing_fbpages" ->
+          map = Cac.Settings.decode_token(params["token"]) |> IO.inspect()
+
+          case map do
+            %{id: id} ->
+              user = Cac.Settings.get_user!(id)
+
+              Cac.Settings.get_user_by_fb_user_id(user.fb_user_id)
+              |> BluePotion.sanitize_struct()
+              |> Map.get(:facebook_pages)
+
+            _ ->
+              []
+          end
+
+        "get_fbpages" ->
+          map = Cac.Settings.decode_token(params["token"]) |> IO.inspect()
+
+          case map do
+            %{id: id} ->
+              user = Cac.Settings.get_user!(id)
+              FacebookHelper.get_user_existing_pages(user.fb_user_id)
+
+            _ ->
+              []
+          end
+
         "get_directory" ->
           Settings.get_directory()
           |> Enum.map(&(&1 |> BluePotion.sanitize_struct()))

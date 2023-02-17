@@ -38,6 +38,12 @@ var route_names = [
     skipNav: false
 
   },
+{
+    html: "fb_integration.html",
+    title: "Home - CAC",
+    route: "/admin/fb_integration",
+    skipNav: true
+  },
 
 
 {

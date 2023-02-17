@@ -1,0 +1,68 @@
+<div class="p-4 shadow">
+  <h1>Facebook Integration</h1>
+  <ol>
+    <li>Login with Facebook <a href="/fb_login" target="_blank">Login</a></li>
+    <li>Get page permissions <a href="/fb_relogin" target="_blank">Start</a></li>
+    <li>Populate pages <a href="javascript:void(0)" onclick="showFbpages()">Show</a></li>
+    <li>Show my managed pages <a href="javascript:void(0)" onclick="showExistingFbpages()">Show</a>
+      <ol id="my_pages">
+      </ol>
+    </li>
+  </ol>
+</div>
+<div class="p-4 " id="posts">
+</div>
+<script type="text/javascript">
+function showFbpages() {
+
+  App.api("get_fbpages", { token: window.userToken }, null, () => {
+
+    App.notify("populated!")
+  })
+}
+
+function showExistingFbpages() {
+  $("#my_pages").html('')
+  var res = App.api("get_existing_fbpages", { token: window.userToken })
+
+
+  res.forEach((page, i) => {
+    var li = `
+
+  	<li> ` + page.page_id + ` ` + page.name + ` : <p class="text-sm text-break">` + page.page_access_token + `</p> <a href="javascript:void(0);" onclick="showPagePosts('` + page.page_id + `', '` + page.page_access_token + `')"> Show Posts</a></li>
+
+  	`
+    $("#my_pages").append(li)
+  })
+
+}
+
+function showPagePosts(page_id, page_access_token) {
+  $("#posts").html('')
+  var res = App.api("show_fb_page_posts", { page_id: page_id, page_access_token: page_access_token })
+
+  res.data.forEach((feed, i) => {
+
+    var pic = ''
+    if (feed.full_picture != null) {
+      pic = `<img  style="max-width: 80vw; height: 500px;" src="` + feed.full_picture + `">`
+    }
+    var card =
+      `
+		<div class="card">
+			<div class="card-body">
+			` + feed.message + `
+				<div class="w-50">
+				` + pic + `
+				</div>
+			</div>
+		</div>
+		`
+
+    $("#posts").append(card)
+
+
+
+  })
+}
+</script>

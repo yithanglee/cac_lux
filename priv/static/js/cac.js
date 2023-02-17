@@ -9,6 +9,7 @@ var route_names = [
   { html: "blog_listing.html", title: "Blogs - 卫理华人年议会 Methodist Chinese Annual Conference", route: "/blog_listing/:id/:title" },
   { html: "blog_show.html", title: "Blog - 卫理华人年议会 Methodist Chinese Annual Conference", route: "/blogs/:id/:title" },
   { html: "page_show.html", title: "Page - 卫理华人年议会 Methodist Chinese Annual Conference", route: "/pages/:id/:title", customNav: "blog_nav_sub.html" },
+  { html: "privacy_policy.html", title: "Privacy Policy - 卫理华人年议会 Methodist Chinese Annual Conference", route: "/privacy_policy" ,skipNav: true },
 
 ]
 
@@ -130,6 +131,60 @@ function navigateTo(route, additionalParamString, dom) {
 function updatePageParams(obj) {
   window.stateObj = obj
   history.pushState(obj, obj.title, obj.route);
+}
+
+function memberLogin() {
+  App.modal({
+    selector: "#transparentModal",
+    autoClose: false,
+    header: 'Login',
+    content: `
+
+      <div id="firebaseui-auth-container"></div>
+    `
+
+  })
+  ui.start('#firebaseui-auth-container', {
+    callbacks: {
+      signInSuccessWithAuthResult: function(authResult, redirectUrl) {
+        window.user = authResult.user
+        window.userToken = authResult.user.uid
+        var res = App.post("google_signin", {
+          result: {
+            uid: authResult.user.uid,
+            email: authResult.user.email,
+            name: authResult.user.displayName
+          }
+        })
+        window.userToken = res
+        localStorage.setItem("pkey", res)
+        checkLoginUser();
+        navigateTo("/home")
+        $("#transparentModal").modal('hide')
+        // $("#xr").addClass("d-none")
+        // $("#axr").removeClass("d-none")
+        $("#axr").find("span[aria-label='displayName']").html("Hi, " + authResult.user.displayName)
+        // $("#aax").addClass("d-none")
+        App.notify("Welcome back!")
+
+
+        // $(".bnn").addClass("d-none")
+        // $("div[aria-label='mainbar']")[0].scrollIntoView();
+      },
+      uiShown: function() {
+        App.hide();
+
+
+        // $("div[aria-label='mainbar']")[0].scrollIntoView();
+
+      }
+    },
+    signInFlow: 'popup',
+    signInSuccessUrl: '/home',
+    signInOptions: [
+      firebase.auth.EmailAuthProvider.PROVIDER_ID
+    ]
+  });
 }
 
 function logout() {

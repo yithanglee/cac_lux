@@ -25,6 +25,28 @@ defmodule Cac.Settings do
     end
   end
 
+  alias Cac.Settings.FacebookPage
+
+  def list_facebook_pages() do
+    Repo.all(FacebookPage)
+  end
+
+  def get_facebook_page!(id) do
+    Repo.get!(FacebookPage, id)
+  end
+
+  def create_facebook_page(params \\ %{}) do
+    FacebookPage.changeset(%FacebookPage{}, params) |> Repo.insert()
+  end
+
+  def update_facebook_page(model, params) do
+    FacebookPage.changeset(model, params) |> Repo.update()
+  end
+
+  def delete_facebook_page(%FacebookPage{} = model) do
+    Repo.delete(model)
+  end
+
   def verify_token(token, id) do
     {:ok, map} = Phoenix.Token.verify(CacWeb.Endpoint, "signature", token)
     map.id == id
@@ -737,7 +759,7 @@ defmodule Cac.Settings do
   end
 
   def get_directory() do
-    Repo.all(from b in Blog, where: b.title in ^["派使名单", "通讯录"])
+    Repo.all(from b in Blog, where: b.title in ^["派使名单", "通讯录", "关于我们"])
   end
 
   alias Cac.Settings.ServiceYear
