@@ -62,6 +62,32 @@
   z-index: -1;
 }
 
+.title-center{
+  text-align: center;
+}
+
+.bg-2 {
+  background: linear-gradient(
+    rgba(0, 0, 0, 0.72), 
+    rgba(0, 0, 0, 0.42), 
+    rgba(0, 0, 0, 0.22), 
+    rgba(0, 0, 0, 0));
+    position: absolute;
+    height: 100vh;
+    top: 0;
+    width: 100%;
+    z-index: -1;
+}
+
+.sc-2, .sc-1{
+  height:100vh; 
+}
+
+.w-80{
+  max-width: 90vw;
+  margin: auto;
+}
+
 @media (min-width: 576px) {
   #myVideo {
     height: 120vh;
@@ -75,7 +101,7 @@
 <div style="height: 96vh; width: 100vw;position: relative;display: flex;">
   <div class="reveal" style="">
     <div class="slides ">
-      <section class="flex-collumn align-items-center h-100 justify-content-center w-100" data-background-size="cover" data-background-repeat="none" data-background-color="#111" data-autoslide="44000" data-transition-speed="slow">
+      <section class="flex-collumn align-items-center h-100 justify-content-center w-100" data-background-size="cover" data-background-repeat="none" data-background-color="#111" data-autoslide="44000" data-transition-speed="slow" data-background-image='/images/slider_bg.jpg'>
         <div style="position: absolute;top: 0px;width: 100vw;z-index: -1;">
           <div style=" background: linear-gradient(
           rgba(0, 0, 0, 0.72), 
@@ -88,13 +114,14 @@
           width: 100%;
           ">
           </div>
-          <video autoplay="" muted="" loop="" id="myVideo">
+          <!--<video autoplay="" muted="" loop="" id="myVideo">
             <source src="/images/worship.mp4" type="video/mp4">
             Your browser does not support HTML5 video.
-          </video>
+          </video>-->
+          
         </div>
         <div class="row pt-4 w-100">
-          <span class=" col-12 text-white offset-lg-2 col-lg-8">
+          <span class=" col-12 text-white offset-lg-5 col-lg-7">
             <div class=" d-flex flex-column align-items-lg-start align-items-center justify-content-center">
               <div class="py-4 fw-bolder" style="font-size: 2em;">
                 神的爱
@@ -104,43 +131,12 @@
               <div style="font-size: 0.4em;" class="py-4">
                 神爱世人，甚至将他的独生子（耶稣）赐给他们，叫一切信他的，不致灭亡，反得永生。（约翰福音 3：16）
               </div>
-              <div class="btn btn-primary ">Find out more</div>
+              
             </div>
           </span>
         </div>
       </section>
-      <section class="flex-collumn align-items-center h-100 justify-content-center w-100" data-background-size="cover" data-background-repeat="none" data-background-color="#111" data-background-image='/images/jp.webp' data-autoslide="4000" data-transition-speed="slow" style=" background: linear-gradient(
-            rgba(0, 0, 0, 0.72), 
-          rgba(0, 0, 0, 0.42), 
-          rgba(0, 0, 0, 0.22), 
-          rgba(0, 0, 0, 0));">
-        <div class="row pt-4">
-          <span class=" col-12 text-white ">
-            <div class=" d-flex flex-column align-items-center justify-content-center">
-              <h3>马来西亚基督教卫理公会华人年议会
-              </h3>
-              <span class="fs-3 ">Chinese Annual Conference,
-                The Methodist Church In Malaysia</span>
-            </div>
-          </span>
-        </div>
-      </section>
-      <section class="flex-collumn align-items-center h-100 justify-content-center w-100" data-background-size="cover" data-background-repeat="none" data-background-color="#111" data-background-image='/images/akira-hojo-_86u_Y0oAaM-unsplash.webp' data-autoslide="4000" data-transition-speed="slow" style=" background: linear-gradient(
-            rgba(0, 0, 0, 0.72), 
-          rgba(0, 0, 0, 0.42), 
-          rgba(0, 0, 0, 0.22), 
-          rgba(0, 0, 0, 0));">
-        <div class="row pt-4">
-          <span class=" col-12 text-white ">
-            <div class=" d-flex flex-column align-items-center justify-content-center">
-              <h3>马来西亚基督教卫理公会华人年议会
-              </h3>
-              <span class="fs-3 ">Chinese Annual Conference,
-                The Methodist Church In Malaysia</span>
-            </div>
-          </span>
-        </div>
-      </section>
+      
     </div>
   </div>
 </div>
@@ -168,97 +164,60 @@ deck.on('slidechanged', event => {
 </script>
 <!--Main Content Start-->
 <div class="main-content">
-  <!--City News Start-->
-  <section class="my-4 py-4" style="position: relative;">
-    <div class="hero-pattern2" style="height: 75vh;position: absolute;bottom: 0px;width: 100vw; z-index: -1;">
+
+  <section class="my-4 py-4 sc-1" style="position: relative;">
+    <div class="hero-pattern" style="height: 100vh;position: absolute;bottom: 0px;width: 100vw; z-index: -1;">
     </div>
-    <div class="px-1 mx-1 px-lg-4 mx-lg-4">
-      <div class="title-style-3 container">
-        <h3>南钟报特选文章</h3>
-        <p>双月刊南钟报</p>
+    <div class="pt-5 px-1 mx-1 px-lg-4 mx-lg-4">
+      <div class="title-center">
+        <h1 style="font-size:xxx-large;">年会活动报导</h1>
+        <p style="font-size:xx-large">年会活动与讲座</p>
       </div>
-      <div class="row d-none" id="l4">
+      <div class="row pt-5 w-80" id="newsletter">
       </div>
-      <div class="row" id="m4">
+    </div>
+  </section>
+
+  <!--City News Start-->
+  <section class="pt-5 py-4 sc-2" style="position: relative;">
+    <div style="background-image:url('/images/bg2.jpg');position: absolute;
+    height: 100vh;
+    top: 0;
+    width: 100%;
+    z-index: -1;"></div>
+    <div style=" background: linear-gradient(
+          rgba(0, 0, 0, 0.72), 
+          rgba(0, 0, 0, 0.42), 
+          rgba(0, 0, 0, 0.22), 
+          rgba(0, 0, 0, 0));
+          position: absolute;
+          height: 100vh;
+          top: 0;
+          width: 100%;
+          z-index: -1;
+          ">
+          </div>
+    <div class="pt-5 px-1 mx-1 px-lg-4 mx-lg-4">
+      <div class="title-center text-white">
+        <h1 style="font-size:xxx-large;">南钟报<span style="color:cyan">特选文章</span></h1>
+        <p style="font-size:xx-large">双月刊南钟报</p>
+      </div>
+      <div class="row pt-5 w-80" id="m4">
       </div>
     </div>
   </section>
   <!--City News End-->
   <!--Recent Events Start-->
   <section class="my-4 py-4 " style="position: relative;">
-    <div class="hero-pattern" style="height: 75vh;position: absolute;bottom: 0px;width: 100vw; z-index: -1;">
-    </div>
-    <div class="container-fluid">
-      <div class="row gx-0">
-        <div class="col-md-5 ">
-          <h3>年会活动报导</h3>
-          <div class="recent-event-block shadow-lg rounded m-4 p-4" style="backdrop-filter: blur(10px);">
-            <!--Slider Big Slider Start-->
-            <div class="recent-event-slider" aria-label="recent-events">
-            </div>
-            <!--Slider Big Slider End-->
-            <div class="row g-1" aria-label="event-gallery">
-            </div>
-          </div>
-        </div>
-        <div class="col-md-7">
-          <h3>年会活动与讲座</h3>
-          <nav class="nav nav-tabs" role="tablist">
-            <a href="#Events" class="active p-3" aria-controls="Events" role="tab" aria-selected="true" data-bs-toggle="tab">活动</a>
-            <a href="#Meetings" class="p-3" aria-controls="Meetings" role="tab" aria-selected="false" data-bs-toggle="tab">讲座</a>
-          </nav>
-          <!-- Tab panes -->
-          <div class="tab-content shadow-lg rounded m-4 p-4" style="backdrop-filter: blur(10px);">
-            <div role="tabpanel" class="tab-pane active show" id="Events">
-              <!--Event List Start-->
-              <!--Event List End-->
-            </div>
-            <div role="tabpanel" class="tab-pane " id="Meetings">
-              <!--Event List Start-->
-              <ul class="event-list">
-                <li> <strong class="edate">30 Jan, 2019</strong> <strong class="etime">09:00 pm</strong> </li>
-                <li><img src="/assets/upce-2.jpg" alt=""></li>
-                <li class="el-title">
-                  <h6><a href="#">Seminar on Child Labour held in next month</a></h6>
-                  <p><i class="fas fa-map-marker-alt"></i> Mayor Office, New York</p>
-                </li>
-                <li> <a href="#" class="joinnow">Join Now</a> </li>
-              </ul>
-              <!--Event List End-->
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+    <div class="hero-pattern" style=
   <!--Recent Events End-->
   <script type="text/javascript">
   $(document).ready(() => {
-    var events = App.api("get_events", {});
-    events.forEach((event, i) => {
-      var dt = new Date(event.start_datetime)
-
-      var edate = dt.toGMTString().split(",")[1].split(" ").splice(0, 4).join(" ")
-      var etime = dt.toLocaleTimeString()
-      var card = `
-
-              <ul class="event-list">
-                <li> <strong class="edate">` + edate + `</strong> <strong class="etime">` + etime + `</strong> </li>
-                <li><img style="height: 56px" src="` + event.img_url + `" alt=""></li>
-                <li class="el-title">
-                  <h6><a class="navi" href="/events/` + event.id + `/` + event.title + `">` + event.title + `</a></h6>
-                  <p><i class="fas fa-map-marker-alt"></i>` + event.venue.name + `</p>
-                </li>
-                <li> <a href="#" class="joinnow">Join Now</a> </li>
-              </ul>
-  `
-
-      $("div#Events").append(card)
-    })
+    
 
     var blogs = App.api("blogs", { category: "年会动态" });
     // ------- Event Slider Start ------- //
-    $("div[aria-label='recent-events']").html('')
+    
     blogs.forEach((blog, i) => {
       var excerpt = blog.excerpt
       if (excerpt == null) {
@@ -267,43 +226,57 @@ deck.on('slidechanged', event => {
       if (excerpt == null) {
         excerpt = blog.title
       }
-      var navcard = `
-      <div class="col-3" >
+      if (i < 12) {
 
-                  <div class="new-thumb" style="
-                      cursor: pointer;
-                      height: 100px;
-                      background-repeat: no-repeat;
-                      background-position: cover;
-                      background-size: cover;
-                      background-image: url('` + blog.img_url + `')
-                    " onclick="$('.recent-event-slider').slick('slickGoTo', ` + i + `)"> 
-                    <div >
-      </div>
-    `
-      var card = `
-                <div class="event-big">
-                  <div class="event-cap">
-                    <h5  >
-                      <a class="navi" href='/blogs/` + blog.id + `/` + blog.title + `'>` + blog.title + `</a></h5>
-                    <ul class="d-none">
-                      <li><i class="fas fa-image"></i> 83 Photos</li>
-                      <li><i class="fas fa-play-circle"></i> 16 Videos</li>
-                    </ul>` + excerpt + `
-                  </div>
-                  <div class="new-thumb" style="
-                      height: 500px;
-                      z-index: -1;
-                      background-repeat: no-repeat;
-                      background-position: center;
-                      background-size: cover;
-                      background-image: url('` + blog.img_url + `')
-                    " onclick="navigateTo('/blogs/` + blog.id + `/` + blog.title + `')"> 
-                    <div >
-                </div>
-              `
-      $("div[aria-label='recent-events']").append(card)
-      $("div[aria-label='event-gallery']").append(navcard)
+      var author_img = '/assets/tuser1.jpg'
+      var author_name = ''
+      var excerpt = blog.excerpt
+      if (excerpt == null) {
+        excerpt = blog.subtitle
+      }
+      if (excerpt == null) {
+        excerpt = blog.content.length>80?blog.content.substring(0,80)+"...":blog.content;
+      }
+      if (blog.author != null) {
+        if (blog.author.img_url != null) {
+          author_img = blog.author.img_url
+        }
+        author_name = blog.author.name
+      }
+
+      var box = `
+        <div class="px-1" data-title="` + blog.title + `"
+            data-blog-id="` + blog.id + `">
+            <a href='/blogs/` + blog.id + `/` + blog.title + `' >
+          <div class="shadow rounded mb-4 p-1" style="backdrop-filter: blur(10px); height:580px; overflow: hidden;">
+            <div class="new-thumb" style="
+                height: 400px;
+                background-repeat: no-repeat;
+                background-position: center;
+                background-size: cover;
+                background-image: url('` + blog.img_url + `')
+              " onclick=""> 
+              <span class="cat c2"></span> 
+          
+              <div >
+              </div> 
+            </div>
+            <div class="new-txt">
+              
+              <div class="navi" style="" >
+                <h4 class="py-3 px-3">
+                  ` + blog.title + `</h4>
+                <h6 class="px-3">` + excerpt +`</h6>
+              </div>
+              
+            </div>
+          
+          </div>
+        </a>
+        </div>
+        `
+      $("#newsletter").append(box)
+      }
     })
 
 
@@ -318,13 +291,10 @@ deck.on('slidechanged', event => {
       if (i < 12) {
 
         var author_img = '/assets/tuser1.jpg'
-        var author_name = 'Reporter'
+        var author_name = ''
         var excerpt = blog.excerpt
         if (excerpt == null) {
           excerpt = blog.subtitle
-        }
-        if (excerpt == null) {
-          excerpt = blog.title
         }
         if (blog.author != null) {
           if (blog.author.img_url != null) {
@@ -334,66 +304,34 @@ deck.on('slidechanged', event => {
         }
 
         var box = `
-          <div class="pt-4 col-md-2 col-sm-6" data-title="` + blog.title + `"
+        
+          <div class="px-1" data-title="` + blog.title + `"
               data-blog-id="` + blog.id + `">
-            <div class="shadow-lg rounded mb-4 p-4">
+              <a href='/blogs/` + blog.id + `/` + blog.title + `' >
+            <div class="shadow rounded mb-4 p-1" style="backdrop-filter: blur(10px); height:500px; overflow: hidden;">
               <div class="new-thumb" style="
-                  height: 200px;
-                  background-repeat: no-repeat;
-                  background-position: center;
-                  background-size: cover;
-                  background-image: url('` + blog.img_url + `')
-                " onclick="navigateTo('/blogs/` + blog.id + `/` + blog.title + `')"> 
-                <span class="cat c2">` + blog.category.name + `</span> 
-            
-                <div >
-                </div> 
-              </div>
-              <div class="new-txt">
-                <ul class="news-meta d-none">
-                  <li>` + blog.ago + ` ago</li>
-                  <li></li>
-                </ul>
-                <div class="navi" style="" >
-                  <h6><a href='/blogs/` + blog.id + `/` + blog.title + `' >` + blog.title + `</a></h6>
-                </div
-                <p> ` + excerpt + ` </p>
-              </div>
-            
-            </div>
-          </div>
-          `
-        $("#l4").append(box)
-
-        var box = `
-          <div class="px-4" data-title="` + blog.title + `"
-              data-blog-id="` + blog.id + `">
-            <div class="shadow rounded mb-4 p-4" style="backdrop-filter: blur(10px);">
-              <div class="new-thumb" style="
-                  height: 200px;
+                  height: 400px;
                   background-repeat: no-repeat;
                   background-position: center;
                   background-size: cover;
                   background-image: url('` + blog.img_url + `')
                 " onclick=""> 
-                <span class="cat c2">` + blog.category.name + `</span> 
+                <span class="cat c2"></span> 
             
                 <div >
                 </div> 
               </div>
               <div class="new-txt">
-                <ul class="news-meta d-none">
-                  <li>` + blog.ago + ` ago</li>
-                  <li></li>
-                </ul>
+                
                 <div class="navi" style="" >
-                  <h6 class="py-2">
-                    <a href='/blogs/` + blog.id + `/` + blog.title + `' >` + blog.title + `</a></h6>
+                  <h4 class="py-3 px-3 text-white">
+                    ` + blog.title + `</h4>
                 </div>
-                <div class="text-sm"> ` + excerpt + ` </div>
+                
               </div>
             
             </div>
+          </a>
           </div>
           `
         $("#m4").append(box)
@@ -411,12 +349,13 @@ deck.on('slidechanged', event => {
         arrows: false,
       });
     }
-    $('#m4').slick({
-      slidesToShow: 5,
+
+    $('#newsletter').slick({
+      slidesToShow: 4,
       slidesToScroll: 2,
       dots: true,
-      infinite: true,
-      centerMode: true,
+      infinite: false,
+      centerMode: false,
       centerPadding: '10px',
       arrows: true,
       responsive: [{
@@ -425,7 +364,7 @@ deck.on('slidechanged', event => {
             arrows: false,
             centerMode: true,
             centerPadding: '40px',
-            slidesToShow: 3
+            slidesToShow: 1
           }
         },
         {
@@ -439,30 +378,35 @@ deck.on('slidechanged', event => {
         }
       ]
     });
-    if ($('#h3team-slider').length) {
-      $('#h3team-slider').owlCarousel({
-        loop: true,
-        margin: 30,
 
-        dots: false,
-        responsiveClass: true,
-        responsive: {
-          0: {
-            items: 1,
-            nav: true
-          },
-          600: {
-            items: 2,
-            nav: true
-          },
-          1000: {
-            items: 2,
-            nav: true,
-            loop: false
+    $('#m4').slick({
+      slidesToShow: 4,
+      slidesToScroll: 2,
+      dots: true,
+      infinite: false,
+      centerMode: false,
+      centerPadding: '10px',
+      arrows: true,
+      responsive: [{
+          breakpoint: 768,
+          settings: {
+            arrows: false,
+            centerMode: true,
+            centerPadding: '40px',
+            slidesToShow: 1
+          }
+        },
+        {
+          breakpoint: 480,
+          settings: {
+            arrows: false,
+            centerMode: true,
+            centerPadding: '40px',
+            slidesToShow: 1
           }
         }
-      })
-    }
+      ]
+    });
   })
   </script>
 </div>

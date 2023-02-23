@@ -262,7 +262,7 @@ $(document).ready(() => {
 
 function populate_menus() {
   parents = categories.filter((cat, i) => {
-    return cat.parent.name == cat.name
+    return cat.parent && cat.parent.name == cat.name
   })
   console.log(parents)
 

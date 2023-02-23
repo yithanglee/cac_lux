@@ -42,80 +42,16 @@
 <div class="row">
 </div>
 <!--Footer Start-->
-<footer class="main-footer my-4 py-4" style="">
+<footer class="">
   <div class="container">
     <div class="row">
-      <!--Footer Widget Start-->
-      <div class="col-md-3 col-sm-6">
-        <div class="textwidget"> <img src="/images/cac_logo.png" alt="" style="background: white;padding: 10px;border-radius: 48px;" height="100px">
-          <address>
-            <ul>
-              <li> <i class="fas fa-university"></i> <strong>Address:</strong>
-                Tingkat 6, Wisma Methodist,<br>
-                Lorong Hang Jebat,<br>
-                50150 Kuala Lumpur, Malaysia<br>
-              </li>
-              <li> <i class="fas fa-envelope"></i> <strong>Email:</strong> cacmcm@methodist.org.my </li>
-              <li> <i class="fas fa-phone"></i> <strong>Call us:</strong>+603-2070 2501 <br>+603-2070 2797 </li>
-            </ul>
-          </address>
-        </div>
+      <div class="textwidget"> <img src="/images/cac_logo.png" alt="" style="background: white;padding: 10px;border-radius: 48px;" height="100px">
+      <a href="/"> 2023 CAC METHODIST </a> | <a href="#"> 联系我们 </a> | <a class="" target="_blank" href="https://fb.com/cac.southernbell">@cac.southernbell <i class="fab fa-facebook-f"></i></a> |  <a href="https://fb.com/MethodistCAC" target="_blank" class="fb"> @MethodistCAC <i class="fab fa-facebook-f"></i></a> | <a href="https://www.youtube.com/@-cac7361" target="_blank" class="yt">马来西亚华人年议会-CAC <i class="fab fa-youtube"></i></a>
       </div>
-      <!--Footer Widget End-->
-      <!--Footer Widget Start-->
-      <div class="col-md-3 col-sm-6" style="backdrop-filter: blur(2px);">
-        <div class="footer-widget">
-          <h6>CAC Directory</h6>
-          <ul aria-label="cac-directory">
-          </ul>
-        </div>
-      </div>
-      <!--Footer Widget End-->
-      <!--Footer Widget Start-->
-      <div class="col-md-3 col-sm-6" style="backdrop-filter: blur(2px);">
-        <div class="footer-widget">
-          <h6>Website Navigation</h6>
-          <ul aria-label="web-nav">
-          </ul>
-        </div>
-      </div>
-      <!--Footer Widget End-->
-      <!--Footer Widget Start-->
-      <div class="col-md-3 col-sm-6">
-        <div class="shadow-lg rounded mb-4 p-4">
-          <div class="">
-            <h6>订购南钟报双月刊</h6>
-            <a href="#" class="reply-tw"><i class="fas fa-user-check"></i></a>
-            <p>资讯与出版部借以各类型的媒介，如：文字刊物、视频图像、社交传媒等，传递马来西亚华人年议会各部门事工的消息动态，以及向非信徒和慕道友宣扬耶稣基督的福音。此外，本部亦为年会各部门事工提供电子科技的协助。本部通过《南钟》双月刊，按时供应灵粮，提醒各个信徒，追求灵命长进。 </p>
-          </div>
-          <div class="tw-footer"> <a class="" target="_blank" href="https://web.facebook.com/cac.southernbell">@cac.southernbell</a> <strong id="tedate"></strong> <i class="fab fa-facebook-f"></i> </div>
-        </div>
-      </div>
-      <!--Footer Widget End-->
     </div>
   </div>
 </footer>
 <!--Footer Start-->
-<!--Footer Start-->
-<footer class=" footer my-4 py-4">
-  <div class="container">
-    <div class="row">
-      <div class="col-md-7 col-sm-7">
-        <p class="copyr"> <a href="#">2023 CAC Methodist</a></p>
-      </div>
-      <div class="col-md-5 col-sm-5">
-        <ul class="footer-social">
-          <li><a href="#" class="fb"><i class="fab fa-facebook-f"></i></a></li>
-          <li><a href="#" class="tw"><i class="fab fa-twitter"></i></a></li>
-          <li><a href="#" class="insta"><i class="fab fa-instagram"></i></a></li>
-          <li><a href="#" class="linken"><i class="fab fa-linkedin-in"></i></a></li>
-          <li><a href="#" class="yt"><i class="fab fa-youtube"></i></a></li>
-        </ul>
-      </div>
-    </div>
-  </div>
-</footer>
-<!--Footer End-->
 <!--Wrapper End-->
 <span id="sign-in-button"></span>
 <div id="recaptcha-container"></div>

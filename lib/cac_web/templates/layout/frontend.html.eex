@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <%= if Enum.any?(@conn.path_info, fn x -> x == "blogs" end) do %>
-  <% c = @conn 
+  <% c = @conn
   title = c.private.plug_session["title"]
   description = c.private.plug_session["description"]
   image = "/images/forest_sd.jpg"
@@ -26,7 +26,7 @@
   <%= raw(string) %>
   <% end %>
   <title>卫理华人年议会 Methodist Chinese Annual Conference | CAC</title>
-  <!-- CSS Files 
+  <!-- CSS Files
   <link href="/assets/custom.css" rel="stylesheet">
   <link href="/assets/responsive.css" rel="stylesheet">
   -->
@@ -98,7 +98,7 @@
     $("#pdf-render").removeClass("d-block")
     $("#arc").removeClass("fa-times")
     $("#arc").addClass("fa-caret-up")
-    $("div[aria-label='mainbar']")[0].scrollIntoView();
+    $("div[aria-label='mainbar']")[0].scrollIntoView({ behavior: 'smooth'});
   })
   $(document).on("click", ".navi a", function(event) {
     event.preventDefault();
