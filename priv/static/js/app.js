@@ -466,10 +466,10 @@ let App = {
 
       $(dom).html(`
                     <div class="row" >
-                      <div class="col-lg-2 col-11  pb-4 nav flex-column nav-pills mx-2" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                      <div class="col-lg-2 col-12 px-4 px-lg-0  pb-4 nav flex-column nav-pills mx-2" id="v-pills-tab" role="tablist" aria-orientation="vertical">
                         ` + left_tab.join("") + `
                       </div>
-                      <div class="col-sm-9 tab-content" id="v-pills-tabContent">
+                      <div class="col-lg-9 col-12 tab-content" id="v-pills-tabContent">
                         ` + right_tab.join("") + `
                       </div>
                     </div>
@@ -490,15 +490,15 @@ let App = {
         <span id="crumb"></span>
       </div>`)
 
-      setTimeout(() => {
         $("#v-pills-tab button").each((ii, v) => {
-          setTimeout(() => {
             $(v).toggleClass("d-none")
             if ($("#v-pills-tab button").length == (ii + 1)) {
               $("#v-pills-tab button")[0].click()
             }
+          setTimeout(() => {
           }, (20 * ii) + 1)
         })
+      setTimeout(() => {
       }, 1)
 
 
@@ -941,8 +941,8 @@ function populateTable(dataSource) {
 
 
     $(".table tbody tr").each((i, v) => {
-      setTimeout(() => {
         $(v).removeClass("d-none")
+      setTimeout(() => {
       }, (2 * i) + 1)
     })
   })

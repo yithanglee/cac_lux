@@ -60,6 +60,8 @@ config :ex_aws,
 
 config :ex_aws, :s3, host: "ap-south-1.linodeobjects.com"
 
+config :hound, driver: "chrome_driver", browser: "google_chrome", path_prefix: "wd/hub/"
+
 config :joken,
   rs256: [
     signer_alg: "RS256",

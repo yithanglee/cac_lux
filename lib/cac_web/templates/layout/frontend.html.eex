@@ -5,7 +5,7 @@
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <%= if Enum.any?(@conn.path_info, fn x -> x == "blogs" end) do %>
+  <%= if Enum.any?(@conn.path_info, fn x -> x == "blogs" or x == "pages" end) do %>
   <% c = @conn
   title = c.private.plug_session["title"]
   description = c.private.plug_session["description"]
@@ -21,11 +21,13 @@
   <meta property="og:title" content="#{title}" />
   <meta property="og:image" content="http://www.methodist.org.my#{image}" />
   <meta property="og:description" content="#{description}" />
+
 )
   %>
   <%= raw(string) %>
+
   <% end %>
-  <title>卫理华人年议会 Methodist Chinese Annual Conference | CAC</title>
+  <title>马来西亚基督教 卫理公会华人年议会 | MYCAC</title>
   <!-- CSS Files
   <link href="/assets/custom.css" rel="stylesheet">
   <link href="/assets/responsive.css" rel="stylesheet">
@@ -57,9 +59,11 @@
   <link type="text/css" rel="stylesheet" href="/vendor/firebase-ui/firebase-ui-auth.css" />
   <!-- Google tag (gtag.js) -->
   <script async defer src="https://www.googletagmanager.com/gtag/js?id=G-Z4PS6CP7TS"></script>
+      <meta name="google-site-verification" content="a6tAO2pnpa0sytcZBB_LRHj-RC-BH00myXjyqQgZS_w" />
+
 </head>
 
-<body style="overflow-x: hidden;" id="swiper-container">
+<body >
   <% render("frontend_nav.html", conn: @conn) %>
   <%= @inner_content %>
   <div class="overlay"></div>

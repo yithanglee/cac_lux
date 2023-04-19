@@ -1,12 +1,12 @@
 <style type="text/css">
-  body {
+body {
   font-weight: 400;
   letter-spacing: 1px;
 }
 </style>
 <span class="post-thumbnail full-width-image"></span>
 <div class="container-fluid">
-  <div class="progress-container fixed-top">
+  <div class="progress-container fixed-bottom">
     <span class="progress-bar bg-info" style="height: 8px;"></span>
   </div>
   <style type="text/css">
@@ -14,7 +14,7 @@
     line-height: 1.7em;
   }
   </style>
-  <div class="d-block row gx-4 pt-4 pt-lg-5" >
+  <div class="d-block row gx-4 pt-4 pt-lg-8">
     <div class="col-12 col-lg-6 offset-lg-3">
       <span class="badge bg-primary rounded-pill my-2" aria-label="category"></span>
       <h2 aria-label="title">Show Blog</h2>
@@ -62,7 +62,7 @@
     </div>
   </div>
   <script type="text/javascript">
-  var blogs = App.api("blogs", {});
+  var blogs = App.api("blogs", { limit: 6 });
 
   blogs.forEach((blog, i) => {
     var url = '/images/daniel-tseng-QCjC1KpA4nA-unsplash.webp'
@@ -70,7 +70,7 @@
       url = blog.img_url
     }
     if (blog.category != null) {
-      
+
       $("#l6").append(`
             <div class="col-sm col-12 px-3 ps-lg-0 pb-3 " style="">
                   <div class="position-relative">
@@ -82,18 +82,16 @@
                             overflow: hidden;
                             cursor: pointer;
                             background: #C04848;
-                    
                             background: linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 0), rgba(2,2,2, 1)), url('` + url + `');
                             height: 200px;
                             background-size: cover;
                             background-repeat: no-repeat;
-                            background-position: center;
-                          "
-                    ">
+                            background-position: center;">
                     </div>
                     <div class="position-absolute p-3 d-flex flex-column align-items-start justify-content-start " style="bottom: 4px;">
-                        <span class=" badge rounded-pill bg-danger">` + blog.category.name + `</span>
-                        
+                      <a class="navi" href="/blog_listing/` + blog.category.id + `/` + blog.category.title + `">
+                          <span class=" badge rounded-pill bg-danger">` + blog.category.name + `</span>
+                      </a>
                     </div>          
                   </div>
                   <div 
@@ -140,7 +138,13 @@
     var adder2 = new Function(currentBlog.javascript_binary);
     adder2();
     $("span[aria-label='subtitle']").html(blog.subtitle)
-    $("span[aria-label='category']").html(blog.category.name)
+    $("span[aria-label='category']").html(
+
+      `      <a class="navi" href="/blog_listing/` + blog.category.id + `/` + blog.category.name + `"><span class="text-white">`
+
+      +
+      blog.category.name + `</span></a>`
+    )
 
     $("blockquote").addClass("d-flex flex-column justify-content-between")
 
@@ -164,8 +168,8 @@
 
     App.Page.scrollProgressBar(".progress-bar")
 
-    App.post("cache", {blog_id: window.currentBlog.id ,content: $("#subcontent").html() })
-  
+    App.post("cache", { blog_id: window.currentBlog.id, content: $("#subcontent").html() })
+
 
   })
   </script>

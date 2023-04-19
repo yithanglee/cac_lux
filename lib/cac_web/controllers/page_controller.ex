@@ -106,7 +106,7 @@ defmodule CacWeb.PageController do
   end
 
   def index(conn, _params) do
-    c = Cac.Settings.get_cache_page_by_name("landing") |> IO.inspect()
+    c = Cac.Settings.get_cache_page_by_name("landing")
     render(conn, "index.html", cache: c)
   end
 

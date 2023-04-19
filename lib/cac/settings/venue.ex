@@ -19,6 +19,7 @@ defmodule Cac.Settings.Venue do
     field :youtube, :string
     field :blog, :string
 
+    field :search_keyword, :string
     field :address, :string
     field :desc, :binary
     field :email, :string
@@ -43,6 +44,7 @@ defmodule Cac.Settings.Venue do
     venue
     |> cast(attrs, [
       :sort_no,
+      :search_keyword,
       # :fax,
       :website,
       :fb,

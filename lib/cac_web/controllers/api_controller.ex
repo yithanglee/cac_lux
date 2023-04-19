@@ -148,21 +148,32 @@ defmodule CacWeb.ApiController do
         "cache" ->
           if params["title"] != nil do
             c = Cac.Settings.get_cache_page_by_name(params["title"])
+            blog = Cac.Settings.get_blog_by_title(params["title"])
 
-            if c != nil do
-              Cac.Settings.update_cache_page(c, %{content: params["content"]})
+            if c != nil && blog != nil do
+              Cac.Settings.update_cache_page(c, %{blog_id: blog.id, content: params["content"]})
             else
-              Cac.Settings.create_cache_page(%{
-                title: params["title"],
-                blog_id: 0,
-                content: params["content"]
-              })
+              if blog != nil do
+                Cac.Settings.create_cache_page(%{
+                  title: params["title"],
+                  blog_id: blog.id,
+                  content: params["content"] |> String.replace("  ", "")
+                })
+              end
             end
           else
-            Cac.Settings.create_cache_page(%{
-              blog_id: params["blog_id"],
-              content: params["content"]
-            })
+            c = Cac.Settings.get_cache_page_by_blog_id(params["blog_id"])
+            blog = Cac.Settings.get_blog!(params["blog_id"])
+
+            if c == nil do
+              Cac.Settings.create_cache_page(%{
+                title: blog.title,
+                blog_id: params["blog_id"],
+                content: params["content"]
+              })
+            else
+              Cac.Settings.update_cache_page(c, %{title: blog.title, content: params["content"]})
+            end
           end
 
           %{status: "ok"}
@@ -342,13 +353,32 @@ defmodule CacWeb.ApiController do
           Settings.get_directory()
           |> Enum.map(&(&1 |> BluePotion.sanitize_struct()))
 
+        "get_venue" ->
+          Settings.get_venue!(params["id"])
+          |> Cac.Repo.preload([:users, :region])
+          |> BluePotion.sanitize_struct()
+
         "get_group" ->
           Settings.get_group!(params["id"])
           |> Cac.Repo.preload(users: [:venues])
           |> BluePotion.sanitize_struct()
 
+        "related_blogs" ->
+          Settings.get_blog_by_keyword(params["keyword"], params)
+
         "get_region" ->
           Settings.get_region_with_year(params["id"], params["year_id"])
+
+        "get_regions" ->
+          regions =
+            Settings.list_regions_with_year(params["year_id"])
+            |> Enum.group_by(& &1.region)
+
+          rg_keys = Map.keys(regions)
+
+          for rg_key <- rg_keys do
+            %{region: rg_key, venues: regions[rg_key]}
+          end
 
         "regions" ->
           Settings.list_regions()
@@ -452,7 +482,22 @@ defmodule CacWeb.ApiController do
           %{status: "received"}
       end
 
+    # the admin no nid the cache control
+
+    append_cache_request = fn conn ->
+      if conn.req_headers
+         |> Enum.into(%{})
+         |> Map.get("referer", "")
+         |> String.contains?("admin") do
+        conn
+      else
+        conn
+        |> put_resp_header("cache-control", "max-age=900, must-revalidate")
+      end
+    end
+
     conn
+    |> append_cache_request.()
     |> put_resp_content_type("application/json")
     |> send_resp(200, Jason.encode!(final))
   end

@@ -110,6 +110,7 @@ defmodule CacWeb.Router do
     get "/fb_relogin", PageController, :fb_relogin
     get "/fb_callback", PageController, :fb_callback
     get "/blogs/:id/:title", PageController, :index
+    get "/pages/:id/:title", PageController, :index
     get "/*path", PageController, :index
   end
 end

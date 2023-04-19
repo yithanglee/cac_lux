@@ -30,6 +30,10 @@ defmodule Cac.Application do
 
     File.rm_rf("./priv/static/images/uploads")
     File.ln_s("#{File.cwd!()}/media/", "./priv/static/images/uploads")
+
+    File.rm_rf("./priv/static/wp-content/uploads")
+    File.ln_s("#{File.cwd!()}/media/", "./priv/static/wp-content/uploads")
+
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options
     opts = [strategy: :one_for_one, name: Cac.Supervisor]

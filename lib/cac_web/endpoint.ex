@@ -25,7 +25,7 @@ defmodule CacWeb.Endpoint do
     from: :cac,
     gzip: false,
     only:
-      ~w(css assets fonts vendor webfonts html images js favicon.ico robots.txt .well-known sitemap.xml)
+      ~w(css assets fonts vendor webfonts html wp-content images js favicon.ico robots.txt .well-known sitemap.xml)
 
   # Code reloading can be explicitly enabled under the
   # :code_reloader configuration of your endpoint.

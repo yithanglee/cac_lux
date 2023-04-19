@@ -1,0 +1,118 @@
+<div class="container-fluid">
+  <div class="progress-container fixed-bottom">
+    <span class="progress-bar bg-info" style="height: 8px;"></span>
+  </div>
+  <div class="row g-0">
+    <div class="col-12 ">
+      <div class="row gx-0">
+        <div class="col-lg-3 col-12 p-lg-4 p-0">
+          <div class="card">
+            <div class="card-header">Search</div>
+            <div class="card-body">
+              <form action="javascript:void(0);" id="search">
+                <div class="form-group">
+                  <label class="py-2">Keyword</label>
+                  <input type="text" name="search" class="form-control">
+                </div>
+                <div class="py-3">
+                  <button class="btn btn-primary" onclick="searchBlog()">
+                    Submit
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-9 col-12 p-lg-4 p-0">
+          <div class="hr"></div>
+          <p class="fs-5">Recent related entries </p>
+          <div id="blgs" class="row p-lg-3 p-0">
+          </div>
+          <div id="pg">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+function formatBlog(blog) {
+  return `
+    <section class="p-4">
+
+    <div class="d-flex justify-content-start align-items-center gap-4">
+      <div style="background-size: cover; background-image: url('`+blog.img_url+`'); 
+        height: 80px;width: 80px" class="d-none d-lg-block rounded-circle text-center 
+        bg-primary d-flex align-items-center justify-content-center text-white">
+        </div>
+        <div>
+          <div class="fs-4">` + blog.title + `</div>
+          <div class="format_date">` + blog.inserted_at + `</div>
+          <a href="/blogs/`+blog.id+`/`+blog.title+`" class="navi">Read more</a>
+        </div>
+
+
+    </div>
+ 
+    </section>
+    `
+}
+
+function template(data) {
+  $("#blgs").html('')
+  data.forEach((blog, i) => {
+    var div = formatBlog(blog)
+    $("#blgs").append(div)
+  })
+  formatDate()
+}
+
+
+function searchBlog() {
+  $("#blgs").html('')
+  window.ky = $("input[name='search']").val()
+  App.notify("searching..." + ky)
+
+  App.hide()
+
+
+
+  $('#pg').pagination({
+    dataSource: '/api/webhook?scope=related_blogs&keyword=' + ky,
+    locator: 'data',
+    totalNumberLocator: function(response) {
+      console.log(response.pagination.totalNumber)
+      // you can return totalNumber by analyzing response content
+      return response.pagination.totalNumber;
+    },
+    pageSize: 10,
+    hideFirstOnEllipsisShow: true,
+    hideLastOnEllipsisShow: true,
+    pageRange: 1,
+    ajax: {
+      beforeSend: function() {
+
+      }
+    },
+    callback: function(data, pagination) {
+      // template method of yourself
+      console.log(data)
+      if (data.length == 0) {
+        $("#blgs").html(`Nothing found related to ` + ky)
+      } else {
+
+        var html = template(data);
+      }
+      // dataContainer.html(html);
+
+
+      console.log(pagination)
+    }
+  })
+
+
+
+
+
+}
+</script>

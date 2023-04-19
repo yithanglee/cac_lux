@@ -2,12 +2,16 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     
   <url>
-    <loc>http://localhost:8501/blogs/7/卫理宗-社会准测探索</loc>
-    <lastmod>2022-04-03</lastmod>
+    <loc>http://localhost:8501/blogs/84/主持总议会试用会员退修会课程研讨</loc>
+    <lastmod>2021-06-22</lastmod>
   </url>    
   <url>
     <loc>http://localhost:8501/blogs/3/《南钟》2022年第三期</loc>
     <lastmod>2022-10-13</lastmod>
+  </url>    
+  <url>
+    <loc>http://localhost:8501/blogs/90/和年会教牧女同工在线上交流</loc>
+    <lastmod>2021-06-15</lastmod>
   </url>    
   <url>
     <loc>http://localhost:8501/blogs/4/《南钟》2022年第二期</loc>
@@ -42,6 +46,14 @@
     <lastmod>2022-10-05</lastmod>
   </url>    
   <url>
+    <loc>http://localhost:8501/blogs/116/总议会会督理事会线上会议</loc>
+    <lastmod>2021-05-08</lastmod>
+  </url>    
+  <url>
+    <loc>http://localhost:8501/blogs/127/每月祷告通报 MONTHLY PRAYER BULLETIN</loc>
+    <lastmod>2021-04-25</lastmod>
+  </url>    
+  <url>
     <loc>http://localhost:8501/blogs/21/淡边牧区线上议会</loc>
     <lastmod>2022-02-28</lastmod>
   </url>    
@@ -52,6 +64,38 @@
   <url>
     <loc>http://localhost:8501/blogs/30/太平堂一百一十六周年感恩崇拜</loc>
     <lastmod>2021-12-29</lastmod>
+  </url>    
+  <url>
+    <loc>http://localhost:8501/blogs/52/太平堂一百一十六周年感恩崇拜</loc>
+    <lastmod>2021-12-29</lastmod>
+  </url>    
+  <url>
+    <loc>http://localhost:8501/blogs/60/一脉相承，人跟神之间的纽带——专访何榕生牧师</loc>
+    <lastmod>2021-08-28</lastmod>
+  </url>    
+  <url>
+    <loc>http://localhost:8501/blogs/63/“举白旗”的呼声与基督徒的回应</loc>
+    <lastmod>2021-08-28</lastmod>
+  </url>    
+  <url>
+    <loc>http://localhost:8501/blogs/78/和印度Christian Medical College在线上会谈</loc>
+    <lastmod>2021-06-22</lastmod>
+  </url>    
+  <url>
+    <loc>http://localhost:8501/blogs/86/跟总议会会督讨论《法规》和牧职事宜</loc>
+    <lastmod>2021-06-22</lastmod>
+  </url>    
+  <url>
+    <loc>http://localhost:8501/blogs/89/爱大华堂百周年纪念感恩崇拜和纪念堂启用礼</loc>
+    <lastmod>2021-06-15</lastmod>
+  </url>    
+  <url>
+    <loc>http://localhost:8501/blogs/130/每月祷告通报 MONTHLY PRAYER BULLETIN</loc>
+    <lastmod>2021-04-25</lastmod>
+  </url>    
+  <url>
+    <loc>http://localhost:8501/blogs/136/新创世纪下人变超人的新世代处境</loc>
+    <lastmod>2021-03-13</lastmod>
   </url>    
   <url>
     <loc>http://localhost:8501/blogs/17/爱大华堂牧区议会</loc>
@@ -68,6 +112,18 @@
   <url>
     <loc>http://localhost:8501/blogs/25/安邦牧区线上议会</loc>
     <lastmod>2022-02-28</lastmod>
+  </url>    
+  <url>
+    <loc>http://localhost:8501/blogs/53/在保亚阁三堂证道</loc>
+    <lastmod>2021-12-29</lastmod>
+  </url>    
+  <url>
+    <loc>http://localhost:8501/blogs/65/我Ok吗？-谈疫情下的情绪照顾</loc>
+    <lastmod>2021-08-11</lastmod>
+  </url>    
+  <url>
+    <loc>http://localhost:8501/blogs/67/《南钟》2021年第一期</loc>
+    <lastmod>2021-08-01</lastmod>
   </url>    
   <url>
     <loc>http://localhost:8501/blogs/11/马来西亚卫理公会《法规》（2016年版）</loc>
@@ -90,28 +146,28 @@
     <lastmod>2022-02-28</lastmod>
   </url>    
   <url>
-    <loc>http://localhost:8501/blogs/16/关丹牧区议会</loc>
-    <lastmod>2022-02-28</lastmod>
-  </url>    
-  <url>
     <loc>http://localhost:8501/blogs/19/日落洞牧区议会</loc>
     <lastmod>2022-02-28</lastmod>
   </url>    
   <url>
-    <loc>http://localhost:8501/blogs/10/派使名单</loc>
-    <lastmod>2022-10-26</lastmod>
-  </url>    
-  <url>
-    <loc>http://localhost:8501/blogs/23/巴生牧区议会</loc>
-    <lastmod>2022-02-28</lastmod>
+    <loc>http://localhost:8501/blogs/10/派司名单</loc>
+    <lastmod>2023-04-07</lastmod>
   </url>    
   <url>
     <loc>http://localhost:8501/blogs/27/每月祷告通报 MONTHLY PRAYER BULLETIN</loc>
     <lastmod>2022-02-20</lastmod>
   </url>    
   <url>
+    <loc>http://localhost:8501/blogs/23/巴生牧区议会</loc>
+    <lastmod>2023-04-08</lastmod>
+  </url>    
+  <url>
     <loc>http://localhost:8501/blogs/29/BSC布道所启用感恩崇拜</loc>
     <lastmod>2021-12-29</lastmod>
+  </url>    
+  <url>
+    <loc>http://localhost:8501/blogs/72/现代版的无神论反宗教历史观</loc>
+    <lastmod>2021-07-01</lastmod>
   </url>    
   <url>
     <loc>http://localhost:8501/blogs/33/致词2</loc>
@@ -126,11 +182,367 @@
     <lastmod>2022-10-26</lastmod>
   </url>    
   <url>
-    <loc>http://localhost:8501/blogs/2/《南钟》2022年第四期</loc>
-    <lastmod>2022-11-15</lastmod>
+    <loc>http://localhost:8501/blogs/74/2021年美门基金会线上常年会议</loc>
+    <lastmod>2021-06-22</lastmod>
+  </url>    
+  <url>
+    <loc>http://localhost:8501/blogs/75/与年会及教区会友领袖线上交流</loc>
+    <lastmod>2021-06-22</lastmod>
+  </url>    
+  <url>
+    <loc>http://localhost:8501/blogs/134/圣经始于花园，终于城国——专访吴慧芬博士</loc>
+    <lastmod>2021-03-13</lastmod>
   </url>    
   <url>
     <loc>http://localhost:8501/blogs/34/关于我们</loc>
     <lastmod>2023-02-12</lastmod>
+  </url>    
+  <url>
+    <loc>http://localhost:8501/blogs/16/关丹牧区议会</loc>
+    <lastmod>2023-04-08</lastmod>
+  </url>    
+  <url>
+    <loc>http://localhost:8501/blogs/2/《南钟》2022年第四期</loc>
+    <lastmod>2023-04-08</lastmod>
+  </url>    
+  <url>
+    <loc>http://localhost:8501/blogs/64/我在！</loc>
+    <lastmod>2021-08-28</lastmod>
+  </url>    
+  <url>
+    <loc>http://localhost:8501/blogs/66/第七届卫斯理研讨会（14-15/07/2021）</loc>
+    <lastmod>2021-08-10</lastmod>
+  </url>    
+  <url>
+    <loc>http://localhost:8501/blogs/68/灵性之义，饮主更深——专访温俊卿博士</loc>
+    <lastmod>2021-07-01</lastmod>
+  </url>    
+  <url>
+    <loc>http://localhost:8501/blogs/7/卫理宗-社会准测探索</loc>
+    <lastmod>2023-04-09</lastmod>
+  </url>    
+  <url>
+    <loc>http://localhost:8501/blogs/35/南钟报目录</loc>
+    <lastmod>2023-04-09</lastmod>
+  </url>    
+  <url>
+    <loc>http://localhost:8501/blogs/36/堂会 Churches</loc>
+    <lastmod>2023-04-13</lastmod>
+  </url>    
+  <url>
+    <loc>http://localhost:8501/blogs/37/卫理堂会</loc>
+    <lastmod>2023-04-15</lastmod>
+  </url>    
+  <url>
+    <loc>http://localhost:8501/blogs/38/寻找 Search</loc>
+    <lastmod>2023-04-16</lastmod>
+  </url>    
+  <url>
+    <loc>http://localhost:8501/blogs/39/每月祷告通报 MONTHLY PRAYER BULLETIN</loc>
+    <lastmod>2022-02-20</lastmod>
+  </url>    
+  <url>
+    <loc>http://localhost:8501/blogs/40/每月祷告通报 MONTHLY PRAYER BULLETIN</loc>
+    <lastmod>2022-02-13</lastmod>
+  </url>    
+  <url>
+    <loc>http://localhost:8501/blogs/41/BSC布道所启用感恩崇拜</loc>
+    <lastmod>2021-12-29</lastmod>
+  </url>    
+  <url>
+    <loc>http://localhost:8501/blogs/42/太平堂一百一十六周年感恩崇拜</loc>
+    <lastmod>2021-12-29</lastmod>
+  </url>    
+  <url>
+    <loc>http://localhost:8501/blogs/43/在保亚阁三堂证道</loc>
+    <lastmod>2021-12-29</lastmod>
+  </url>    
+  <url>
+    <loc>http://localhost:8501/blogs/45/走访柔府真光小学</loc>
+    <lastmod>2021-12-29</lastmod>
+  </url>    
+  <url>
+    <loc>http://localhost:8501/blogs/70/这就是我主</loc>
+    <lastmod>2021-07-01</lastmod>
+  </url>    
+  <url>
+    <loc>http://localhost:8501/blogs/87/敬祝父亲节蒙恩</loc>
+    <lastmod>2021-06-20</lastmod>
+  </url>    
+  <url>
+    <loc>http://localhost:8501/blogs/44/保阁亚三堂新圣殿动土礼</loc>
+    <lastmod>2021-12-29</lastmod>
+  </url>    
+  <url>
+    <loc>http://localhost:8501/blogs/46/主持婚礼</loc>
+    <lastmod>2021-12-29</lastmod>
+  </url>    
+  <url>
+    <loc>http://localhost:8501/blogs/47/在亚洲合一学院授课</loc>
+    <lastmod>2021-12-29</lastmod>
+  </url>    
+  <url>
+    <loc>http://localhost:8501/blogs/48/莎亚南堂三十三周年感恩崇拜</loc>
+    <lastmod>2021-12-29</lastmod>
+  </url>    
+  <url>
+    <loc>http://localhost:8501/blogs/49/每月祷告通报 MONTHLY PRAYER BULLETIN</loc>
+    <lastmod>2022-02-20</lastmod>
+  </url>    
+  <url>
+    <loc>http://localhost:8501/blogs/50/每月祷告通报 MONTHLY PRAYER BULLETIN</loc>
+    <lastmod>2022-02-13</lastmod>
+  </url>    
+  <url>
+    <loc>http://localhost:8501/blogs/51/BSC布道所启用感恩崇拜</loc>
+    <lastmod>2021-12-29</lastmod>
+  </url>    
+  <url>
+    <loc>http://localhost:8501/blogs/57/在亚洲合一学院授课</loc>
+    <lastmod>2021-12-29</lastmod>
+  </url>    
+  <url>
+    <loc>http://localhost:8501/blogs/54/保阁亚三堂新圣殿动土礼</loc>
+    <lastmod>2021-12-29</lastmod>
+  </url>    
+  <url>
+    <loc>http://localhost:8501/blogs/55/走访柔府真光小学</loc>
+    <lastmod>2021-12-29</lastmod>
+  </url>    
+  <url>
+    <loc>http://localhost:8501/blogs/56/主持婚礼</loc>
+    <lastmod>2021-12-29</lastmod>
+  </url>    
+  <url>
+    <loc>http://localhost:8501/blogs/58/莎亚南堂三十三周年感恩崇拜</loc>
+    <lastmod>2021-12-29</lastmod>
+  </url>    
+  <url>
+    <loc>http://localhost:8501/blogs/59/《南钟》2021年第二期</loc>
+    <lastmod>2021-09-01</lastmod>
+  </url>    
+  <url>
+    <loc>http://localhost:8501/blogs/61/谁为我们发声？——淺談散聚之民之人道关怀</loc>
+    <lastmod>2021-08-28</lastmod>
+  </url>    
+  <url>
+    <loc>http://localhost:8501/blogs/62/意象体现上帝的爱</loc>
+    <lastmod>2021-08-28</lastmod>
+  </url>    
+  <url>
+    <loc>http://localhost:8501/blogs/69/我们有多少恩典，就做多少事！</loc>
+    <lastmod>2021-07-01</lastmod>
+  </url>    
+  <url>
+    <loc>http://localhost:8501/blogs/71/母亲节谈“卫理妇女会”</loc>
+    <lastmod>2021-07-01</lastmod>
+  </url>    
+  <url>
+    <loc>http://localhost:8501/blogs/73/和十个教区的同工在线上交流</loc>
+    <lastmod>2021-06-22</lastmod>
+  </url>    
+  <url>
+    <loc>http://localhost:8501/blogs/76/和本宗在马来西亚神学院的神学生线上交流</loc>
+    <lastmod>2021-06-22</lastmod>
+  </url>    
+  <url>
+    <loc>http://localhost:8501/blogs/77/“港湾”Covid 19支援平台筹备小组会议</loc>
+    <lastmod>2021-06-22</lastmod>
+  </url>    
+  <url>
+    <loc>http://localhost:8501/blogs/79/2021年“全国大专生聚会”</loc>
+    <lastmod>2021-06-22</lastmod>
+  </url>    
+  <url>
+    <loc>http://localhost:8501/blogs/80/和“信徒成长之旅”的学员在线上交流</loc>
+    <lastmod>2021-06-22</lastmod>
+  </url>    
+  <url>
+    <loc>http://localhost:8501/blogs/81/和保阁亚三堂执事会在线上交流</loc>
+    <lastmod>2021-06-22</lastmod>
+  </url>    
+  <url>
+    <loc>http://localhost:8501/blogs/82/参加2021年教师节线上庆典</loc>
+    <lastmod>2021-06-22</lastmod>
+  </url>    
+  <url>
+    <loc>http://localhost:8501/blogs/83/印尼雅德门线上讲座会（Aldersgate Webinar）</loc>
+    <lastmod>2021-06-22</lastmod>
+  </url>    
+  <url>
+    <loc>http://localhost:8501/blogs/85/年会执行部线上特别会议</loc>
+    <lastmod>2021-06-22</lastmod>
+  </url>    
+  <url>
+    <loc>http://localhost:8501/blogs/88/在疫情中过冬</loc>
+    <lastmod>2021-06-17</lastmod>
+  </url>    
+  <url>
+    <loc>http://localhost:8501/blogs/91/参加南中教区赞美敬拜晚会</loc>
+    <lastmod>2021-06-15</lastmod>
+  </url>    
+  <url>
+    <loc>http://localhost:8501/blogs/92/和“第廿三届信徒成长之旅”线上交流</loc>
+    <lastmod>2021-06-15</lastmod>
+  </url>    
+  <url>
+    <loc>http://localhost:8501/blogs/93/探望文打堂</loc>
+    <lastmod>2021-06-15</lastmod>
+  </url>    
+  <url>
+    <loc>http://localhost:8501/blogs/94/探望劳勿堂</loc>
+    <lastmod>2021-06-15</lastmod>
+  </url>    
+  <url>
+    <loc>http://localhost:8501/blogs/95/每月祷告通报 MONTHLY PRAYER BULLETIN</loc>
+    <lastmod>2021-05-21</lastmod>
+  </url>    
+  <url>
+    <loc>http://localhost:8501/blogs/96/Fund Raising India Covid Crisis</loc>
+    <lastmod>2021-05-15</lastmod>
+  </url>    
+  <url>
+    <loc>http://localhost:8501/blogs/97/为印度疫情筹款</loc>
+    <lastmod>2021-05-15</lastmod>
+  </url>    
+  <url>
+    <loc>http://localhost:8501/blogs/98/探望美佳堂</loc>
+    <lastmod>2021-05-08</lastmod>
+  </url>    
+  <url>
+    <loc>http://localhost:8501/blogs/99/在八达灵新市堂证道</loc>
+    <lastmod>2021-05-08</lastmod>
+  </url>    
+  <url>
+    <loc>http://localhost:8501/blogs/110/“联属教会、本处传道和执事”培训讲座</loc>
+    <lastmod>2021-05-08</lastmod>
+  </url>    
+  <url>
+    <loc>http://localhost:8501/blogs/100/探望东部教区肢体</loc>
+    <lastmod>2021-05-08</lastmod>
+  </url>    
+  <url>
+    <loc>http://localhost:8501/blogs/101/探望东部教区彭亨州东部及登嘉楼州的教会</loc>
+    <lastmod>2021-05-08</lastmod>
+  </url>    
+  <url>
+    <loc>http://localhost:8501/blogs/102/主持世界循道卫理宗联会华人教会联会神学委员会会议</loc>
+    <lastmod>2021-05-08</lastmod>
+  </url>    
+  <url>
+    <loc>http://localhost:8501/blogs/103/在百美堂证道</loc>
+    <lastmod>2021-05-08</lastmod>
+  </url>    
+  <url>
+    <loc>http://localhost:8501/blogs/104/马来西亚神学院第三十八届毕业典礼</loc>
+    <lastmod>2021-05-08</lastmod>
+  </url>    
+  <url>
+    <loc>http://localhost:8501/blogs/106/在旧古仔路卫理布道所证道</loc>
+    <lastmod>2021-05-08</lastmod>
+  </url>    
+  <url>
+    <loc>http://localhost:8501/blogs/108/《会友指南》导师训练会</loc>
+    <lastmod>2021-05-08</lastmod>
+  </url>    
+  <url>
+    <loc>http://localhost:8501/blogs/115/在昆仑喇叭堂线上证道</loc>
+    <lastmod>2021-05-08</lastmod>
+  </url>    
+  <url>
+    <loc>http://localhost:8501/blogs/105/探望蒲种百美卫理公会</loc>
+    <lastmod>2021-05-08</lastmod>
+  </url>    
+  <url>
+    <loc>http://localhost:8501/blogs/107/“联属教会、执事与本处传道”培训讲座</loc>
+    <lastmod>2021-05-08</lastmod>
+  </url>    
+  <url>
+    <loc>http://localhost:8501/blogs/109/旧古仔路卫理公会-三周年感恩崇拜</loc>
+    <lastmod>2021-05-08</lastmod>
+  </url>    
+  <url>
+    <loc>http://localhost:8501/blogs/113/跨文化教牧学校</loc>
+    <lastmod>2021-05-08</lastmod>
+  </url>    
+  <url>
+    <loc>http://localhost:8501/blogs/114/总议会执行理事会线上会议</loc>
+    <lastmod>2021-05-08</lastmod>
+  </url>    
+  <url>
+    <loc>http://localhost:8501/blogs/120/和吾会神学生吃早餐</loc>
+    <lastmod>2021-05-08</lastmod>
+  </url>    
+  <url>
+    <loc>http://localhost:8501/blogs/132/每月祷告通报 MONTHLY PRAYER BULLETIN</loc>
+    <lastmod>2021-03-17</lastmod>
+  </url>    
+  <url>
+    <loc>http://localhost:8501/blogs/111/和新同工在线上交流</loc>
+    <lastmod>2021-05-08</lastmod>
+  </url>    
+  <url>
+    <loc>http://localhost:8501/blogs/117/教区长线上会议</loc>
+    <lastmod>2021-05-08</lastmod>
+  </url>    
+  <url>
+    <loc>http://localhost:8501/blogs/125/大城堡牧区议会</loc>
+    <lastmod>2021-05-08</lastmod>
+  </url>    
+  <url>
+    <loc>http://localhost:8501/blogs/112/探望吉隆坡怡保路卫理公会</loc>
+    <lastmod>2021-05-08</lastmod>
+  </url>    
+  <url>
+    <loc>http://localhost:8501/blogs/118/和吾会神学生交流</loc>
+    <lastmod>2021-05-08</lastmod>
+  </url>    
+  <url>
+    <loc>http://localhost:8501/blogs/126/新创世纪下人造人的新启示录</loc>
+    <lastmod>2021-05-05</lastmod>
+  </url>    
+  <url>
+    <loc>http://localhost:8501/blogs/129/新创世纪下人造人的新启示录</loc>
+    <lastmod>2021-05-05</lastmod>
+  </url>    
+  <url>
+    <loc>http://localhost:8501/blogs/119/印度卫理使徒教会线上交流会</loc>
+    <lastmod>2021-05-08</lastmod>
+  </url>    
+  <url>
+    <loc>http://localhost:8501/blogs/121/《门徒红本》线上导师训练营</loc>
+    <lastmod>2021-05-08</lastmod>
+  </url>    
+  <url>
+    <loc>http://localhost:8501/blogs/123/探望在加埔堂</loc>
+    <lastmod>2021-05-08</lastmod>
+  </url>    
+  <url>
+    <loc>http://localhost:8501/blogs/131/连于上帝的大能</loc>
+    <lastmod>2021-04-25</lastmod>
+  </url>    
+  <url>
+    <loc>http://localhost:8501/blogs/135/从年会财务不敷看年会事工</loc>
+    <lastmod>2021-03-13</lastmod>
+  </url>    
+  <url>
+    <loc>http://localhost:8501/blogs/137/古今崇拜</loc>
+    <lastmod>2021-03-13</lastmod>
+  </url>    
+  <url>
+    <loc>http://localhost:8501/blogs/122/在兵如港堂线上证道</loc>
+    <lastmod>2021-05-08</lastmod>
+  </url>    
+  <url>
+    <loc>http://localhost:8501/blogs/124/年会各部会议</loc>
+    <lastmod>2021-05-08</lastmod>
+  </url>    
+  <url>
+    <loc>http://localhost:8501/blogs/128/大城堡牧区议会</loc>
+    <lastmod>2021-05-08</lastmod>
+  </url>    
+  <url>
+    <loc>http://localhost:8501/blogs/133/会督大斋节心语</loc>
+    <lastmod>2021-03-13</lastmod>
   </url>
 </urlset>

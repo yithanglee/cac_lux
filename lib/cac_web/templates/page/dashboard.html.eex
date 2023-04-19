@@ -1,4 +1,6 @@
+<script type="text/javascript" src="/js/pagination.min.js"></script>
 
+  <link rel="stylesheet" type="text/css" href="/css/pagination.min.css" />
 <style type="text/css">
 .list-group-item {
   position: relative;
@@ -9,6 +11,7 @@
   background-color: #fff;
   border: 0px;
 }
+
 .navbar {
   position: relative;
   display: -ms-flexbox;
@@ -25,20 +28,21 @@
 </style>
 <div id="subcontent">
 </div>
-
 <script type="text/javascript">
+  var s = new Date()
+var currentYear = s.getFullYear()
+var year_id;
 var profile_data =
   App.api("get_corporate_account_profile", { token: window.userToken })
 
-var route_names = [
-{
+var route_names = [{
     html: "author_blogs.html",
     title: "Author Blogs - CAC",
     route: "/admin/author_blogs",
     skipNav: false
 
   },
-{
+  {
     html: "fb_integration.html",
     title: "Home - CAC",
     route: "/admin/fb_integration",
@@ -46,7 +50,21 @@ var route_names = [
   },
 
 
-{
+  {
+    html: "churches.html",
+    title: "Church - CAC",
+    route: "/admin/churches",
+    skipNav: true
+  },
+
+  {
+    html: "church.html",
+    title: "Church - CAC",
+    route: "/admin/church/:id",
+    skipNav: true
+  },
+
+  {
     html: "dashboard.html",
     title: "Home - CAC",
     route: "/admin/dashboard",

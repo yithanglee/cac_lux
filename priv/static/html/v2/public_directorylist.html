@@ -32,7 +32,7 @@ function populateUserGroup(ug, ug_id) {
   if (user_group.remarks != null) {
     remarks = user_group.remarks
   }
-  console.log(user_group)
+
   if (user != null) {
     if (user.bio != null) {
       bio = user.bio
@@ -74,20 +74,29 @@ function populateUserGroup(ug, ug_id) {
 
 
 										<div class="d-flex flex-column">
-											<span class=" text-primary flex-grow-1 py-2">` + remarks + `</span> 
-										<div 
-											class="d-lg-none my-3 rounded-circle text-center bg-primary d-flex align-items-center justify-content-center text-white"
-											style="background-size: cover; background-image: url('` + user.image_url + `'); height: 60px;width: 60px"
-											>
-										  ` + placeholder + `
-										</div>
+											<span class="fw-bold text-primary flex-grow-1 py-2">` + remarks + `</span> 
+                      <div class="d-flex justify-content-start gap-2 align-items-center">
+    										<div 
+    											class="d-lg-none my-3 rounded-circle text-center bg-primary d-flex align-items-center justify-content-center text-white"
+    											style="background-size: cover; background-image: url('` + user.image_url + `'); height: 60px; width: 60px"
+    											>
+    										  ` + placeholder + `
+    										</div>
+                        <div  >
+
+                                  <span class="d-block d-lg-none">` + cname + `</span>
+                                  <span class="text-sm d-block d-lg-none">` + user.full_name + `</span> 
+                        </div>
+                      </div>
 
 											<div class="d-flex justify-content-start gap-4">
-																<div class="d-flex flex-column">
+																<div class="d-none d-lg-flex flex-column">
 																			<span>` + cname + `</span>
 																			<span class="text-sm">` + user.full_name + `</span>
 																</div>
-																<div class="d-flex flex-column">		
+																<div class="d-flex flex-column">
+
+	
 																	<span class="text-sm">HP: ` + user.phone + `</span>
 																	<span class="text-sm">Email: ` + user.email + `</span>
 																</div>
@@ -150,7 +159,7 @@ function populateGroup(group_id) {
   $("section#group_" + group_id).html('')
 
   group.user_groups.sort(function(b, a) {
-    return b.id - a.id;
+    return b.sort_no - a.sort_no;
   })
 
   group.user_groups.forEach((user_group, ii) => {
@@ -186,7 +195,7 @@ function loadGroups() {
 					</section>
 				</div>`)
     group.user_groups.sort(function(b, a) {
-      return b.id - a.id;
+      return b.sort_no - a.sort_no;
     })
 
     group.user_groups.forEach((user_group, ii) => {

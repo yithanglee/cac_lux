@@ -2,7 +2,6 @@
 </div>
 <script type="text/javascript">
 var tab_list = [
-
   {
     title: "通讯录",
     icon: "fa fa-list",
@@ -70,10 +69,11 @@ var customCols = [
   'service_start',
   { label: 'service_end' },
 ]
-var directorylist, namelist;
+var directorylist, namelist, churchlist;
+
+
 service_yearSource = new phoenixModel({
   onDrawFn: () => {
-
 
     directorylist = App.html("directorylist.html")
     $("#tab4").html(directorylist)
@@ -569,11 +569,14 @@ regionSource.load(random_id, "#tab3a")
 customCols = [{
   name: "General",
   list: [
-
+    { label: 'translator', binary: true },
     'name',
     'desc',
     'reg_no',
     'address',
+    'phone',
+    'email',
+    'fb',
     'id',
     'img_url',
 
@@ -585,13 +588,11 @@ customCols = [{
   name: "Contact",
   list: [
 
-    'fb',
     'youtube',
     'website',
     'blog',
+    'search_keyword',
 
-    'email',
-    'phone',
     'id',
     'lat',
     'long',
@@ -601,6 +602,22 @@ customCols = [{
 
 random_id = 'venues'
 venueSource = new phoenixModel({
+  onDrawFn: () => {
+    $("textarea[name='Venue[translator]']").unbind()
+    $("textarea[name='Venue[translator]']").on("focusout", function(e) {
+      var desc = $(this).val().split(')')[1]
+      var first = $(this).val().split(')')[0].split("(")
+      var cname = first[0]
+      var reg_no = first[1]
+
+      console.log(cname)
+      console.log(desc)
+      console.log(reg_no)
+      $("[name='Venue[name]']").val(cname)
+      $("[name='Venue[desc]']").val(desc)
+      $("[name='Venue[reg_no]']").val(reg_no)
+    })
+  },
   data: { preloads: ['region'] },
   columns: [
 
@@ -667,46 +684,59 @@ var customCols = ['group_id', 'id', 'remarks', 'sort_no', 'user_id']
 
 var random_id = 'user_groups'
 user_groupSource = new phoenixModel({
+  data: {
+    preloads: ['service_year'],
+    sorts: [
+      [1, "desc"],
+      [2, "asc"]
+    ],
+    pageLength: 100
+  },
   columns: [
 
     { label: 'id', data: 'id' },
     { label: 'Sort', data: 'sort_no' },
     { label: 'remarks', data: 'remarks' },
     { label: 'id', data: 'id' },
+    { label: 'Year', data: 'service_year_id', showChild: true, xdata: { child: 'service_year', data: 'remarks' } },
     { label: 'Action', data: 'id' }
 
   ],
   moduleName: "UserGroup",
   link: "UserGroup",
   customCols: customCols,
-  buttons: [{
-    buttonType: "grouped",
-    name: "Manage",
-    color: "outline-warning",
-    buttonList: [
+  buttons: [
 
-      {
-        name: "Edit",
-        iconName: "fa fa-edit",
-        color: "btn-sm btn-outline-warning",
-        onClickFunction: editData,
-        fnParams: {
-          drawFn: enlargeModal,
-          customCols: customCols
-        }
-      },
-      {
-        name: "Delete",
-        iconName: "fa fa-trash",
-        color: "outline-danger",
-        onClickFunction: deleteData,
-        fnParams: {}
+    {
+      name: "Edit",
+      iconName: "fa fa-edit",
+      color: "btn-sm btn-outline-warning",
+      onClickFunction: editData,
+      fnParams: {
+        drawFn: enlargeModal,
+        customCols: customCols
       }
-    ],
-    fnParams: {
+    },
+    {
+      buttonType: "grouped",
+      name: "Manage",
+      color: "outline-warning",
+      buttonList: [
 
-    }
-  }, ],
+
+        {
+          name: "Delete",
+          iconName: "fa fa-trash",
+          color: "outline-danger",
+          onClickFunction: deleteData,
+          fnParams: {}
+        }
+      ],
+      fnParams: {
+
+      }
+    },
+  ],
 
   tableSelector: "#" + random_id
 })
@@ -718,7 +748,7 @@ customCols = [{
       'name',
       'cname',
       'email',
-      {label: 'image_url', upload: true},
+      { label: 'image_url', upload: true },
     ]
   },
   {

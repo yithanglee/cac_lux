@@ -1,4 +1,5 @@
-
+<script type="text/javascript" src="/js/pagination.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/pagination.min.css" />
 <!-- pdf
  -->
 <script src="/js/pdfobject.min.js"></script>
@@ -35,18 +36,37 @@
 }
 </style>
 <!--Wrapper Start-->
-<div class="" id="subcontent" aria-label="mainbar">
+<div class="" id="subcontent" aria-label="mainbar" style="position: relative;">
   <%= render("show_blog.html", cache: @cache)%>
 </div>
+
+<%= if true do %>
+
+<script type="text/javascript">
+  function cachePage(){
+
+    $(document).ready(() => {
+      App.post("cache", { title: document.title, content: $("#subcontent").html().replaceAll("  ", "") })
+    })
+  }
+</script>
+<% else %>
+
+<script type="text/javascript">
+  function cachePage(){
+    console.log("cache n/a")
+  }
+</script>
+<% end %>
 <script src="/js/cac.js"></script>
-<div class="row">
-</div>
+
+
 <!--Footer Start-->
-<footer class="">
+<footer class="lf">
   <div class="container">
     <div class="row">
       <div class="textwidget"> <img src="/images/cac_logo.png" alt="" style="background: white;padding: 10px;border-radius: 48px;" height="100px">
-      <a href="/"> 2023 CAC METHODIST </a> | <a href="#"> 联系我们 </a> | <a class="" target="_blank" href="https://fb.com/cac.southernbell">@cac.southernbell <i class="fab fa-facebook-f"></i></a> |  <a href="https://fb.com/MethodistCAC" target="_blank" class="fb"> @MethodistCAC <i class="fab fa-facebook-f"></i></a> | <a href="https://www.youtube.com/@-cac7361" target="_blank" class="yt">马来西亚华人年议会-CAC <i class="fab fa-youtube"></i></a>
+        <a href="/"> 2023 CAC METHODIST </a> | <a href="#"> 联系我们 </a> | <a class="" target="_blank" href="https://fb.com/cac.southernbell">@cac.southernbell <i class="fab fa-facebook-f"></i></a> | <a href="https://fb.com/MethodistCAC" target="_blank" class="fb"> @MethodistCAC <i class="fab fa-facebook-f"></i></a> | <a href="https://www.youtube.com/@-cac7361" target="_blank" class="yt">马来西亚华人年议会-CAC <i class="fab fa-youtube"></i></a>
       </div>
     </div>
   </div>

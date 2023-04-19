@@ -1,15 +1,47 @@
 var categories = App.api("blog_categories", {})
-var route_names = [
-  { html: "landing2.html", title: "Home - 卫理华人年议会 Methodist Chinese Annual Conference", route: "/home2" },
-  { html: "landing.html", title: "Home - 卫理华人年议会 Methodist Chinese Annual Conference", route: "/home" },
-  { html: "account.html", title: "Account - 卫理华人年议会 Methodist Chinese Annual Conference", route: "/account" },
-  { html: "event_listing.html", title: "Events - 卫理华人年议会 Methodist Chinese Annual Conference", route: "/event_listing/:id/:title" },
-  { html: "event_show.html", title: "Event - 卫理华人年议会 Methodist Chinese Annual Conference", route: "/events/:id/:title" },
+var route_names = [{
+    html: "landing.html",
+    title: "Home - 马来西亚基督教 卫理公会华人年议会",
+    route: "/home"
+  }, {
+    html: "account.html",
+    title: "Account - 马来西亚基督教 卫理公会华人年议会",
+    route: "/account"
+  }, {
+    html: "event_listing.html",
+    title: "Events - 马来西亚基督教 卫理公会华人年议会",
+    route: "/event_listing/:id/:title"
+  }, {
+    html: "event_show.html",
+    title: "Event - 马来西亚基督教 卫理公会华人年议会",
+    route: "/events/:id/:title"
+  },
+  {
+    html: "church.html",
+    title: "Church - 马来西亚基督教 卫理公会华人年议会",
+    route: "/church/:id"
+  },
+ 
 
-  { html: "blog_listing.html", title: "Blogs - 卫理华人年议会 Methodist Chinese Annual Conference", route: "/blog_listing/:id/:title" },
-  { html: "blog_show.html", title: "Blog - 卫理华人年议会 Methodist Chinese Annual Conference", route: "/blogs/:id/:title" },
-  { html: "page_show.html", title: "Page - 卫理华人年议会 Methodist Chinese Annual Conference", route: "/pages/:id/:title", customNav: "blog_nav_sub.html" },
-  { html: "privacy_policy.html", title: "Privacy Policy - 卫理华人年议会 Methodist Chinese Annual Conference", route: "/privacy_policy" ,skipNav: true },
+  {
+    html: "blog_listing.html",
+    title: "Blogs - 马来西亚基督教 卫理公会华人年议会",
+    route: "/blog_listing/:id/:title"
+  }, {
+    html: "blog_show.html",
+    title: "Blog - 马来西亚基督教 卫理公会华人年议会",
+    route: "/blogs/:id/:title"
+  }, {
+    html: "page_show.html",
+    title: "Page - 马来西亚基督教 卫理公会华人年议会",
+    route: "/pages/:id/:title",
+    customNav: "blog_nav_sub.html"
+  }, {
+    html: "privacy_policy.html",
+    title: "Privacy Policy - 马来西亚基督教 卫理公会华人年议会",
+    route: "/privacy_policy",
+    skipNav: true
+  },
 
 ]
 
@@ -72,7 +104,10 @@ function navigateTo(route, additionalParamString, dom) {
     if (window.back) {
       window.back = false
     } else {
-      var stateObj = { fn: `navigateTo('` + route + `', '` + xParamString + `')`, params: params };
+      var stateObj = {
+        fn: `navigateTo('` + route + `', '` + xParamString + `')`,
+        params: params
+      };
       console.log("route")
       console.log(route)
       window.stateObj = stateObj
@@ -95,6 +130,7 @@ function navigateTo(route, additionalParamString, dom) {
 
     if (keys.includes("skipNav")) {
       $("#subcontent").html(html)
+      renderCallback()
 
     } else {
       var nav = App.html("blog_nav.html")
@@ -105,27 +141,33 @@ function navigateTo(route, additionalParamString, dom) {
 
       $("#subcontent").html(nav)
       $("#subcontent").append(html)
-      populate_menus()
-
-      App.hide()
+      renderCallback()
 
     }
 
-    checkLoginUser();
+
     return match_2[0]
   } else {
     var html = App.html("landing.html")
     var nav = App.html("blog_nav.html")
     $("#subcontent").html(nav)
     $("#subcontent").append(html)
-    populate_menus()
-    checkLoginUser();
-
-    App.hide()
+    renderCallback()
 
   }
 
 
+}
+
+function renderCallback() {
+  populate_menus()
+  checkLoginUser();
+  App.hide()
+  try {
+    cachePage()
+  } catch(e){
+
+  }
 }
 
 function updatePageParams(obj) {
@@ -203,7 +245,9 @@ function checkLoginUser() {
   if (localStorage.getItem("pkey") != null) {
     window.userToken = localStorage.getItem("pkey")
 
-    var pdata = App.api("get_member_profile", { token: window.userToken }, () => {
+    var pdata = App.api("get_member_profile", {
+      token: window.userToken
+    }, () => {
       window.member = null
       localStorage.removeItem("pkey")
       // $("#ulg").html("Login")
@@ -345,7 +389,7 @@ function populate_directory() {
   var li = ` 
 
     <li class=" nav-item">
-      <a id="axr" onclick="checkLogin()" style="cursor: pointer;" class="  nav-link p-2"> 
+      <a id="axr" onclick="checkLogin()" style="cursor: pointer;" class="  nav-link "> 
       <i class="fa fa-user pe-2"></i>
       <span aria-label='displayName'>Profile</span> </a>
     </li>
@@ -356,15 +400,15 @@ function populate_directory() {
 }
 
 function populate_footer() {
-  var groups = App.api("list_groups", {})
-  $("ul[aria-label='cac-directory']").html('')
-  groups.forEach((g, i) => {
-    var li = `<li>
-      <a href="javascript:void(0);">
-        <i class=""></i>` + g.name + `</a>
-        </li>`
-    $("ul[aria-label='cac-directory']").append(li)
-  })
+  // var groups = App.api("list_groups", {})
+  // $("ul[aria-label='cac-directory']").html('')
+  // groups.forEach((g, i) => {
+  //   var li = `<li>
+  //     <a href="javascript:void(0);">
+  //       <i class=""></i>` + g.name + `</a>
+  //       </li>`
+  //   $("ul[aria-label='cac-directory']").append(li)
+  // })
   var dt = new Date()
   var edate = dt.toGMTString().split(",")[1].split(" ").splice(0, 4).join(" ")
   $("#tedate").html(edate)

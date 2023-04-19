@@ -31,9 +31,7 @@
   </div>
 </div>
 <script type="text/javascript">
-var s = new Date()
-var currentYear = s.getFullYear()
-var year_id;
+
 service_yearSource.allData.forEach((year, i) => {
   if (year.year == currentYear) {
     year_id = year.id
@@ -174,7 +172,7 @@ function queryWorker() {
     },
     data: {
       preloads: ["role"],
-      additional_search_queries: ["full_name"],
+      additional_search_queries: ["full_name", "chinese_name"],
       // sorts: [
       //   [6, 'desc']
       // ]

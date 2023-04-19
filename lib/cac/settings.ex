@@ -250,6 +250,7 @@ defmodule Cac.Settings do
     |> Repo.update()
   end
 
+  # 通讯录
   def clone_user_groups(year_id, new_year_id) do
     ugs =
       Repo.all(
@@ -276,6 +277,8 @@ defmodule Cac.Settings do
 
     is_page = opts |> Map.get("is_page", false)
 
+    limit = opts |> Map.get("limit", limit)
+
     blog_type =
       case is_page do
         "false" ->
@@ -300,10 +303,13 @@ defmodule Cac.Settings do
           where: cc.name == ^category_name,
           or_where: c.name == ^category_name,
           preload: [:category, :author],
-          limit: 10,
+          limit: ^limit,
           order_by: [desc: b.inserted_at]
       else
-        from b in Blog, preload: [:category, :author], limit: 10, order_by: [desc: b.inserted_at]
+        from b in Blog,
+          preload: [:category, :author],
+          limit: ^limit,
+          order_by: [desc: b.inserted_at]
       end
       |> where([b], b.blog_type == ^"#{blog_type}")
 
@@ -320,6 +326,33 @@ defmodule Cac.Settings do
 
   def get_blog!(id) do
     Repo.get!(Blog, id) |> Repo.preload([:attachment, :category, :author])
+  end
+
+  def get_blog_by_title(title) do
+    Repo.get_by(Blog, title: title)
+  end
+
+  def get_blog_by_keyword(keyword, params) do
+    pageSize = Map.get(params, "pageSize", "10") |> String.to_integer()
+    pageNumber = Map.get(params, "pageNumber", "1") |> String.to_integer()
+
+    q1 =
+      from(b in Blog)
+      |> where([b], like(b.content, ^"%#{keyword}%"))
+      |> Repo.all()
+      |> IO.inspect()
+
+    data =
+      from(b in Blog,
+        limit: ^pageSize,
+        offset: ^((pageNumber - 1) * pageSize),
+        order_by: [desc: b.inserted_at]
+      )
+      |> where([b], like(b.content, ^"%#{keyword}%"))
+      |> Repo.all()
+      |> Enum.map(&(&1 |> BluePotion.sanitize_struct()))
+
+    %{data: data, pagination: %{totalNumber: Enum.count(q1)}}
   end
 
   def create_blog(params \\ %{}) do
@@ -343,6 +376,10 @@ defmodule Cac.Settings do
 
   def get_cache_page!(id) do
     Repo.get!(CachePage, id)
+  end
+
+  def get_cache_page_by_blog_id(id) do
+    Repo.get_by(CachePage, blog_id: id)
   end
 
   def get_cache_page_by_name(name) do
@@ -436,10 +473,9 @@ defmodule Cac.Settings do
     case a do
       {:ok, sm} ->
         filename = sm.img_url |> String.replace("/images/uploads/", "")
-        Cac.s3_large_upload(filename)
 
         StoredMedia.changeset(sm, %{
-          s3_url: "https://cac-bucket.ap-south-1.linodeobjects.com/#{filename}"
+          s3_url: sm.img_url
         })
         |> Repo.update()
 
@@ -606,6 +642,35 @@ defmodule Cac.Settings do
   end
 
   alias Cac.Settings.Region
+  require IEx
+
+  def list_regions_with_year(year_id) do
+    uv =
+      Repo.all(
+        from uv in Cac.Settings.UserVenue,
+          where: uv.service_year_id == ^year_id,
+          preload: [:user]
+      )
+      |> BluePotion.sanitize_struct()
+
+    append_users = fn venue ->
+      users =
+        uv
+        |> Enum.filter(&(&1.venue_id == venue.id))
+        |> Enum.map(&(&1 |> Map.get(:user)))
+        |> IO.inspect()
+
+      Map.put(venue, :users, users)
+    end
+
+    r =
+      Repo.all(
+        from v in Venue,
+          preload: [:region]
+      )
+      |> BluePotion.sanitize_struct()
+      |> Enum.map(&(&1 |> append_users.()))
+  end
 
   def list_regions() do
     Repo.all(Region)
@@ -737,6 +802,7 @@ defmodule Cac.Settings do
     Repo.all(q)
   end
 
+  # 派司名单？
   def clone_user_venues(year_id, new_year_id) do
     ugs =
       Repo.all(
@@ -759,7 +825,7 @@ defmodule Cac.Settings do
   end
 
   def get_directory() do
-    Repo.all(from b in Blog, where: b.title in ^["派使名单", "通讯录", "关于我们"])
+    Repo.all(from b in Blog, where: b.title in ^["寻找 Search", "卫理堂会", "派司名单", "通讯录", "关于我们"])
   end
 
   alias Cac.Settings.ServiceYear

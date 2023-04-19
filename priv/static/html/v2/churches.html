@@ -1,0 +1,667 @@
+<div id="user_content" class="p-4 ps-0">
+</div>
+<script type="text/javascript">
+var tab_list = [{
+    title: "教会",
+    icon: "fa fa-list",
+    content: `<div id="tab3z">
+    </div>`,
+  },
+
+
+  {
+    title: "Users",
+    icon: "fa fa-users",
+    content: `<div id="tab2"></div>`,
+  },
+  {
+    title: "Members",
+    icon: "fa fa-users",
+    content: `<div id="tab1cac"></div>`,
+  },
+
+
+  {
+    title: "Region",
+    icon: "fa fa-tags",
+    content: `<div id="tab3a"></div>`,
+  },
+  {
+    title: "Venues",
+    icon: "fa fa-users",
+    content: `<div id="tab2az"></div>`,
+  },
+
+
+  {
+    title: "ServiceYear",
+    icon: "fa fa-info",
+    content: `<div id="tabsy"></div>`,
+  },
+
+]
+App.Page.tablist("#user_content", tab_list, "Users")
+var random_id = "syears"
+var customCols = [
+  'year',
+  'id',
+  'remarks',
+  'duration_in_months',
+  'service_start',
+  { label: 'service_end' },
+]
+var directorylist, namelist, churchlist;
+
+
+service_yearSource = new phoenixModel({
+  onDrawFn: () => {
+
+    churchlist = App.html("churchlist.html")
+    $("#tab3z").html(churchlist)
+    directorylist = App.html("directorylist.html")
+    $("#tab4").html(directorylist)
+    namelist = App.html("namelist.html")
+    $("#tab3").html(namelist)
+  },
+
+  columns: [
+
+    { label: 'id', data: 'id' },
+    { label: 'Year', data: 'year' },
+    { label: 'Remarks', data: 'remarks' },
+    { label: 'Start', data: 'service_start', date: true },
+    { label: 'End', data: 'service_end', date: true },
+    { label: 'Action', data: 'id' }
+
+  ],
+  moduleName: "ServiceYear",
+  link: "ServiceYear",
+  customCols: customCols,
+  buttons: [{
+    buttonType: "grouped",
+    name: "Manage",
+    color: "outline-warning",
+    buttonList: [
+
+      {
+        name: "Edit",
+        iconName: "fa fa-edit",
+        color: "btn-sm btn-outline-warning",
+        onClickFunction: editData,
+        fnParams: {
+          drawFn: enlargeModal,
+          customCols: customCols
+        }
+      },
+      {
+        name: "Delete",
+        iconName: "fa fa-trash",
+        color: "outline-danger",
+        onClickFunction: deleteData,
+        fnParams: {}
+      }
+    ],
+    fnParams: {
+
+    }
+  }, ],
+  tableSelector: "#" + random_id
+})
+service_yearSource.load(random_id, "#tabsy")
+
+
+
+
+$("#v-pills-tab button").click(() => {
+  try {
+    $("button#AssignUsers-tab").remove()
+
+  } catch (e) {}
+})
+
+function assignVenueUsers(params) {
+
+  var title = "AssignUsers"
+  var i = 1
+  var icon = "fa fa-tags"
+  $("button#AssignUsers-tab").remove()
+  $(".tab-pane#AssignUsers").remove()
+  var content = `<div id="tab54"></div>`
+  var b = `
+          <div class="tab-pane fade ` + (i == 0 ? 'show active' : '') + `" 
+          id="` + title + `"
+          role="tabpanel" 
+          aria-labelledby="` + title + `-tab"
+          href="#` + title + `"
+          >` + content + `
+          </div>
+          `
+  console.log(b)
+  $("#v-pills-tabContent").append(b)
+
+
+  var assignParentContent = `
+                            <div class="row">
+                              <div class="col-12">
+                                <div class="card">
+                                  <div class="card-body" >
+                                    <form id="assign-children" >
+                                      
+                                    </form>
+                                    <div class="btn btn-primary" onclick='App.form("#assign-children", "update_venue_user")'>
+                                      Update
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                              `
+
+
+
+
+  $("#tab54").html(assignParentContent)
+
+  var dt = params.dataSource;
+  window.currentSelector = dt.tableSelector
+  var table = dt.table;
+  var r = table.row(params.row);
+  var rowData = table.data()[params.index]
+  console.log(rowData)
+  var a = `<button  
+              class="p-2 d-flex justify-content-between align-items-center nav-link  text-center  ` + (i == 0 ? 'active' : '') + `"       
+              id="` + title + `-tab"
+              data-bs-toggle="pill"  
+              data-bs-target="#` + title + `"
+              type="button"
+              role="tab" > 
+              <i class="` + icon + `"> </i>
+              <span class="px-3">` + title + `</span>
+          </button>`
+  $("button#Venues-tab").after(a)
+  $("#AssignUsers-tab").click()
+  $("#assign-children").before(`<h3>` + rowData.name + `</h3>`)
+  var children = App.api("venue_users", { id: rowData.id })
+  userSource.allData.forEach((v, i) => {
+
+    var res =
+      children.filter((cv, ci) => {
+        return cv.user.id == v.id
+      })
+
+
+    if (res.length > 0) {
+      $("#assign-children").append(`
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" checked  id="` + v.id + `" name="group[` + rowData.id + `][` + v.id + `]">
+            <label class="form-check-label" for="` + v.id + `">
+             ` + v.full_name + `
+            </label>
+            <div class="d-flex justify-content-between">
+             <input class="form-control"  type="text" value="` + res[0].remarks + `"  id="` + v.id + `" name="remarks[` + v.id + `]">
+             <input class="form-control"  type="date" value="` + res[0].date_start + `"  id="` + v.id + `" name="start_date[` + v.id + `]">
+            </div>
+          </div>`)
+    } else {
+
+      $("#assign-children").append(`
+          <div class="form-check">
+              <input class="form-check-input" type="checkbox"  id="` + v.id + `" name="group[` + rowData.id + `][` + v.id + `]">
+              <label class="form-check-label" for="` + v.id + `">
+               ` + v.full_name + `
+              </label>
+              <div class="d-flex justify-content-between">
+               <input class="form-control"  type="text"   id="` + v.id + `" name="remarks[` + v.id + `]">
+               <input class="form-control"  type="date"  id="` + v.id + `" name="start_date[` + v.id + `]">
+              </div>
+            </div>`)
+    }
+
+  })
+}
+
+
+function assignChildren(params) {
+
+  var title = "AssignUsers"
+  var i = 1
+  var icon = "fa fa-tags"
+  $("button#AssignUsers-tab").remove()
+  $(".tab-pane#AssignUsers").remove()
+  var content = `<div id="tab54"></div>`
+  var b = `
+          <div class="tab-pane fade ` + (i == 0 ? 'show active' : '') + `" 
+          id="` + title + `"
+          role="tabpanel" 
+          aria-labelledby="` + title + `-tab"
+          href="#` + title + `"
+          >` + content + `
+          </div>
+          `
+  console.log(b)
+  $("#v-pills-tabContent").append(b)
+
+
+  var assignParentContent = `
+                            <div class="row">
+                              <div class="col-12">
+                                <div class="card">
+                                  <div class="card-body" >
+                                    <form id="assign-children" >
+                                      
+                                    </form>
+                                    <div class="btn btn-primary" onclick='App.form("#assign-children", "update_group_user")'>
+                                      Update
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                              `
+
+
+
+
+  $("#tab54").html(assignParentContent)
+
+  var dt = params.dataSource;
+  window.currentSelector = dt.tableSelector
+  var table = dt.table;
+  var r = table.row(params.row);
+  var rowData = table.data()[params.index]
+  console.log(rowData)
+  var a = `<button  
+              class="p-2 d-flex justify-content-between align-items-center nav-link  text-center  ` + (i == 0 ? 'active' : '') + `"       
+              id="` + title + `-tab"
+              data-bs-toggle="pill"  
+              data-bs-target="#` + title + `"
+              type="button"
+              role="tab" > 
+              <i class="` + icon + `"> </i>
+              <span class="px-3">` + title + `</span>
+          </button>`
+  $("button#Group-tab").after(a)
+  $("#AssignUsers-tab").click()
+  $("#assign-children").before(`<h3>` + rowData.alias + `</h3>`)
+  var children = App.api("group_users", { id: rowData.id })
+  userSource.allData.forEach((v, i) => {
+
+    var res =
+      children.filter((group_user, ci) => {
+        return group_user.user_id == v.id
+      })
+
+    if (res.length > 0) {
+      $("#assign-children").append(`
+          <div class="form-check">
+                        <input class="form-check-input" type="checkbox" checked  id="` + v.id + `" name="group[` + rowData.id + `][` + v.id + `]">
+                        <label class="form-check-label" for="` + v.id + `">
+                         ` + v.full_name + `
+                        </label>
+                         <input class="form-control"  type="text" value="` + res[0].remarks + `"  id="` + v.id + `" name="remarks[` + v.id + `]">
+                      </div>`)
+    } else {
+
+      $("#assign-children").append(`
+          <div class="form-check">
+                        <input class="form-check-input" type="checkbox"  id="` + v.id + `" name="group[` + rowData.id + `][` + v.id + `]">
+                        <label class="form-check-label" for="` + v.id + `">
+                         ` + v.full_name + `
+                        </label>
+                         <input class="form-control "   type="text"  id="` + v.id + `" name="remarks[` + v.id + `]">
+                      </div>`)
+    }
+  })
+}
+
+
+
+
+var customCols = null
+var random_id = 'grps'
+groupSource = new phoenixModel({
+  columns: [
+
+    { label: 'id', data: 'id' },
+    { label: 'Sort', data: 'sort_no' },
+    { label: 'Name', data: 'name' },
+    { label: 'Action', data: 'id' }
+
+  ],
+  moduleName: "Group",
+  link: "Group",
+  customCols: customCols,
+  buttons: [
+
+    {
+      name: "Assign Users",
+      iconName: "fa fa-edit",
+      color: "btn-sm btn-outline-warning",
+      onClickFunction: assignChildren,
+      fnParams: {
+
+
+      }
+    },
+
+    {
+      buttonType: "grouped",
+      name: "Manage",
+      color: "outline-warning",
+      buttonList: [
+
+        {
+          name: "Edit",
+          iconName: "fa fa-edit",
+          color: "btn-sm btn-outline-warning",
+          onClickFunction: editData,
+          fnParams: {
+            drawFn: enlargeModal,
+            customCols: customCols
+          }
+        },
+        {
+          name: "Delete",
+          iconName: "fa fa-trash",
+          color: "outline-danger",
+          onClickFunction: deleteData,
+          fnParams: {}
+        }
+      ],
+      fnParams: {
+
+      }
+    },
+  ],
+  tableSelector: "#" + random_id
+})
+groupSource.load(random_id, "#tab2ax")
+
+
+var customCols = null
+random_id = 'roles'
+roleSource = new phoenixModel({
+  columns: [
+
+    { label: 'id', data: 'id' },
+    { label: 'Name', data: 'name' },
+    { label: 'Action', data: 'id' }
+
+  ],
+  moduleName: "Role",
+  link: "Role",
+  customCols: customCols,
+  buttons: [{
+    buttonType: "grouped",
+    name: "Manage",
+    color: "outline-warning",
+    buttonList: [
+
+      {
+        name: "Edit",
+        iconName: "fa fa-edit",
+        color: "btn-sm btn-outline-warning",
+        onClickFunction: editData,
+        fnParams: {
+          drawFn: enlargeModal,
+          customCols: customCols
+        }
+      },
+      {
+        name: "Delete",
+        iconName: "fa fa-trash",
+        color: "outline-danger",
+        onClickFunction: deleteData,
+        fnParams: {}
+      }
+    ],
+    fnParams: {
+
+    }
+  }, ],
+  tableSelector: "#" + random_id
+})
+roleSource.load(random_id, "#tab1")
+var customCols = [
+
+  {
+    name: 'General',
+    list: [
+      'username',
+      'full_name',
+
+      'chinese_name',
+      { label: 'role_id', selection: roleSource.allData },
+      'email',
+      'phone',
+      'id',
+    ]
+  },
+  {
+    name: 'Others',
+    list: [
+      { label: 'bio', editor: true },
+      'crypted_password',
+
+      { label: 'image_url', upload: true },
+
+    ]
+  }
+
+]
+random_id = 'users'
+userSource = new phoenixModel({
+  data: { preloads: ['role'] },
+  columns: [
+
+    { label: 'id', data: 'id' },
+    { label: 'Name', data: 'username' },
+    { label: 'Phone/Email', data: 'phone', showSubtitle: true, subtitle: 'email' },
+    { label: 'email', data: 'email', className: 'd-none' },
+
+    { label: 'Role', data: 'role_id', showChild: true, xdata: { child: 'role', data: 'name' } },
+
+    { label: 'Action', data: 'id' }
+
+  ],
+  moduleName: "User",
+  link: "User",
+  customCols: customCols,
+  buttons: [{
+    buttonType: "grouped",
+    name: "Manage",
+    color: "outline-warning",
+    buttonList: [
+
+      {
+        name: "Edit",
+        iconName: "fa fa-edit",
+        color: "btn-sm btn-outline-warning",
+        onClickFunction: editData,
+        fnParams: {
+          drawFn: enlargeModal,
+          customCols: customCols
+        }
+      },
+      {
+        name: "Delete",
+        iconName: "fa fa-trash",
+        color: "outline-danger",
+        onClickFunction: deleteData,
+        fnParams: {}
+      }
+    ],
+    fnParams: {
+
+    }
+  }, ],
+  tableSelector: "#" + random_id
+})
+userSource.load(random_id, "#tab2")
+
+
+customCols = null
+random_id = 'regi'
+regionSource = new phoenixModel({
+
+  columns: [
+
+    { label: 'id', data: 'id' },
+    { label: 'Name', data: 'name' },
+    { label: 'Alias', data: 'alias' },
+    { label: 'Action', data: 'id' }
+
+  ],
+  moduleName: "Region",
+  link: "Region",
+  customCols: customCols,
+  buttons: [{
+    buttonType: "grouped",
+    name: "Manage",
+    color: "outline-warning",
+    buttonList: [
+
+      {
+        name: "Edit",
+        iconName: "fa fa-edit",
+        color: "btn-sm btn-outline-warning",
+        onClickFunction: editData,
+        fnParams: {
+          drawFn: enlargeModal,
+          customCols: customCols
+        }
+      },
+      {
+        name: "Delete",
+        iconName: "fa fa-trash",
+        color: "outline-danger",
+        onClickFunction: deleteData,
+        fnParams: {}
+      }
+    ],
+    fnParams: {
+
+    }
+  }, ],
+  tableSelector: "#" + random_id
+})
+regionSource.load(random_id, "#tab3a")
+
+
+
+customCols = [{
+  name: "General",
+  list: [
+    { label: 'translator', binary: true },
+    'name',
+    'desc',
+    'reg_no',
+    'address',
+    'phone',
+    'email',
+    'fb',
+    'id',
+    'img_url',
+
+
+    { label: 'region_id', selection: regionSource.allData },
+    { label: 'venue_type', selection: ['Church', 'Recreation', 'Park'] }
+  ]
+}, {
+  name: "Contact",
+  list: [
+
+    'youtube',
+    'website',
+    'blog',
+
+
+    'id',
+    'lat',
+    'long',
+
+  ]
+}]
+
+random_id = 'venues'
+venueSource = new phoenixModel({
+  onDrawFn: () => {
+    $("textarea[name='Venue[translator]']").unbind()
+    $("textarea[name='Venue[translator]']").on("focusout", function(e) {
+      var desc = $(this).val().split(')')[1]
+      var first = $(this).val().split(')')[0].split("(")
+      var cname = first[0]
+      var reg_no = first[1]
+
+      console.log(cname)
+      console.log(desc)
+      console.log(reg_no)
+      $("[name='Venue[name]']").val(cname)
+      $("[name='Venue[desc]']").val(desc)
+      $("[name='Venue[reg_no]']").val(reg_no)
+    })
+  },
+  data: { preloads: ['region'] },
+  columns: [
+
+    { label: 'id', data: 'id' },
+    { label: 'Name', data: 'name', showSubtitle: true, subtitle: 'reg_no' },
+    { label: 'reg_no', data: 'reg_no', className: 'd-none' },
+    { label: 'Address', data: 'address' },
+    { label: 'Region', data: 'region_id', showChild: true, xdata: { child: 'region', data: 'name' } },
+    { label: 'Action', data: 'id' }
+
+  ],
+  moduleName: "Venue",
+  link: "Venue",
+  customCols: customCols,
+  buttons: [
+
+
+
+    {
+      name: "Assign Users",
+      iconName: "fa fa-edit",
+      color: "btn-sm btn-outline-warning",
+      onClickFunction: assignVenueUsers,
+      fnParams: {
+
+
+      }
+    },
+
+    {
+      buttonType: "grouped",
+      name: "Manage",
+      color: "outline-warning",
+      buttonList: [
+
+        {
+          name: "Edit",
+          iconName: "fa fa-edit",
+          color: "btn-sm btn-outline-warning",
+          onClickFunction: editData,
+          fnParams: {
+            drawFn: enlargeModal,
+            customCols: customCols
+          }
+        },
+        {
+          name: "Delete",
+          iconName: "fa fa-trash",
+          color: "outline-danger",
+          onClickFunction: deleteData,
+          fnParams: {}
+        }
+      ],
+      fnParams: {
+
+      }
+    },
+  ],
+  tableSelector: "#" + random_id
+})
+venueSource.load(random_id, "#tab2az")
+
+
+</script>

@@ -19,11 +19,11 @@
   </div>
   <div class="card-body">
     <div class="row">
-      <div class="col-3">
-        <ul class="nav nav-pills flex-column" id="region_li">
-        </ul>
+      <div class="col-12">
+        <select class="form-control" id="region_li">
+        </select>
       </div>
-      <div class="col-9">
+      <div class="col-12">
         <ul id="church_entry">
         </ul>
       </div>
@@ -32,6 +32,9 @@
 </div>
 <script type="text/javascript">
 service_yearSource.allData.forEach((year, i) => {
+  if (year.year == currentYear) {
+    year_id = year.id
+  }
   $("#service_years2").append(`
       <option value="` + year.id + `">` + year.year + `</option>
     `)
@@ -89,19 +92,19 @@ function populateNamelist(year_id) {
 
     $("#region_li").append(`
 
-          <li class="nav-item" region-id="` + region.id + `">
-            <a class="region nav-link" region-id="` + region.id + `" href="javascript:void(0);">` + region.name + `</a>
-          </li>
+          <option value="` + region.id + `" region-id="` + region.id + `">` + region.name + `
+         
+          </option>
 
       `)
   })
 
-  $(document).on("click", "a.region", function() {
-    var r_id = $(this).attr("region-id")
-    $("a.region").removeClass("active")
+  $(document).on("change", "select#region_li", function() {
+    var r_id = $(this).val()
+
 
     $("li.content-region").addClass("d-none")
-    $(this).addClass("active")
+
     $("li.content-region#region_" + r_id).removeClass("d-none")
   })
 }
@@ -111,13 +114,20 @@ function populateRegion(j) {
   var venues = region.venues
   var venues_list = []
   venues.sort(function(b, a) {
-    return b.id - a.id;
+    if (b.reg_no != null && a.reg_no != null) {
+
+      return b.reg_no.localeCompare(a.reg_no);
+    } else {
+      return b.id - a.id
+    }
   })
+  console.log(venues)
   venues.forEach((venue, ii) => {
     var user_venues = venue.user_venues
     var roles = ['主理', '协理', '代理', '副理', '传道']
     var tds = []
     roles.forEach((role, ri) => {
+
       var user_venue = user_venues.filter((uv, iuv) => {
         return uv.remarks == role && uv.service_year_id == parseInt(j.year_id);
       })
@@ -287,7 +297,7 @@ function queryMember() {
     },
     data: {
       preloads: ["role"],
-      additional_search_queries: ["full_name"],
+      additional_search_queries: ["full_name", "chinese_name"],
       // sorts: [
       //   [6, 'desc']
       // ]

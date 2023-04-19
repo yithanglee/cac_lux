@@ -9,6 +9,54 @@ defmodule Cac do
   import Mogrify
   import Ecto.Query
   alias Cac.{Repo, Settings}
+  use Hound.Helpers
+  require IEx
+
+  def start_chrome() do
+    Porcelain.shell("pkill chrome ")
+    Porcelain.shell("chromedriver --url-base=/wd/hub ")
+  end
+
+  def test_save_page() do
+    Task.start_link(__MODULE__, :start_chrome, [])
+
+    Hound.start_session()
+
+    base_url = Application.get_env(:cac, :endpoint)[:url]
+    # IEx.pry()
+    # blogs = Repo.all(Settings.Blog) |> Enum.take(1)
+
+    # if blogs != [] do
+    #   for blog <- blogs do
+    #     link = "#{base_url}/blogs/#{blog.id}/#{blog.title}" |> IO.inspect()
+    #     # Process.sleep(4000)
+    navigate_to(base_url) |> IO.inspect()
+    #     path = save_page("screenshot-test.html")
+
+    #     html = File.read!("screenshot-test.html")
+
+    #     # {:ok, document} = Floki.parse_document(html)
+
+    #     # content =
+    #     #   document
+    #     #   |> Floki.raw_html()
+
+    #     # IO.puts(content)
+    #     # a = Repo.get_by(RenderPage, link: "/blogs/#{blog.id}")
+
+    #     # if a == nil do
+    #     #   Settings.create_render_page(%{link: "/blogs/#{blog.id}", html: content})
+    #     # else
+    #     #   Settings.update_render_page(a, %{link: "/blogs/#{blog.id}", html: content})
+    #     # end
+    #   end
+    # else
+    #   []
+    # end
+
+    # here nid to save all the rendered html
+    Hound.end_session()
+  end
 
   def generate_sitemap() do
     # create a filepath for sitemap
@@ -107,8 +155,52 @@ defmodule Cac do
       "采访/整理" => ""
     }
 
+    get_content_images = fn tuple ->
+      {"img", attr_list, _list} = tuple
+      check = File.exists?(File.cwd!() <> "/media")
+
+      path =
+        if check do
+          File.cwd!() <> "/media"
+        else
+          File.mkdir(File.cwd!() <> "/media")
+          File.cwd!() <> "/media"
+        end
+
+      map = Enum.into(attr_list, %{}) |> IO.inspect()
+      src = map |> Map.get("src", nil)
+
+      with true <- src != nil,
+           true <- src != "" do
+        [_head, tail] =
+          if src |> String.contains?("https") do
+            src |> String.split("https://www.methodist.org.my/wp-content/uploads/")
+          else
+            src |> String.split("http://www.methodist.org.my/wp-content/uploads/")
+          end
+
+        [year, month, image_filename] = tail |> String.split("/")
+        fl = tail |> String.replace("/", "_") |> IO.inspect()
+
+        %HTTPoison.Response{body: body} = HTTPoison.get!(src)
+        File.mkdir_p(File.cwd!() <> "/media/#{year}/#{month}")
+        File.write!("#{path}/#{tail}", body)
+
+        {:ok, sm} =
+          Cac.Settings.create_stored_media(%{img_url: "/wp-content/uploads/#{tail}", name: fl})
+      else
+        _ ->
+          nil
+      end
+    end
+
     get_content = fn post ->
-      post |> Map.get("content") |> Map.get("rendered")
+      a = post |> Map.get("content") |> Map.get("rendered")
+
+      # Floki.parse(a) 
+
+      img_list = Floki.find(a, "img") |> IO.inspect() |> Enum.map(&(&1 |> get_content_images.()))
+      a
     end
 
     get_featured_image = fn post ->
@@ -131,14 +223,15 @@ defmodule Cac do
         url = urls |> hd
 
         [_head, tail] = url |> String.split("http://www.methodist.org.my/wp-content/uploads/")
-
+        [year, month, image_filename] = tail |> String.split("/")
         fl = tail |> String.replace("/", "_") |> IO.inspect()
 
         %HTTPoison.Response{body: body} = HTTPoison.get!(url)
-        File.write!("#{path}/#{fl}", body)
+        File.mkdir_p(File.cwd!() <> "/media/#{year}/#{month}")
+        File.write!("#{path}/#{tail}", body)
 
         {:ok, sm} =
-          Cac.Settings.create_stored_media(%{img_url: "/images/uploads/#{fl}", name: fl})
+          Cac.Settings.create_stored_media(%{img_url: "/wp-content/uploads/#{fl}", name: fl})
 
         "/images/uploads/#{fl}"
       else
@@ -169,191 +262,7 @@ defmodule Cac do
       updated_at: get_date.(post)
     }
 
-    {:ok, blog} = Cac.Settings.create_blog(attrs) |> IO.inspect()
-
-    %{
-      "_links" => %{
-        "about" => [
-          %{"href" => "http://www.methodist.org.my/wp-json/wp/v2/types/post"}
-        ],
-        "author" => [
-          %{
-            "embeddable" => true,
-            "href" => "http://www.methodist.org.my/wp-json/wp/v2/users/4"
-          }
-        ],
-        "collection" => [
-          %{"href" => "http://www.methodist.org.my/wp-json/wp/v2/posts"}
-        ],
-        "curies" => [
-          %{
-            "href" => "https://api.w.org/{rel}",
-            "name" => "wp",
-            "templated" => true
-          }
-        ],
-        "predecessor-version" => [
-          %{
-            "href" => "http://www.methodist.org.my/wp-json/wp/v2/posts/17834/revisions/17838",
-            "id" => 17838
-          }
-        ],
-        "replies" => [
-          %{
-            "embeddable" => true,
-            "href" => "http://www.methodist.org.my/wp-json/wp/v2/comments?post=17834"
-          }
-        ],
-        "self" => [
-          %{"href" => "http://www.methodist.org.my/wp-json/wp/v2/posts/17834"}
-        ],
-        "version-history" => [
-          %{
-            "count" => 1,
-            "href" => "http://www.methodist.org.my/wp-json/wp/v2/posts/17834/revisions"
-          }
-        ],
-        "wp:attachment" => [
-          %{
-            "href" => "http://www.methodist.org.my/wp-json/wp/v2/media?parent=17834"
-          }
-        ],
-        "wp:featuredmedia" => [
-          %{
-            "embeddable" => true,
-            "href" => "http://www.methodist.org.my/wp-json/wp/v2/media/17836"
-          }
-        ],
-        "wp:term" => [
-          %{
-            "embeddable" => true,
-            "href" => "http://www.methodist.org.my/wp-json/wp/v2/categories?post=17834",
-            "taxonomy" => "category"
-          },
-          %{
-            "embeddable" => true,
-            "href" => "http://www.methodist.org.my/wp-json/wp/v2/tags?post=17834",
-            "taxonomy" => "post_tag"
-          }
-        ]
-      },
-      "author" => 4,
-      "author_info" => %{
-        "author_link" => "http://www.methodist.org.my/author/damien/",
-        "display_name" => "damien"
-      },
-      "categories" => '\f',
-      "category_info" =>
-        "<a href=\"http://www.methodist.org.my/category/latest-news/%e4%bb%a3%e7%a5%b7%e4%ba%8b%e9%a1%b9/\" rel=\"category tag\">代祷事项</a>",
-      "comment_status" => "closed",
-      "content" => %{
-        "protected" => false,
-        "rendered" =>
-          "<a href=\"http://www.methodist.org.my/wp-content/uploads/2022/03/CAC-2022年3月祷告通讯.pdf\" class=\"pdfemb-viewer\" style=\"\" data-width=\"max\" data-height=\"max\"  data-toolbar=\"bottom\" data-toolbar-fixed=\"off\">CAC-2022年3月祷告通讯<br/></a>\n<p class=\"wp-block-pdfemb-pdf-embedder-viewer\"></p>\n"
-      },
-      "date" => "2022-03-28T23:28:16",
-      "date_gmt" => "2022-03-28T15:28:16",
-      "excerpt" => %{"protected" => false, "rendered" => ""},
-      "featured_image_urls" => %{
-        "1536x1536" => [
-          "http://www.methodist.org.my/wp-content/uploads/2022/03/march.jpg",
-          600,
-          500,
-          false
-        ],
-        "2048x2048" => [
-          "http://www.methodist.org.my/wp-content/uploads/2022/03/march.jpg",
-          600,
-          500,
-          false
-        ],
-        "content-slide-thumbnail" => [
-          "http://www.methodist.org.my/wp-content/uploads/2022/03/march.jpg",
-          600,
-          500,
-          false
-        ],
-        "covernews-featured" => [
-          "http://www.methodist.org.my/wp-content/uploads/2022/03/march.jpg",
-          600,
-          500,
-          false
-        ],
-        "covernews-medium" => [
-          "http://www.methodist.org.my/wp-content/uploads/2022/03/march-600x380.jpg",
-          600,
-          380,
-          true
-        ],
-        "covernews-medium-square" => [
-          "http://www.methodist.org.my/wp-content/uploads/2022/03/march-600x450.jpg",
-          600,
-          450,
-          true
-        ],
-        "covernews-slider-center" => [
-          "http://www.methodist.org.my/wp-content/uploads/2022/03/march.jpg",
-          600,
-          500,
-          false
-        ],
-        "covernews-slider-full" => [
-          "http://www.methodist.org.my/wp-content/uploads/2022/03/march.jpg",
-          600,
-          500,
-          false
-        ],
-        "full" => [
-          "http://www.methodist.org.my/wp-content/uploads/2022/03/march.jpg",
-          600,
-          500,
-          false
-        ],
-        "large" => [
-          "http://www.methodist.org.my/wp-content/uploads/2022/03/march.jpg",
-          600,
-          500,
-          false
-        ],
-        "medium" => [
-          "http://www.methodist.org.my/wp-content/uploads/2022/03/march-300x250.jpg",
-          300,
-          250,
-          true
-        ],
-        "medium_large" => [
-          "http://www.methodist.org.my/wp-content/uploads/2022/03/march.jpg",
-          600,
-          500,
-          false
-        ],
-        "thumbnail" => [
-          "http://www.methodist.org.my/wp-content/uploads/2022/03/march-150x150.jpg",
-          150,
-          150,
-          true
-        ]
-      },
-      "featured_media" => 17836,
-      "format" => "standard",
-      "guid" => %{"rendered" => "https://www.methodist.org.my/?p=17834"},
-      "id" => 17834,
-      "link" =>
-        "http://www.methodist.org.my/2022/03/%e6%af%8f%e6%9c%88%e7%a5%b7%e5%91%8a%e9%80%9a%e6%8a%a5-monthly-prayer-bulletin-12/",
-      "meta" => [],
-      "modified" => "2022-03-28T23:28:23",
-      "modified_gmt" => "2022-03-28T15:28:23",
-      "ping_status" => "closed",
-      "slug" =>
-        "%e6%af%8f%e6%9c%88%e7%a5%b7%e5%91%8a%e9%80%9a%e6%8a%a5-monthly-prayer-bulletin-12",
-      "status" => "publish",
-      "sticky" => false,
-      "tag_info" => "代祷事项",
-      "tags" => [],
-      "template" => "",
-      "title" => %{"rendered" => "每月祷告通报 MONTHLY PRAYER BULLETIN"},
-      "type" => "post"
-    }
+    # {:ok, blog} = Cac.Settings.create_blog(attrs) |> IO.inspect()
   end
 
   def check_time_difference(date_to_check \\ Timex.shift(Timex.now(), hours: -100)) do

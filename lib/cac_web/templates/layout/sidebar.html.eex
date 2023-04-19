@@ -7,6 +7,14 @@
     </span>
     <span class=""> Dashboard</span></div>
   </a>
+  <a href="/admin/churches" class="navi  d-none list-group-item list-group-item-action">
+    <div class="d-flex flex-column justify-content-center align-items-center">
+      <span class="badge bg-primary rounded-pill">
+        <i class="fa fa-users"></i>
+      </span>
+      <span class=""> Churches</span>
+    </div>
+  </a>
   <a href="/admin/users" class="navi  d-none list-group-item list-group-item-action">
     <div class="d-flex flex-column justify-content-center align-items-center">
       <span class="badge bg-primary rounded-pill">

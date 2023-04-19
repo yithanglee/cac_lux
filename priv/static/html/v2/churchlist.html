@@ -1,0 +1,139 @@
+<div class="row  w-100 text-end">
+  <div class="col-12 col-lg-8 align-items-center d-flex">
+    <label class=" px-2" style="min-width: 100px;">Service Year</label>
+    <select id="service_years2" class="form-control">
+    </select>
+  </div>
+</div>
+<div id="all-region">
+</div>
+<script type="text/javascript">
+var s = new Date()
+var currentYear = s.getFullYear()
+var year_id;
+var random_id = 'arw'
+service_yearSource = new phoenixModel({
+  columns: [
+    { label: 'Action', data: 'id' }
+  ],
+  moduleName: "ServiceYear",
+  link: "ServiceYear",
+  tableSelector: "#" + random_id
+})
+populateTableData(service_yearSource)
+service_yearSource.allData.forEach((year, i) => {
+  if (year.year == currentYear) {
+    year_id = year.id
+  }
+  $("#service_years2").append(`
+      <option value="` + year.id + `">` + year.year + `</option>
+    `)
+})
+$("#service_years2").val(year_id)
+
+function showChurch(venue_id) {
+  App.show()
+
+  navigateTo("/church/" + venue_id)
+
+
+}
+
+function toggleThis(elem, venue_id) {
+  var div = $("[aria-label='u" + venue_id + "']").html()
+  var church = $("[aria-label='u" + venue_id + "']").attr("aria-name")
+
+  App.modal({ selector: "#mySubModal", content: `<div class="row">` + div + `</div>`, header: church + " contacts", autoClose: false, drawFn: regularModal })
+}
+
+
+regions = App.api("get_regions", { year_id: year_id })
+regions.forEach((data, i) => {
+
+
+  var venues = []
+
+  data.venues.sort(function(b, a) {
+    if (b.reg_no != null && a.reg_no != null) {
+
+      return b.reg_no.localeCompare(a.reg_no);
+    } else {
+      return b.id - a.id
+    }
+  })
+  data.venues.forEach((venue, vi) => {
+
+    var users = []
+
+
+    venue.users.forEach((user, ui) => {
+
+
+      if (user != null) {
+
+        var div = `
+								<div class=" col-12 col-lg-6 p-4">
+											<div class="">` + user.chinese_name + `</div>
+											<div class="text-secondary">` + user.full_name + `</div>
+											<div>` + user.phone + `</div>
+											<div>` + user.email + `</div>
+								</div>
+
+							`
+
+
+        users.push(div)
+      }
+
+    })
+
+
+    var div = `
+	
+				<div onclick="showChurch( '` + venue.id + `')" class="card px-2 my-2" style="cursor: pointer;">
+					<div class="d-flex align-items-center justify-content-start gap-2">
+						<div class="fw-bold">` + venue.name + `</div>
+					
+
+					</div>
+					<div class="text-secondary">` + venue.reg_no + `</div>
+					<div class="">` + venue.desc + `</div>
+					<div class="py-2 d-flex justify-content-between align-items-center">
+						<span>
+							` + venue.address + `
+						</span>
+						<span class="px-3">
+							<i class="fa fa-caret-right"></i>
+						</span>
+
+
+
+					</div>
+				</div>
+
+					<div class="card m-4 p-4 d-none" aria-name=` + venue.name + ` aria-label="u` + venue.id + `">
+							` + users.join("") + `
+					</div>
+	
+		
+		`
+
+
+
+
+    venues.push(div)
+  })
+
+  $("#all-region").append(`<div id="` + data.region.id + `" class="card my-4">
+		<div class="card-header">
+			` + data.region.name + `
+		</div>
+			<div	class="d-flex flex-column p-3">
+
+				` + venues.join("") + `
+
+			</div>
+		</div>`)
+
+})
+</script>

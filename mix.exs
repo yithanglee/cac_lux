@@ -20,7 +20,7 @@ defmodule Cac.MixProject do
   def application do
     [
       mod: {Cac.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:logger, :runtime_tools, :hound]
     ]
   end
 
@@ -39,6 +39,7 @@ defmodule Cac.MixProject do
       {:ecto_sql, ">= 3.0.0 and < 3.5.0"},
       {:ecto, ">= 3.4.4 and < 3.4.5"},
       {:ecto_enum, "~> 1.4"},
+      {:floki, "~> 0.25.0"},
       {:postgrex, ">= 0.0.0"},
       {:phoenix_html, "~> 2.11"},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
@@ -63,6 +64,7 @@ defmodule Cac.MixProject do
       {:joken, "~> 2.4.1"},
       {:mogrify, "~> 0.9.1"},
       {:ex_gram, "~> 0.30.0"},
+      {:hound, "~> 1.0"},
       {:tesla, "~> 1.2"}
     ]
   end
