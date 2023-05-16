@@ -134,7 +134,7 @@ body {
       url = blog.img_url
     }
     $("div[aria-label='img']").css("background-image", "url('" + url + "')")
-    $("div[aria-label='content']").html(blog.content)
+    $("div[aria-label='content']").html(blog.content.replaceAll("http://www.methodist.org.my", "https://archive.methodist.org.my"))
     var adder2 = new Function(currentBlog.javascript_binary);
     adder2();
     $("span[aria-label='subtitle']").html(blog.subtitle)

@@ -13,99 +13,133 @@
     </div>
   </div>
 </section>
-<!--City News End-->
-<script type="text/javascript">
-var category_id = pageParams.id
-var category = categories.filter((v, i) => {
-  return v.id == category_id
-})[0];
-var title = category.name
-if (category.alias != null) {
-  title = category.alias
-}
 
-$("div[aria-label='category']").html(`
+  <!--City News End-->
+  <script type="text/javascript">
+  var category_id = pageParams.id
+  var category = categories.filter((v, i) => {
+    return v.id == category_id
+  })[0];
+  var title = category.name
+  if (category.alias != null) {
+    title = category.alias
+  }
+
+  $("div[aria-label='category']").html(`
  <h3>` + title + `</h3>
   `)
-var blogSource = new phoenixModel({
-  onDrawFn: () => {
-    populateGridView(blogSource);
-    $(".xc").each((i, v) => {
-      var blog = v.data
-      var author_img = '/assets/tuser1.jpg'
-      var author_name = 'Reporter'
-      var excerpt = blog.excerpt
-      if (excerpt == null) {
-        excerpt = blog.subtitle
-      }
-      if (excerpt == null) {
-        excerpt = blog.title
-      }
-      if (blog.author != null) {
-        if (blog.author.img_url != null) {
-          author_img = blog.author.img_url
-        }
-        author_name = blog.author.name
-      }
-
-      var card = `
-          <div class="p-2" data-title="` + blog.title + `"
-              data-blog-id="` + blog.id + `">
-            <div class="news-box" style="backdrop-filter: blur(10px);">
-              <div class="new-thumb" style="
-                  height: 320px;
-                  background-repeat: no-repeat;
-                  background-position: top;
-                  background-size: cover;
-                  background-image: url('` + blog.img_url + `')
-                " onclick="navigateTo('/blogs/` + blog.id + `/` + blog.title + `')"> 
-                <span class="cat c2">` + blog.category.name + `</span> 
-
-                <div >
-                </div> 
-              </div>
-              <div class="new-txt">
-                <ul class="news-meta">
-                  <li>` + blog.inserted_at + `</li>
-                  <li></li>
-                </ul>
-                <div style="" >
-                <h6><a href='/blogs/` + blog.id + `/` + blog.title + `' class="navi">` + blog.title + `</a></h6>
-                </div>
-                <p class="text-sm"> ` + excerpt + ` </p>
-              </div>
-             
-            </div>
-          </div>
-          `
-      $(v).html(card)
-    })
-  },
-  data: {
-    dom: '<"row px-4"<"col-lg-6 col-12"i><"col-12 col-lg-6"p>><"row grid_view "><"list_view d-none"t><"row px-4"<"col-lg-6 col-12"><"col-lg-6 col-12"p>>',
-    preloads: ["category"],
-    additional_join_statements: [{ category: "category" }],
-    additional_search_queries: ["a.category_id=" + category_id],
-    // category_id: category_id,
-    pageLength: 12,
-    sorts: [
-      [1, 'asc']
-    ]
-  },
-  columns: [{
-      label: 'title',
-      data: 'title'
+  var blogSource = new phoenixModel({
+    onDrawFn: () => {
+      formatDate()
     },
-    {
-      label: 'id',
-      data: 'id'
-    }
-  ],
+    xcard: (params) => {
+      console.log(params)
+      var data = params
+      var author = "n/a"
+      try {
+        author = data.author.name
+      } catch (e) {
+        author = "n/a"
+      }
+      var img = '/images/bg.jpg'
+      try {
+        img = data.img_url
+      } catch (e) {
+        img = '/images/bg.jpg'
+      }
+      var alias = data.category.alias
+      if (data.category.alias == null) {
+        alias = data.category.name
+      }
+      var card = `
 
-  moduleName: "Blog",
-  link: "Blog",
-  buttons: [],
-  tableSelector: "#" + 'cbii'
-})
-blogSource.load('cbii', "#book_intros")
-</script>
+
+
+
+
+            <div onclick="navigateTo('/blogs/` + data.id + `/` + data.title + `')">
+              <div class="d-flex justify-content-center"
+                  style="cursor: pointer;   position: relative; height: 400px;">
+
+                <div 
+                  class="rounded py-2" style="
+                  height: 400px;
+       
+                  width:  260px;
+                       position: absolute;
+                  background-position: center;
+                  background-size: contain; 
+                  background-image: url('` + img + `');">
+                </div>
+
+                <div style=" background: #ffffff05;
+                        position: absolute;
+                        height: 60vh;
+                        width: 100%;
+
+                        background-attachment: fixed;
+                        ">
+                </div>
+
+                <div 
+                  class="rounded py-2" style="
+                  height: 400px;
+                  width:  260px;
+                                       backdrop-filter: 
+                  blur(10px); 
+                  background-position: center;
+                  background-repeat: no-repeat;
+                  background-size: contain; 
+                  background-image: url('` + img + `');">
+
+                </div>
+
+
+              </div>
+              <div class="d-flex flex-column gap-2 py-2 px-2 px-lg-0" style="min-height: 150px;">
+                <small class=" text-muted border-bottom pb-2 mb-2">` + data.category.name + ` ` + alias + `</small>
+                <div class="d-flex flex-column justify-content-start align-items-center" style="min-height: 100px;">
+                  <div style="cursor: pointer;" >
+                    <div class=" fw-bold">` + data.title + `</div>
+                  </div>
+                 <a class="navi btn btn-primary btn-sm mt-4" href="/blogs/` + data.id + `/` + data.title + `">
+                  <i class="fa fa-book-open pe-2"></i>
+                  <span>Read</span>
+                 </a>
+                
+                </div>
+              </div>  
+
+            </div>
+          `
+      return card
+    },
+
+    data: {
+      dom: '<"row px-4"<"col-lg-6 col-12"i><"col-12 col-lg-6"p>><"row grid_view "><"list_view d-none"t><"row px-4"<"col-lg-6 col-12"><"col-lg-6 col-12"p>>',
+      preloads: ["category"],
+      additional_join_statements: [{ category: "category" }],
+      additional_search_queries: ["a.category_id=" + category_id],
+      // category_id: category_id,
+      pageLength: 12,
+      sorts: [
+        [1, 'desc']
+      ]
+    },
+    columns: [{
+        label: 'title',
+        data: 'title'
+      },
+      {
+        label: 'id',
+        data: 'id'
+      }
+    ],
+
+    moduleName: "Blog",
+    link: "Blog",
+    buttons: [],
+    tableSelector: "#" + 'cbii'
+  })
+  blogSource.load('cbii', "#book_intros")
+  </script>

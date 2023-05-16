@@ -21,7 +21,16 @@ var route_names = [{
     title: "Church - 马来西亚基督教 卫理公会华人年议会",
     route: "/church/:id"
   },
- 
+  {
+    html: "southern_bell.html",
+    title: "南钟报 - 马来西亚基督教 卫理公会华人年议会",
+    route: "/%E5%8D%97%E9%92%9F"
+  },
+  {
+    html: "southern_bell.html",
+    title: "南钟报 - 马来西亚基督教 卫理公会华人年议会",
+    route: "/%E5%8D%97%E9%92%9F/:referral"
+  },
 
   {
     html: "blog_listing.html",
@@ -165,7 +174,7 @@ function renderCallback() {
   App.hide()
   try {
     cachePage()
-  } catch(e){
+  } catch (e) {
 
   }
 }
@@ -368,34 +377,130 @@ function checkLogin() {
 }
 
 function populate_directory() {
+try {
+
+  var al4 = categories.filter((v, i) => {
+    return v.name == '会长心语'
+  })[0]
+  al4_link = `
+    <a href="/blog_listing/` + al4.id + `/` + al4.name + `" class="navi btn btn-outline-secondary">View More</a>
+    `
+} catch(e){
+  
+}
+
+
+  var al3 = categories.filter((v, i) => {
+    return v.name == '讲座'
+  })[0]
+  al3_link = `
+    <a href="/blog_listing/` + al3.id + `/` + al3.name + `" class="navi btn btn-outline-secondary">View More</a>
+    `
+  var al2 = categories.filter((v, i) => {
+    return v.name == 'e_southernbell'
+  })[0]
+  al2_link = `
+    <a href="/blog_listing/` + al2.id + `/` + al2.name + `" class="navi btn btn-secondary">View More</a>
+    `
+
   var directories = App.api("get_directory", {})
-
   $("ul.quick-links").html('')
+  var list = [
+    "会长心语",
+    "关于我们",
+    "年会组织",
+    "卫理堂会",
+    "派司名单",
+    "南钟报",
+    "年会活动",
+    "寻找 Search",
+  ]
 
-  directories.forEach((v, i) => {
-    var li = ` <li class="navi nav-item">
-      <a class="nav-link" href="/pages/` + v.id + `/` + v.title + `" >` + v.title + `</a>
-    </li>`
+  list.forEach((lv, i) => {
+    // else if (lv == "南钟报") {
+    //        var li = ` <li class="navi nav-item">
+    //        <a class="nav-link" href="/blog_listing/` + al2.id + `/` + al2.name + `" >南钟报</a>
+    //      </li>`
 
-    $("ul.quick-links").append(li)
-    var li = ` <li class="navi nav-item">
-      <a class="nav-link" href="/pages/` + v.id + `/` + v.title + `" >` + v.title + `</a>
-    </li>`
+    //        $("ul.quick-links").append(li)
 
-    $("#nav_items").append(li)
+
+    //        var li = ` <li class="navi nav-item">
+    //        <a class="nav-link" href="/blog_listing/` + al2.id + `/` + al2.name + `" >南钟报</a>
+    //      </li>`
+
+    //        $("#nav_items").append(li)
+    //      }
+    try {
+
+    
+
+  // if (lv == "会长心语") {
+  //       var li = ` <li class="navi nav-item">
+  //       <a class="nav-link" href="/blog_listing/` + al4.id + `/` + al4.name + `" >会长心语</a>
+  //     </li>`
+
+  //       $("ul.quick-links").append(li)
+
+
+  //       var li = ` <li class="navi nav-item">
+  //       <a class="nav-link" href="/blog_listing/` + al4.id + `/` + al4.name + `" >会长心语</a>
+  //     </li>`
+
+  //       $("#nav_items").append(li)
+
+  //     } else 
+
+    if (lv == "年会活动") {
+        var li = ` <li class="navi nav-item">
+        <a class="nav-link" href="/blog_listing/` + al3.id + `/` + al3.name + `" >年会活动</a>
+      </li>`
+
+        $("ul.quick-links").append(li)
+
+
+        var li = ` <li class="navi nav-item">
+        <a class="nav-link" href="/blog_listing/` + al3.id + `/` + al3.name + `" >年会活动</a>
+      </li>`
+
+        $("#nav_items").append(li)
+
+      } else {
+
+        var v = directories.filter((z, ii) => {
+          return z.title == lv
+        })[0]
+        var li = ` <li class="navi nav-item">
+        <a class="nav-link" href="/pages/` + v.id + `/` + v.title + `" >` + v.title + `</a>
+      </li>`
+
+        $("ul.quick-links").append(li)
+
+
+        var li = ` <li class="navi nav-item">
+        <a class="nav-link" href="/pages/` + v.id + `/` + v.title + `" >` + v.title + `</a>
+      </li>`
+
+        $("#nav_items").append(li)
+      }
+
+    } catch (e) {
+      console.log(e)
+
+    }
 
   })
 
-  var li = ` 
+  // var li = ` 
 
-    <li class=" nav-item">
-      <a id="axr" onclick="checkLogin()" style="cursor: pointer;" class="  nav-link "> 
-      <i class="fa fa-user pe-2"></i>
-      <span aria-label='displayName'>Profile</span> </a>
-    </li>
-    `
-  $("#nav_items").append(li)
-  $(".quick-links").append(li)
+  //   <li class=" nav-item">
+  //     <a id="axr" onclick="checkLogin()" style="cursor: pointer;" class="  nav-link "> 
+  //     <i class="fa fa-user pe-2"></i>
+  //     <span aria-label='displayName'>Profile</span> </a>
+  //   </li>
+  //   `
+  // $("#nav_items").append(li)
+  // $(".quick-links").append(li)
 
 }
 

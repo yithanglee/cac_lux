@@ -329,7 +329,7 @@ defmodule Cac.Settings do
   end
 
   def get_blog_by_title(title) do
-    Repo.get_by(Blog, title: title)
+    Repo.all(from b in Blog, where: b.title == ^title) |> List.first()
   end
 
   def get_blog_by_keyword(keyword, params) do
@@ -379,11 +379,11 @@ defmodule Cac.Settings do
   end
 
   def get_cache_page_by_blog_id(id) do
-    Repo.get_by(CachePage, blog_id: id)
+    Repo.all(from cp in CachePage, where: cp.blog_id == ^id) |> List.first()
   end
 
   def get_cache_page_by_name(name) do
-    Repo.get_by(CachePage, title: name)
+    Repo.all(from cp in CachePage, where: cp.title == ^name) |> List.first()
   end
 
   def create_cache_page(params \\ %{}) do
@@ -825,7 +825,10 @@ defmodule Cac.Settings do
   end
 
   def get_directory() do
-    Repo.all(from b in Blog, where: b.title in ^["寻找 Search", "卫理堂会", "派司名单", "通讯录", "关于我们"])
+    Repo.all(
+      from b in Blog,
+        where: b.title in ^["会长心语", "年会活动", "南钟报", "寻找 Search", "卫理堂会", "派司名单", "年会组织", "关于我们"]
+    )
   end
 
   alias Cac.Settings.ServiceYear

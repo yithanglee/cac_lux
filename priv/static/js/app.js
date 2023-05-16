@@ -264,6 +264,9 @@ let App = {
     }
   },
   html(page) {
+    $(".modal-body").each((i, v) => {
+      $(v).html('')
+    })
     var res = ""
     $.ajax({
       async: false,
@@ -454,7 +457,7 @@ let App = {
                         id="` + v.title + `"
                         role="tabpanel" 
                         aria-labelledby="` + v.title + `-tab"
-                        href="#` + v.title + `"
+                      
                         >
                             ` + v.content + `
                             
@@ -694,6 +697,7 @@ class phoenixModel {
       data: {},
       allData: [],
       buttons: [],
+        tableButtons: [],
       table: null,
       columns: [],
       customCols: null,
@@ -716,6 +720,35 @@ class phoenixModel {
     })
 
 
+    function loadDefaultGrid(object) {
+      $(object.tableSelector).closest(".dataTables_wrapper").find(".grid_view .xc").each((ti, tv) => {
+        var data = tv.data
+        console.log("xcard..")
+        if (object.xcard != null) {
+          var res = object.xcard(data);
+          $(tv).prepend(res)
+
+        } else {
+          var cols = []
+          object.columns.forEach((v, i) => {
+            var col = `
+             <div class="d-flex flex-column pb-2" role="grid_data" aria-label="` + v.label + `"><label class="fw-light">` + v.label + `</label>` + dataFormatter(data, v) + `</div>`
+            cols.push(col)
+          })
+
+          var div = document.createElement("div")
+          div.className = " card"
+          div.innerHTML = cols.join("")
+          console.log("ts")
+          console.log(div)
+
+          $(tv).prepend(div)
+        }
+
+      })
+    }
+
+
     this.load = function(makeid, dom) {
       if (makeid != null) {
         this.tableSelector = "#" + makeid
@@ -726,10 +759,61 @@ class phoenixModel {
       }
       populateTable(this)
       this.table.on('draw', () => {
-        if (this.onDrawFn != null) {
 
+        // <---- this function used to populate the grid view button ---->
+        $(this.tableSelector).closest(".table-responsive").find(".module_buttons").html(`
+        <div class="d-flex align-items-center">
+          <div class="dropdown morphing scale-left ">
+                     <a href="#" class="more-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-h"></i></a>
+                      <ul class="dropdown-menu dropdown-animation dropdown-menu-end shadow border-0">
+                        <li><a class="dropdown-item" href="javascript:void(0);" onclick="toggleView('` + this.tableSelector + `')">Grid View<i class="fa fa-th-large"></i></a></li>
+                        <li><a class="dropdown-item" href="javascript:void(0);" onclick="App.Functions.reinit()">Reload<i class="fa fa-repeat"></i></a></li>
+                        <li><a class="dropdown-item" href="javascript:void(0);" data-href="" data-module="add_new" data-ref="">New
+                        <i class="fa fa-arrow-right"></i></a></li>
+                      </ul>
+                    </div>
+        </div>
+
+                `)
+
+        var nbutton = $(this.tableSelector).closest(".table-responsive").find(".module_buttons [data-module='add_new']");
+        try {
+          if (nbutton.length > 0) {
+            var ts = this.tableSelector
+            nbutton[0].onclick = function() {
+              window.currentSelector = ts
+              form_new(ts, {})
+            }
+          }
+        } catch (e) {}
+        // <---- this function used to populate the table button ---->
+        this.tableButtons.forEach((b, i) => {
+          var buttonz = new formButton({
+              iconName: b.iconName,
+              color: b.color,
+              name: b.name
+            },
+            b.fnParams,
+            b.onClickFunction);
+          $(this.tableSelector).closest(".table-responsive").find(".module_buttons").prepend(buttonz)
+        })
+        // <---- this function used to populate the grid view button ---->
+        populateGridView(this)
+        loadDefaultGrid(this)
+        if (this.onDrawFn != null) {
           this.onDrawFn();
         }
+
+
+
+
+      })
+      this.table.on('page', () => {
+        // the prev page is meant for restoring the pagination after update...
+        try {
+          window.prev_page = this.table.page()
+        } catch (e) {}
+
       })
 
     };
@@ -749,14 +833,56 @@ class phoenixModel {
       populateTable(this)
       try {
         this.table.on('draw', () => {
-          if (this.xcard != null) {
 
-            populateGridView(this)
-          }
+
+          // <---- this function used to populate the grid view button ---->
+          $(this.tableSelector).closest(".table-responsive").find(".module_buttons").html(`
+        <div class="d-flex align-items-center">
+          <div class="dropdown morphing scale-left ">
+                     <a href="#" class="more-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-h"></i></a>
+                      <ul class="dropdown-menu dropdown-animation dropdown-menu-end shadow border-0">
+                        <li><a class="dropdown-item" href="javascript:void(0);" onclick="toggleView('` + this.tableSelector + `')">Grid View<i class="fa fa-th-large"></i></a></li>
+                        <li><a class="dropdown-item" href="javascript:void(0);" onclick="App.Functions.reinit()">Reload<i class="fa fa-repeat"></i></a></li>
+                        <li><a class="dropdown-item" href="javascript:void(0);" data-href="" data-module="add_new" data-ref="">New<i class="fa fa-arrow-right"></i></a></li>
+                      </ul>
+                    </div>
+        </div>
+
+           `)
+
+          var nbutton = $(this.tableSelector).closest(".table-responsive").find(".module_buttons [data-module='add_new']");
+          try {
+            console.log("dt table data")
+            console.log(this.data)
+            console.log(nbutton)
+            if (nbutton.length > 0) {
+              var ts = this.tableSelector
+              nbutton[0].onclick = function() {
+                window.currentSelector = ts
+                form_new(ts, {})
+              }
+            }
+          } catch (e) {}
+
+          // <---- this function used to populate the table button ---->
+          this.tableButtons.forEach((b, i) => {
+            var buttonz = new formButton({
+                iconName: b.iconName,
+                color: b.color,
+                name: b.name
+              },
+              b.fnParams,
+              b.onClickFunction);
+            $(this.tableSelector).closest(".table-responsive").find(".module_buttons").prepend(buttonz)
+          })
+
+          // <---- this function used to populate the grid view button ---->
+          populateGridView(this)
+          loadDefaultGrid(this)
           if (this.onDrawFn != null) {
-
             this.onDrawFn();
           }
+
 
         })
         this.table.on('init', () => {
@@ -792,7 +918,7 @@ function populateTable(dataSource) {
     [0, "desc"]
   ]
   var custPageLength = 10
-  var custDom = '<"row align-items-center"<"col-lg-4"l><"gap-2 col-lg-8 text-center module_buttons d-flex justify-content-lg-end justify-content-center  py-2 py-lg-0">><"row grid_view d-none"><"list_view"t><"row p-4"<"col-lg-6"i><"col-lg-6"p>>'
+  var custDom = '<"row align-items-center"<"col-lg-4"l><"gap-2 col-lg-8 text-center module_buttons d-flex justify-content-lg-end justify-content-center  py-2 py-lg-0">><"row grid_view d-block d-lg-none"><"list_view d-lg-block d-none"t><"row p-4"<"col-lg-6"i><"col-lg-6"p>>'
   if (dataSource.data.dom != null) {
     custDom = dataSource.data.dom
   }
@@ -821,7 +947,7 @@ function populateTable(dataSource) {
   var keys = Object.keys(dataSource.data);
   var xparams = [];
   $(keys).each((i, k) => {
-    if (!["modalSelector", "sorts", "dom", "footerFn", "rowFn", "preloads"].includes(k)) {
+    if (!["modalSelector", "sorts", "dom", "footerFn", "rowFn", "preloads", "grid_class"].includes(k)) {
       xparams.push("&" + k + "=" + dataSource.data[k]);
     }
     if (["preloads"].includes(k)) {
@@ -836,6 +962,7 @@ function populateTable(dataSource) {
   var table_selector = dataSource.tableSelector;
 
   var table = $(table_selector).DataTable({
+
     pageLength: custPageLength,
     processing: true,
     responsive: true,
@@ -925,7 +1052,10 @@ function populateTable(dataSource) {
   });
   dataSource.table = table
 
-
+  table.on('preXhr', () => {
+    console.log("fetching...")
+    // App.show();
+  })
   table.on('draw', () => {
     $(".jsv" + dataSource.makeid.id).closest("tr").each((i, v) => {
       var j = dataSource.columns.filter((v, i) => {
@@ -939,12 +1069,16 @@ function populateTable(dataSource) {
     })
 
 
-
     $(".table tbody tr").each((i, v) => {
-        $(v).removeClass("d-none")
       setTimeout(() => {
-      }, (2 * i) + 1)
+        $(v).removeClass("d-none")
+      }, (10 * i) + 1)
     })
+
+  })
+  table.on('xhr', () => {
+    // App.hide()
+    console.log("fetched")
   })
 
 
@@ -978,41 +1112,7 @@ function populateTable(dataSource) {
       window.phoenixModels.splice(delete_idx, 1)
       window.phoenixModels.push(dataSource)
     }
-
-
-
   }
-
-  // <---- this function used to populate the grid view button ---->
-  window.phoenixModels.forEach((v, i) => {
-    $(v.tableSelector).closest(".table-responsive").find(".module_buttons").html(`
-                <button type="submit" onclick="toggleView('` + v.tableSelector + `')" class="btn btn-fill btn-round btn-primary" data-href="" data-module="" data-ref="">
-                <i class="fa fa-th-large"></i></button>
-                <button type="submit" onclick="App.Functions.reinit()" class="btn btn-fill btn-round btn-primary" data-href="" data-module="" data-ref="">
-                <i class="fa fa-redo"></i></button>
-                <button type="submit" class="btn btn-fill btn-round btn-primary"  data-href="" data-module="add_new" data-ref=""><i class="fa fa-plus"></i></button>
-                `)
-
-    var nbutton = $(v.tableSelector).closest(".table-responsive").find(".module_buttons button[data-module='add_new']");
-    try {
-      console.log("dt table data")
-      console.log(v.data)
-      console.log(nbutton)
-      if (nbutton.length > 0) {
-        nbutton[0].onclick = function() {
-          window.currentSelector = v.tableSelector
-          form_new(v.tableSelector, v.data)
-        }
-      }
-
-    } catch (e) {
-
-
-    }
-
-  })
-
-
 
   return table;
 }
@@ -3525,6 +3625,97 @@ function formatDate() {
 
 
   })
+}
+function dataFormatter(dtdata, v) {
+  var input2 = null;
+  var formatType = ['formatFloat', 'showBoolean', 'formatDateTime', 'showImg', 'showChild']
+  var selectedKey = -1
+  var keys = Object.keys(v)
+  formatType.forEach((f, ii) => {
+    if (keys.indexOf(f) > 0) {
+      selectedKey = ii
+    }
+  })
+
+  console.log(formatType[selectedKey])
+  switch (formatType[selectedKey]) {
+    case 'formatFloat':
+      input2 = currencyFormat(dtdata[v.data]);
+      break;
+    case 'showImg':
+      try {
+        console.log(("simmg"))
+        input2 = `
+        <div style="background-size: cover !important; background-image: url('` + dtdata[v.data] + `') !important; 
+        height: 80px;width: 80px" class="rounded-circle text-center 
+        bg-primary d-flex align-items-center justify-content-center text-white">
+        </div>`
+
+      } catch (e) {
+        console.log(e)
+
+      }
+      break;
+    case 'showChild':
+      input2 = dtdata[v.xdata.child][v.xdata.data]
+      if (v.xdata.showImg) {
+        try {
+          console.log("attemp to show img...")
+          if (dtdata[v.xdata.child][0] != null) {
+            input2 = `
+              <div style="background-size: cover !important; background-image: url('` + dtdata[v.xdata.child][0][v.xdata.data] + `') !important; 
+              height: 80px;width: 80px" class="rounded-circle text-center 
+              bg-primary d-flex align-items-center justify-content-center text-white">
+              </div>`
+          }
+        } catch (e) {
+
+        }
+      }
+      if (v.xdata.formatFloat) {
+        input2 = currencyFormat(dtdata[v.xdata.child][v.xdata.data])
+      }
+
+      break;
+    case 'showBoolean':
+      try {
+        var ic;
+        if (dtdata[v.data] == true) {
+          ic = `<i class="text-success fa fa-check"></i>`
+        } else {
+          ic = `<i class="text-danger fa fa-times"></i>`
+        }
+        input2 = ic
+      } catch (e) {
+
+      }
+      break;
+
+    case 'formatDateTime':
+      // code block
+      var str = dtdata[v.data]
+      var dt = new Date(str)
+      dt.setTime(dt.getTime() + (8 * 60 * 60 * 1000));
+      var edate = dt.toGMTString().split(",")[1].split(" ").splice(0, 4).join(" ")
+      var etime = dt.toLocaleTimeString()
+      input2 = `<span class="text-muted fw-bold">` + edate + `</span>
+
+              <small class="fw-bold text-primary">
+                  ` + etime + `          
+              </small>
+                 `
+      break;
+    default:
+      input2 = dtdata[v.data]
+  }
+
+
+  if (input2 == null) {
+    input2 = dtdata[v.data]
+  }
+
+  return input2
+
 }
 
 let ColumnFormater = {

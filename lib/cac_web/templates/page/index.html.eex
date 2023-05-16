@@ -40,7 +40,7 @@
   <%= render("show_blog.html", cache: @cache)%>
 </div>
 
-<%= if true do %>
+<%= if false do %>
 
 <script type="text/javascript">
   function cachePage(){

@@ -5,6 +5,14 @@
     </select>
   </div>
 </div>
+<div class="row gx-0">
+  <div class="col-12 col-lg-4">
+    <div id="region_toc" class="p-lg-4"></div>
+  </div>
+  <div class="col-12 col-lg-8" style="height: 80vh; overflow-y: scroll ;">
+    <div id="toc" class="p-4"></div>
+  </div>
+</div>
 <div id="all-region">
 </div>
 <script type="text/javascript">
@@ -32,11 +40,7 @@ service_yearSource.allData.forEach((year, i) => {
 $("#service_years2").val(year_id)
 
 function showChurch(venue_id) {
-  App.show()
-
   navigateTo("/church/" + venue_id)
-
-
 }
 
 function toggleThis(elem, venue_id) {
@@ -48,7 +52,27 @@ function toggleThis(elem, venue_id) {
 
 
 regions = App.api("get_regions", { year_id: year_id })
+
+
+regions.sort((a, b) => {
+
+  return a.region.sort_no - b.region.sort_no
+
+})
+
 regions.forEach((data, i) => {
+  $("#region_toc").append(`
+  													<div class="d-flex justify-content-between  p-3  py-2 m-lg-4 my-lg-3 border">
+															<span class='fw-bold'>
+														  	` + data.region.name + `
+													  	</span>
+													  		<span class="px-3 d-flex align-items-center gap-4" style="cursor: pointer;" onclick="spy('`+ data.region.id +`')">
+																	<small>Show </small>
+																	<i class="fa fa-caret-right"></i>
+																</span>
+												  	</div>
+												  	`)
+  $("#toc").append(`<div  data-id='` + data.region.id + `' class="fw-bold pt-4">` + data.region.name + `</div>`)
 
 
   var venues = []
@@ -88,9 +112,19 @@ regions.forEach((data, i) => {
     })
 
 
+    var smallContent = `						
+	    <div class="row py-2" style="cursor: pointer;" onclick="showChurch( '` + venue.id + `')"> 
+		    <div class="col-6">` + venue.name + `</div>
+    		<div class="col-6">` + venue.desc + `</div>
+			<div>
+			<div class="divider"></div>
+    				`
+
+    $("#toc").append(smallContent)
+
     var div = `
 	
-				<div onclick="showChurch( '` + venue.id + `')" class="card px-2 my-2" style="cursor: pointer;">
+				<div  onclick="showChurch( '` + venue.id + `')" class="card p-4 my-2" style="cursor: pointer;">
 					<div class="d-flex align-items-center justify-content-start gap-2">
 						<div class="fw-bold">` + venue.name + `</div>
 					
@@ -98,16 +132,14 @@ regions.forEach((data, i) => {
 					</div>
 					<div class="text-secondary">` + venue.reg_no + `</div>
 					<div class="">` + venue.desc + `</div>
-					<div class="py-2 d-flex justify-content-between align-items-center">
+					<div class=" d-flex justify-content-between align-items-center">
 						<span>
 							` + venue.address + `
 						</span>
-						<span class="px-3">
+						<span class="px-3 d-flex align-items-center gap-4">
+						<span>More info </span>
 							<i class="fa fa-caret-right"></i>
 						</span>
-
-
-
 					</div>
 				</div>
 
@@ -136,4 +168,11 @@ regions.forEach((data, i) => {
 		</div>`)
 
 })
+
+function spy(id) {
+  var elem = $("[data-id='" + id + "']")[0]
+  elem.scrollIntoView()
+  var y = $(window).scrollTop(); //your current y position on the page
+  $(window).scrollTop(y - 50);
+}
 </script>

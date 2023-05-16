@@ -22,7 +22,7 @@
         <div id="usr" class="row">
         </div>
         <div class="hr"></div>
-        <p class="fs-5">Recent related entries </p>
+        <p class="fs-5 p-2">Recent related entries </p>
         <div id="blgs" class="row">
         </div>
       </div>
@@ -46,7 +46,7 @@ App.api("related_blogs", { keyword: ky }, null, (list) => {
 		<section class="p-4">
 			<div class="fs-4">` + blog.title + `</div>
 			<div class="format_date">` + blog.inserted_at + `</div>
-			<div>` + blog.content.replaceAll(ky, `<span style="background-color: cyan; padding: 4px;font-weight: bold;">` + ky + `</span>`) + `</div>
+			<div>` + blog.content.replaceAll(ky, `<span style="background-color: cyan; padding: 4px;font-weight: bold;">` + ky + `</span>`).replaceAll("http://www.methodist.org.my", "https://archive.methodist.org.my") + `</div>
 		</section>
 		`
     $("#blgs").append(div)

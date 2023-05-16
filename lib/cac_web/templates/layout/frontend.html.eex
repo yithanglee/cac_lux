@@ -27,7 +27,7 @@
   <%= raw(string) %>
 
   <% end %>
-  <title>马来西亚基督教 卫理公会华人年议会 | MYCAC</title>
+  <title>马来西亚基督教 卫理公会华人年议会 | Chinese Annual Conference</title>
   <!-- CSS Files
   <link href="/assets/custom.css" rel="stylesheet">
   <link href="/assets/responsive.css" rel="stylesheet">
@@ -123,7 +123,7 @@
   }
   </script>
   <div class="modal" id="transparentModal">
-    <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-dialog modal-xl" role="document">
       <div class="modal-content border-0" style="background: transparent;">
         <div class="modal-header border-0">
           <h5 class="modal-title">Modal title</h5>
@@ -131,7 +131,7 @@
             <span aria-hidden="true"></span>
           </button>
         </div>
-        <div class="modal-body">
+        <div class="modal-body" style="height: 100vh; width: 100vw;">
           <p>Modal body text goes here.</p>
         </div>
         <div class="modal-footer border-0">

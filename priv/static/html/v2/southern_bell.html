@@ -1,0 +1,157 @@
+<link rel="stylesheet" href="/css/datatables.min.css">
+<script type="text/javascript" src="/js/datatables.min.js"></script>
+<section class="my-4 py-4 pt-lg-8" style="position: relative; top: 0px;">
+  <div class="pt-5 px-1 mx-1 px-lg-4 mx-lg-4">
+    <div class="text-center d-flex flex-column gap-3">
+      <div class="fs-1 fw-bold">《南钟》</div>
+      <div class="fs-5 fw-bold">个别目录</div>
+    </div>
+    <div class="row pt-2 pt-lg-5 w-80 d-block d-lg-none" id="sb1">
+    </div>
+    <div class="row pt-1 pt-lg-5 w-80">
+      <div class="offset-2 col-8">
+        <div class="row" id="sb2">
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!--City News Start-->
+<section class="wf100 city-news p75 ">
+  <div class="hero-pattern3" style="height: 150vh;position: absolute;width: 100vw; z-index: -1;">
+  </div>
+  <div class="container">
+    <div class="title-style-3" aria-label="category">
+      <h3>Title</h3>
+      <p>Subtitle</p>
+    </div>
+    <div class="row gy-4" id="book_intros">
+    </div>
+  </div>
+</section>
+<!--City News End-->
+<script type="text/javascript">
+var sb =
+  categories.filter((v, i) => {
+    return v.name == "e_southernbell"
+  })[0]
+
+
+sb.children.forEach((c, i) => {
+  var div = `
+
+    <div class="col-12 col-lg-2 p-lg-2 p-1">
+      <a class="text-center navi" href="/blog_listing/` + c.id + `/` + c.name + `">
+        <div>` + c.name + `</div>
+      </a>
+    </div>
+
+  `
+  if (c.name != "e_southernbell") {
+    $("#sb2").append(div)
+  }
+})
+
+
+
+
+
+var al2 = categories.filter((v, i) => {
+  return v.name == 'e_southernbell'
+})[0]
+
+var category_id = al2.id
+var category = categories.filter((v, i) => {
+  return v.id == category_id
+})[0];
+var title = category.name
+if (category.alias != null) {
+  title = category.alias
+}
+
+$("div[aria-label='category']").html(`
+ <h3>` + title + `</h3>
+  `)
+var blogSource = new phoenixModel({
+  onDrawFn: () => {
+    populateGridView(blogSource);
+    $(".xc").each((i, v) => {
+      var blog = v.data
+      var author_img = '/assets/tuser1.jpg'
+      var author_name = 'Reporter'
+      var excerpt = blog.excerpt
+      if (excerpt == null) {
+        excerpt = blog.subtitle
+      }
+      if (excerpt == null) {
+        excerpt = blog.title
+      }
+      if (blog.author != null) {
+        if (blog.author.img_url != null) {
+          author_img = blog.author.img_url
+        }
+        author_name = blog.author.name
+      }
+
+      var card = `
+          <div class="p-2" data-title="` + blog.title + `"
+              data-blog-id="` + blog.id + `">
+            <div class="news-box" style="backdrop-filter: blur(10px);">
+              <div class="new-thumb" style="
+                  height: 320px;
+                  background-repeat: no-repeat;
+                  background-position: top;
+                  background-size: cover;
+                  background-image: url('` + blog.img_url + `')
+                " onclick="navigateTo('/blogs/` + blog.id + `/` + blog.title + `')"> 
+                <span class="cat c2">` + blog.category.name + `</span> 
+
+                <div >
+                </div> 
+              </div>
+              <div class="new-txt">
+                <ul class="news-meta">
+                  <li>` + blog.inserted_at + `</li>
+                  <li></li>
+                </ul>
+                <div style="" >
+                <h6><a href='/blogs/` + blog.id + `/` + blog.title + `' class="navi">` + blog.title + `</a></h6>
+                </div>
+                <p class="text-sm"> ` + excerpt + ` </p>
+              </div>
+             
+            </div>
+          </div>
+          `
+      $(v).html(card)
+    })
+  },
+  data: {
+    dom: '<"row px-4"<"col-lg-6 col-12"i><"col-12 col-lg-6"p>><"row grid_view "><"list_view d-none"t><"row px-4"<"col-lg-6 col-12"><"col-lg-6 col-12"p>>',
+    preloads: ["category"],
+    additional_join_statements: [{ category: "category" }],
+    additional_search_queries: ["a.category_id=" + category_id],
+    // category_id: category_id,
+    pageLength: 12,
+    sorts: [
+      [0, 'desc']
+    ]
+  },
+  columns: [
+    {
+      label: 'title',
+      data: 'title'
+    },
+    {
+      label: 'id',
+      data: 'id'
+    }
+  ],
+
+  moduleName: "Blog",
+  link: "Blog",
+  buttons: [],
+  tableSelector: "#" + 'cbii'
+})
+blogSource.load('cbii', "#book_intros")
+</script>
