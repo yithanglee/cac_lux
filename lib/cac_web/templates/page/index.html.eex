@@ -1,29 +1,7 @@
 <script type="text/javascript" src="/js/pagination.min.js"></script>
 <link rel="stylesheet" type="text/css" href="/css/pagination.min.css" />
-<!-- pdf
- -->
 <script src="/js/pdfobject.min.js"></script>
-<!-- treant -->
-<link rel="stylesheet" href="/css/treant.css" type="text/css" />
-<script src="/vendor/raphael/raphael.js"></script>
-<script src="/js/treant.js"></script>
 <style type="text/css">
-.dropdown-toggle::after {
-  display: inline-block;
-  margin-left: .255em;
-  vertical-align: .255em;
-  content: "";
-  border-top: .3em solid;
-  border-right: 0px solid transparent;
-  border-bottom: 0;
-  border-left: 0px solid transparent;
-}
-
-.accordion-item {
-  background-color: #40407e;
-  border: 1px solid rgba(0, 0, 0, .125);
-}
-
 #pdf-render {
   display: none;
   height: 100vh;
@@ -36,42 +14,241 @@
 }
 </style>
 <!--Wrapper Start-->
-<div class="" id="subcontent" aria-label="mainbar" style="position: relative;">
-  <%= render("show_blog.html", cache: @cache)%>
-</div>
-
-<%= if false do %>
-
-<script type="text/javascript">
-  function cachePage(){
-
-    $(document).ready(() => {
-      App.post("cache", { title: document.title, content: $("#subcontent").html().replaceAll("  ", "") })
-    })
-  }
-</script>
-<% else %>
-
-<script type="text/javascript">
-  function cachePage(){
-    console.log("cache n/a")
-  }
-</script>
-<% end %>
-<script src="/js/cac.js"></script>
-
-
-<!--Footer Start-->
-<footer class="lf">
-  <div class="container">
-    <div class="row">
-      <div class="textwidget"> <img src="/images/cac_logo.png" alt="" style="background: white;padding: 10px;border-radius: 48px;" height="100px">
-        <a href="/"> 2023 CAC METHODIST </a> | <a href="#"> 联系我们 </a> | <a class="" target="_blank" href="https://fb.com/cac.southernbell">@cac.southernbell <i class="fab fa-facebook-f"></i></a> | <a href="https://fb.com/MethodistCAC" target="_blank" class="fb"> @MethodistCAC <i class="fab fa-facebook-f"></i></a> | <a href="https://www.youtube.com/@-cac7361" target="_blank" class="yt">马来西亚华人年议会-CAC <i class="fab fa-youtube"></i></a>
+<div class="wrapper" id="wrapper">
+  <!-- start perloader -->
+  <div class="pre-loader" id="preloader">
+    <div class="loader"></div>
+  </div>
+  <!-- end perloader -->
+  <!-- Start main-content -->
+  <div id="main_content" class="footer-fixed">
+  </div>
+  <!-- End main-content -->
+  <!-- Start  offcanvas menu -->
+  <div class="offcanvas-menu-wrap" id="offcanvas-wrap" data-position="left">
+    <div class="offcanvas-content">
+      <div class="offcanvas-header">
+        <div class="offcanvas-logo">
+          <div class="site-branding">
+            <a class="dark-logo" href="index.html"><img width="162" height="52" src="media/logo/logo-dark.svg" alt="neeon"></a>
+            <a class="light-logo" href="index.html"><img width="162" height="52" src="media/logo/logo-light.svg" alt="neeon"></a>
+          </div>
+        </div>
+        <div class="close-btn offcanvas-close">
+          <a href="javascript:void(0)">
+            <i class="fas fa-times"></i>
+          </a>
+        </div>
+      </div>
+      <div class="offcanvas-widget">
+        <h3 class="offcanvas-widget-title">About Us</h3>
+        <p>
+          The argument in favor of using filler text
+          goes something like this: If you use arey
+          real content in the Consulting Process
+          anytime you reachtent.
+        </p>
+      </div>
+      <div class="offcanvas-widget">
+        <h3 class="offcanvas-widget-title">Instagram</h3>
+        <div class="insta-gallery">
+          <div class="galleryitem">
+            <a href="https://www.instagram.com/">
+              <img src="media/gallery/ins-gallery_1.jpg" width="100" height="90" alt="gallery1">
+            </a>
+          </div>
+          <div class="galleryitem">
+            <a href="https://www.instagram.com/">
+              <img src="media/gallery/ins-gallery_2.jpg" width="100" height="90" alt="gallery2">
+            </a>
+          </div>
+          <div class="galleryitem">
+            <a href="https://www.instagram.com/">
+              <img src="media/gallery/ins-gallery_3.jpg" width="100" height="90" alt="gallery3">
+            </a>
+          </div>
+          <div class="galleryitem">
+            <a href="https://www.instagram.com/">
+              <img src="media/gallery/ins-gallery_4.jpg" width="100" height="90" alt="gallery4">
+            </a>
+          </div>
+          <div class="galleryitem">
+            <a href="https://www.instagram.com/">
+              <img src="media/gallery/ins-gallery_5.jpg" width="100" height="90" alt="gallery5">
+            </a>
+          </div>
+          <div class="galleryitem">
+            <a href="https://www.instagram.com/">
+              <img src="media/gallery/ins-gallery_6.jpg" width="100" height="90" alt="gallery6">
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="offcanvas-widget footer-widget">
+        <h3 class="offcanvas-widget-title">Contact Info</h3>
+        <ul class="contact-info-list widget-list">
+          <li class="widget-list-item">
+            <i class="fas fa-map-marker-alt list-icon"></i>
+            Chicago 12, Melborne City, USA
+          </li>
+          <li class="widget-list-item">
+            <i class="fas fa-phone-alt list-icon"></i>
+            <a href="tel:123333000999" class="widget-list-link">
+              (123) 333-000-999
+            </a>
+          </li>
+          <li class="widget-list-item">
+            <i class="fas fa-envelope list-icon"></i>
+            <a href="mailto:info@example.com" class="widget-list-link">
+              neeon@gmail.com
+            </a>
+          </li>
+        </ul>
+        <ul class="footer-social style-2 gutter-15">
+          <li class="social-item">
+            <a href="https://www.facebook.com/" class="social-link fb" target="_blank">
+              <i class="fab fa-facebook-f"></i>
+            </a>
+          </li>
+          <li class="social-item">
+            <a href="https://twitter.com/" class="social-link tw" target="_blank">
+              <i class="fab fa-twitter"></i>
+            </a>
+          </li>
+          <li class="social-item">
+            <a href="https://vimeo.com/" class="social-link vm" target="_blank">
+              <i class="fab fa-vimeo-v"></i>
+            </a>
+          </li>
+          <li class="social-item">
+            <a href="https://www.pinterest.com/" class="social-link pn" target="_blank">
+              <i class="fab fa-pinterest-p"></i>
+            </a>
+          </li>
+          <li class="social-item">
+            <a href="https://www.whatsapp.com/" class="social-link wh" target="_blank">
+              <i class="fab fa-whatsapp"></i>
+            </a>
+          </li>
+        </ul>
       </div>
     </div>
   </div>
-</footer>
-<!--Footer Start-->
+  <!-- End  offcanvas menu -->
+  <!-- Start Cart Wrap -->
+  <div class="cart-wrap" id="cart-wrap" data-position="left">
+    <div class="cart-content">
+      <div class="cart-header">
+        <span class="cart-title d-inlie-block">Cart</span>
+        <button type="button" class="cart-menu-btn menu-close-btn">
+          <span class="menu-btn-icon">
+            <i class="fas fa-times"></i>
+          </span>
+        </button>
+      </div>
+      <ul class="cart-items ">
+        <li class="d-flex ">
+          <div class="item-figure">
+            <a href="#">
+              <img src="media/gallery/ins-gallery_1.jpg" alt="Cart" width="100" height="90">
+            </a>
+            <div class="item-dismiss">
+              <a href="#"><i class="fas fa-times"></i></a>
+            </div>
+          </div>
+          <div class="item-description">
+            <span class="item-main-title"><a href="#">Animal</a></span>
+            <span class="item-amount d-flex align-items-center"><span class="item-quantity">1</span>X<span class="item-price">$12.00</span></span>
+          </div>
+        </li>
+        <li class="d-flex">
+          <div class="item-figure">
+            <a href="#">
+              <img src="media/gallery/ins-gallery_2.jpg" alt="Cart" width="100" height="90">
+            </a>
+            <div class="item-dismiss">
+              <a href="#"><i class="fas fa-times"></i></a>
+            </div>
+          </div>
+          <div class="item-description">
+            <span class="item-main-title"><a href="#">Sports</a></span>
+            <span class="item-amount d-flex align-items-center"><span class="item-quantity">1</span>X<span class="item-price">$18.00</span></span>
+          </div>
+        </li>
+        <li class="d-flex">
+          <div class="item-figure">
+            <a href="#">
+              <img src="media/gallery/ins-gallery_3.jpg" alt="Cart" width="100" height="90">
+            </a>
+            <div class="item-dismiss">
+              <a href="#"><i class="fas fa-times"></i></a>
+            </div>
+          </div>
+          <div class="item-description">
+            <span class="item-main-title"><a href="#">Fashion</a></span>
+            <span class="item-amount d-flex align-items-center"><span class="item-quantity">1</span>X<span class="item-price">$20.00</span></span>
+          </div>
+        </li>
+      </ul>
+      <div class="cart-footer">
+        <ul class="total-amount">
+          <li class="title">Subtotal:</li>
+          <li class="amount">$50.00</li>
+        </ul>
+        <ul class="action-buttons">
+          <li><a href="#" class="rt-submit-btn">VIEW CART</a></li>
+          <li><a href="#" class="rt-submit-btn">CHECKOUT</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <!-- End Cart Wrap -->
+  <!-- Start Search  -->
+  <div id="template-search" class="template-search">
+    <button type="button" class="close">×</button>
+    <form class="search-form">
+      <input type="search" value="" placeholder="Search" />
+      <button type="submit" class="search-btn btn-ghost style-1">
+        <i class="flaticon-search"></i>
+      </button>
+    </form>
+  </div>
+  <!-- End Search -->
+  <!-- theme-switch-box -->
+  <div class="theme-switch-box-wrap">
+    <div class="theme-switch-box">
+      <span class="theme-switch-box__theme-status"><i class="fas fa-cog"></i></span>
+      <label class="theme-switch-box__label" for="themeSwitchCheckbox">
+        <input class="theme-switch-box__input" type="checkbox" name="themeSwitchCheckbox" id="themeSwitchCheckbox">
+        <span class="theme-switch-box__main"></span>
+      </label>
+      <span class="theme-switch-box__theme-status"><i class="fas fa-moon"></i></span>
+    </div>
+  </div>
+  <!-- end theme-switch-box -->
+  <!-- start back to top -->
+  <a href="javascript:void(0)" id="back-to-top">
+    <i class="fas fa-angle-double-up"></i>
+  </a>
+  <!-- End back to top -->
+</div>
+<%= if false do %>
+<script type="text/javascript">
+function cachePage() {
+
+  $(document).ready(() => {
+    App.post("cache", { title: document.title, content: $("#subcontent").html().replaceAll("  ", "") })
+  })
+}
+</script>
+<% else %>
+<script type="text/javascript">
+function cachePage() {
+  console.log("cache n/a")
+}
+</script>
+<% end %>
+<script src="/js/cac.js"></script>
 <!--Wrapper End-->
 <span id="sign-in-button"></span>
 <div id="recaptcha-container"></div>

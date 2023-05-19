@@ -15,18 +15,15 @@ var route_names = [{
     html: "event_show.html",
     title: "Event - 马来西亚基督教 卫理公会华人年议会",
     route: "/events/:id/:title"
-  },
-  {
+  }, {
     html: "church.html",
     title: "Church - 马来西亚基督教 卫理公会华人年议会",
     route: "/church/:id"
-  },
-  {
+  }, {
     html: "southern_bell.html",
     title: "南钟报 - 马来西亚基督教 卫理公会华人年议会",
     route: "/%E5%8D%97%E9%92%9F"
-  },
-  {
+  }, {
     html: "southern_bell.html",
     title: "南钟报 - 马来西亚基督教 卫理公会华人年议会",
     route: "/%E5%8D%97%E9%92%9F/:referral"
@@ -133,12 +130,13 @@ function navigateTo(route, additionalParamString, dom) {
       }
     }
     var html = App.html(match_2[0].html)
+    var footer = App.html("footer.html")
     var keys = Object.keys(match_2[0])
     $("html")[0].scrollIntoView()
 
 
     if (keys.includes("skipNav")) {
-      $("#subcontent").html(html)
+      $("#main_content").html(html + footer)
       renderCallback()
 
     } else {
@@ -148,8 +146,8 @@ function navigateTo(route, additionalParamString, dom) {
         var nav = App.html(match_2[0].customNav)
       }
 
-      $("#subcontent").html(nav)
-      $("#subcontent").append(html)
+      $("#main_content").html(nav)
+      $("#main_content").append(html + footer)
       renderCallback()
 
     }
@@ -159,8 +157,8 @@ function navigateTo(route, additionalParamString, dom) {
   } else {
     var html = App.html("landing.html")
     var nav = App.html("blog_nav.html")
-    $("#subcontent").html(nav)
-    $("#subcontent").append(html)
+    $("#main_content").html(nav)
+    $("#main_content").append(html + footer)
     renderCallback()
 
   }
@@ -168,12 +166,400 @@ function navigateTo(route, additionalParamString, dom) {
 
 }
 
+
+/*-------------------------------
+ //  WOW
+-------------------------------*/
+const wow = new WOW({
+  boxClass: "wow",
+  animateClass: "animated",
+  offset: 0,
+  mobile: false,
+  live: true,
+  scrollContainer: null,
+});
+
+
+function templateSearch() {
+  /*-----------------------------------
+  //  Jquery Serch Box
+  -----------------------------------*/
+  $('a[href="#template-search"]').on("click", function(event) {
+    event.preventDefault();
+    const target = $("#template-search");
+    target.addClass("open");
+    setTimeout(function() {
+      target.find("input").focus();
+    }, 600);
+    return false;
+  });
+
+  $("#template-search, #template-search button.close").on(
+    "click keyup",
+    function(event) {
+      if (
+        event.target === this ||
+        event.target.className === "close" ||
+        event.keyCode === 27
+      ) {
+        $(this).removeClass("open");
+      }
+    }
+  );
+
+}
+
+
+function sliders() {
+  /*-------------------------------------
+  // Trending slider
+  ------------------------------------*/
+  const rtTrendingSlider1 = new Swiper(".rt-treding-slider1", {
+    slidesPerView: 1,
+    loop: true,
+    slideToClickedSlide: true,
+    direction: "vertical",
+    autoplay: {
+      delay: 4000,
+    },
+    speed: 800,
+  });
+
+  /*-------------------------------------
+  // banner-slider-thumbnail-style-2
+  ------------------------------------*/
+
+  const bannerSliderThumbnailStyle2 = new Swiper(
+    ".banner-slider-thumbnail-style-2", {
+      slidesPerView: 3,
+      slideToClickedSlide: true,
+      spaceBetween: 20,
+      loop: true,
+      speed: 1000,
+      direction: "horizontal",
+      mousewheel: true,
+
+      breakpoints: {
+        0: {
+          slidesPerView: 1,
+        },
+        576: {
+          slidesPerView: 1,
+        },
+        768: {
+          slidesPerView: 2,
+        },
+        992: {
+          slidesPerView: 2,
+          direction: "vertical",
+          pagination: {
+            el: ".swiper-pagination",
+            type: "progressbar",
+          },
+          // centeredSlides: true,
+        },
+        1200: {
+          slidesPerView: 3,
+          direction: "vertical",
+          pagination: {
+            el: ".swiper-pagination",
+            type: "progressbar",
+          },
+        },
+      },
+    }
+  );
+  const bannerSliderStyle2 = new Swiper(".banner-slider-style-2", {
+    loop: true,
+    speed: 1000,
+    thumbs: {
+      swiper: bannerSliderThumbnailStyle2,
+    },
+  });
+
+  /*-------------------------------------
+  // banner-slider-thumbnail-style-2
+  ------------------------------------*/
+
+  var bannerSliderThumbnailStyle3 = new Swiper(
+    ".banner-slider-thumbnail-style-3", {
+      slidesPerView: 3,
+      spaceBetween: 20,
+      loop: true,
+      speed: 1000,
+
+      breakpoints: {
+        0: {
+          slidesPerView: 1,
+        },
+        576: {
+          slidesPerView: 1,
+        },
+        768: {
+          slidesPerView: 2,
+        },
+        1025: {
+          slidesPerView: 2,
+        },
+        1400: {
+          slidesPerView: 3,
+          centeredSlides: true,
+        },
+      },
+    }
+  );
+  var bannerSliderStyle3 = new Swiper(".banner-slider-style-3", {
+    loop: true,
+    speed: 1000,
+    thumbs: {
+      swiper: bannerSliderThumbnailStyle3,
+    },
+    navigation: {
+      nextEl: ".btn-next-thumb",
+      prevEl: ".btn-prev-thumb",
+    },
+    effect: 'fade',
+    autoplay: {
+      delay: 6000
+    }
+  });
+
+
+  /*-------------------------------------
+  // video Thumbnail slider
+  ------------------------------------*/
+
+  const videoSliderThumbnailStyle1 = new Swiper(
+    ".video-slider-thumbnail-style-1", {
+      loop: true,
+      spaceBetween: 10,
+      slidesPerView: 4,
+      watchSlidesVisibility: true,
+      watchSlidesProgress: true,
+      speed: 800,
+      pagination: {
+        el: ".swiper-pagination",
+        type: "progressbar",
+      },
+      breakpoints: {
+        0: {
+          slidesPerView: 1,
+        },
+        576: {
+          slidesPerView: 1,
+        },
+        768: {
+          slidesPerView: 2,
+        },
+        992: {
+          slidesPerView: 2,
+        },
+        1200: {
+          slidesPerView: 3,
+        },
+        1400: {
+          slidesPerView: 4,
+        },
+      },
+    }
+  );
+  const videoSliderStyle1 = new Swiper(".video-slider-style-1", {
+    loop: true,
+    speed: 800,
+    thumbs: {
+      swiper: videoSliderThumbnailStyle1,
+    },
+  });
+
+}
+
+function setDate() {
+  /*--------------------------------
+   // Date
+   -------------------------------*/
+  const currentYear = document.querySelectorAll(".currentYear");
+  if (currentYear.length > 0) {
+    const date = new Date();
+    const currYear = date.getFullYear();
+    currentYear.forEach((ele) => {
+      ele.innerText = currYear;
+    });
+  }
+
+  const currentDate = document.querySelectorAll(".currentDate");
+  if (currentDate.length > 0) {
+    const date = new Date().toLocaleDateString("en-us", {
+      weekday: "long",
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    });
+    currentDate.forEach((ele) => {
+      ele.innerText = date;
+    });
+  }
+}
+
+function mobileToggle() {
+  if ($(".rt-slide-nav").is(":visible")) {
+    $(".rt-slide-nav").slideUp();
+    $("body").removeClass("slidemenuon");
+  } else {
+    $(".rt-slide-nav").slideDown();
+    $("body").addClass("slidemenuon");
+  }
+}
+
+function setHeader() {
+  // Fixed header
+  $(window).on("scroll", function() {
+    if ($("header").hasClass("sticky-on")) {
+      const stickyPlaceHolder = $("#sticky-placeholder"),
+        menu = $("#navbar-wrap"),
+        menuH = menu.outerHeight(),
+        topbarH = $("#topbar-wrap").outerHeight() || 0,
+        targrtScroll = topbarH,
+        header = $("header");
+      if ($(window).scrollTop() > targrtScroll) {
+        header.addClass("sticky");
+        stickyPlaceHolder.height(menuH);
+      } else {
+        header.removeClass("sticky");
+        stickyPlaceHolder.height(0);
+      }
+    }
+  });
+  // Fixed header mobile
+  $(window).on("scroll", function() {
+    if ($(".rt-mobile-header").hasClass("mobile-sticky-on")) {
+      const stickyPlaceHolder = $("#mobile-sticky-placeholder"),
+        menu = $("#mobile-menu-bar-wrap"),
+        menuH = menu.outerHeight(),
+        topbarH = $("#mobile-top-bar").outerHeight() || 0,
+        targrtScroll = topbarH,
+        header = $(".rt-mobile-header");
+      if ($(window).scrollTop() > targrtScroll) {
+        header.addClass("mobile-sticky");
+        stickyPlaceHolder.height(menuH);
+      } else {
+        header.removeClass("mobile-sticky");
+        stickyPlaceHolder.height(0);
+      }
+    }
+  });
+
+  // humburger
+  $(".humburger").on("click", function() {
+    $(".humburger").toggleClass("active");
+  });
+
+
+
+  /*-------------------------------------
+    Mobile Menu Dropdown
+    -------------------------------------*/
+  const rtMobileMenu = $(".offscreen-navigation .menu");
+
+  if (rtMobileMenu.length) {
+    rtMobileMenu.children("li").addClass("menu-item-parent");
+    rtMobileMenu.find(".menu-item-has-children > a").on("click", function(e) {
+      e.preventDefault();
+      $(this).toggleClass("opened");
+      const n = $(this).next(".sub-menu"),
+        s = $(this).closest(".menu-item-parent").find(".sub-menu");
+      rtMobileMenu
+        .find(".sub-menu")
+        .not(s)
+        .slideUp(250)
+        .prev("a")
+        .removeClass("opened"),
+        n.slideToggle(250);
+    });
+    rtMobileMenu
+      .find(".menu-item:not(.menu-item-has-children) > a")
+      .on("click", function(e) {
+        $(".rt-slide-nav").slideUp();
+        $("body").removeClass("slidemenuon");
+      });
+  }
+}
+
+function windowLoad() {
+  /*-------------------------------------
+  Window Load and Resize
+  -------------------------------------*/
+  $(window).on("load", function() {
+    console.log("finish loading..")
+    // Modal
+    if ($(window).width() > 992) {
+      $("#rtModal").modal("show");
+    }
+
+    // video pop up
+    var videoPopUp = $(".play-btn");
+    if (videoPopUp.length) {
+      videoPopUp.magnificPopup({
+        type: "iframe",
+        iframe: {
+          markup: '<div class="mfp-iframe-scaler">' +
+            '<div class="mfp-close"></div>' +
+            '<iframe class="mfp-iframe" frameborder="0" allowfullscreen></iframe>' +
+            "</div>",
+          patterns: {
+            youtube: {
+              index: "youtube.com/",
+              id: "v=",
+              src: "https://www.youtube.com/embed/%id%?autoplay=1",
+            },
+            vimeo: {
+              index: "vimeo.com/",
+              id: "/",
+              src: "//player.vimeo.com/video/%id%?autoplay=1",
+            },
+            gmaps: {
+              index: "//maps.google.",
+              src: "%id%&output=embed",
+            },
+          },
+          srcAction: "iframe_src",
+        },
+      });
+    }
+
+  });
+
+  $(window).on("load resize", function() {
+    // Masonry
+    $(".masonry-items").masonry({
+      itemSelector: ".masonry-item",
+      columnWidth: ".masonry-item",
+    });
+  });
+
+  // Page Preloader
+  var preloader = $("#preloader");
+  preloader &&
+    $("#preloader").fadeOut("slow", function() {
+      $(this).remove();
+    });
+
+  $(".rt-slide-nav").slideUp();
+  $("body").removeClass("slidemenuon");
+}
+
 function renderCallback() {
   populate_menus()
   checkLoginUser();
   App.hide()
+  templateSearch();
+  sliders()
+  setDate()
+
+  setHeader()
+  windowLoad()
   try {
     cachePage()
+    wow.init();
   } catch (e) {
 
   }
@@ -212,22 +598,12 @@ function memberLogin() {
         checkLoginUser();
         navigateTo("/home")
         $("#transparentModal").modal('hide')
-        // $("#xr").addClass("d-none")
-        // $("#axr").removeClass("d-none")
         $("#axr").find("span[aria-label='displayName']").html("Hi, " + authResult.user.displayName)
-        // $("#aax").addClass("d-none")
         App.notify("Welcome back!")
 
-
-        // $(".bnn").addClass("d-none")
-        // $("div[aria-label='mainbar']")[0].scrollIntoView();
       },
       uiShown: function() {
         App.hide();
-
-
-        // $("div[aria-label='mainbar']")[0].scrollIntoView();
-
       }
     },
     signInFlow: 'popup',
@@ -240,12 +616,8 @@ function memberLogin() {
 
 function logout() {
   localStorage.removeItem("pkey")
-  // $("#ulg").html("Login")
   navigateTo("/home")
-  // $("#xr").removeClass("d-none")
-  // $("#axr").addClass("d-none")
-  // $("#aax").removeClass("d-none")
-  // $(".online-status").removeClass("bg-success")
+
   window.userToken = null
   App.notify("Logout")
 }
@@ -259,24 +631,14 @@ function checkLoginUser() {
     }, () => {
       window.member = null
       localStorage.removeItem("pkey")
-      // $("#ulg").html("Login")
-      // $("#xr").removeClass("d-none")
-      // $("#axr").addClass("d-none")
-      // $("#aax").removeClass("d-none")
-      // $(".online-status").removeClass("bg-success")
+
       window.userToken = null
       App.notify("Logout")
     })
     window.pdata = pdata
     window.member = pdata
-    // $("#xr").addClass("d-none")
-    // $("#axr").removeClass("d-none")
     $("span[aria-label='displayName']").html("Hi, " + pdata.name)
-    // $("#ulg").html("Hi, " + pdata.name)
-    // $("#ulg2").html(pdata.name)
-    // $("#aax").addClass("d-none")
-    // $(".online-status").addClass("bg-success")
-    // genCode();
+
   }
 }
 var ui;
@@ -292,7 +654,7 @@ $(document).ready(() => {
   };
 
   if (!firebase.apps.length) {
-    // Initialize Firebase
+
     firebase.initializeApp(firebaseConfig);
     firebase.auth().languageCode = "en";
   } else {
@@ -307,9 +669,7 @@ $(document).ready(() => {
     }
   );
   ui = new firebaseui.auth.AuthUI(firebase.auth());
-
   navigateTo();
-
 })
 
 
@@ -363,8 +723,6 @@ function populate_menus() {
   populate_footer()
 
 
-
-
 }
 
 function checkLogin() {
@@ -377,17 +735,17 @@ function checkLogin() {
 }
 
 function populate_directory() {
-try {
+  try {
 
-  var al4 = categories.filter((v, i) => {
-    return v.name == '会长心语'
-  })[0]
-  al4_link = `
+    var al4 = categories.filter((v, i) => {
+      return v.name == '会长心语'
+    })[0]
+    al4_link = `
     <a href="/blog_listing/` + al4.id + `/` + al4.name + `" class="navi btn btn-outline-secondary">View More</a>
     `
-} catch(e){
-  
-}
+  } catch (e) {
+
+  }
 
 
   var al3 = categories.filter((v, i) => {
@@ -417,43 +775,14 @@ try {
   ]
 
   list.forEach((lv, i) => {
-    // else if (lv == "南钟报") {
-    //        var li = ` <li class="navi nav-item">
-    //        <a class="nav-link" href="/blog_listing/` + al2.id + `/` + al2.name + `" >南钟报</a>
-    //      </li>`
 
-    //        $("ul.quick-links").append(li)
-
-
-    //        var li = ` <li class="navi nav-item">
-    //        <a class="nav-link" href="/blog_listing/` + al2.id + `/` + al2.name + `" >南钟报</a>
-    //      </li>`
-
-    //        $("#nav_items").append(li)
-    //      }
     try {
 
-    
-
-  // if (lv == "会长心语") {
-  //       var li = ` <li class="navi nav-item">
-  //       <a class="nav-link" href="/blog_listing/` + al4.id + `/` + al4.name + `" >会长心语</a>
-  //     </li>`
-
-  //       $("ul.quick-links").append(li)
 
 
-  //       var li = ` <li class="navi nav-item">
-  //       <a class="nav-link" href="/blog_listing/` + al4.id + `/` + al4.name + `" >会长心语</a>
-  //     </li>`
-
-  //       $("#nav_items").append(li)
-
-  //     } else 
-
-    if (lv == "年会活动") {
-        var li = ` <li class="navi nav-item">
-        <a class="nav-link" href="/blog_listing/` + al3.id + `/` + al3.name + `" >年会活动</a>
+      if (lv == "年会活动") {
+        var li = ` <li class="">
+        <a class="animation navi" href="/blog_listing/` + al3.id + `/` + al3.name + `" >年会活动</a>
       </li>`
 
         $("ul.quick-links").append(li)

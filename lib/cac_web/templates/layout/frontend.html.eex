@@ -11,10 +11,6 @@
   description = c.private.plug_session["description"]
   image = "/images/forest_sd.jpg"
   image = c.private.plug_session["image"]
-  IO.inspect(c.request_path)
-  IO.inspect(title)
-  IO.inspect(description)
-  IO.inspect(image)
   string = ~s(
   <meta property="og:url" content="https://www.methodist.org.my#{c.request_path}" />
   <meta property="og:type" content="website" />
@@ -25,32 +21,30 @@
 )
   %>
   <%= raw(string) %>
-
   <% end %>
   <title>马来西亚基督教 卫理公会华人年议会 | Chinese Annual Conference</title>
-  <!-- CSS Files
-  <link href="/assets/custom.css" rel="stylesheet">
-  <link href="/assets/responsive.css" rel="stylesheet">
-  -->
-  <link href="/assets/color.css" rel="stylesheet">
-  <link href="/assets/all.css" rel="stylesheet">
-  <link href="/assets/owl.carousel.min.css" rel="stylesheet">
-  <link href="/css/bootstrap_lux.min.css" rel="stylesheet">
-  <link href="/css/app.css" rel="stylesheet">
-  <link href="/assets/prettyPhoto.css" rel="stylesheet">
-  <link href="/assets/slick.css" rel="stylesheet">
   <link rel="icon" href="" type="image/png">
-  <script type="text/javascript" src="/js/jquery.min.js"></script>
-  <script src="/js/bootstrap.min.js"></script>
-  <script src="/assets/owl.carousel.min.js"></script>
-  <script src="/assets/jquery.prettyPhoto.js"></script>
-  <script src="/assets/slick.min.js"></script>
-  <!--reveal start-->
-  <link rel="stylesheet" href="/vendor/revealjs/reveal.css" />
-  <link rel="stylesheet" href="/vendor/revealjs/theme/white.css" />
-  <script type="text/javascript" src="/vendor/revealjs/reveal.js"></script>
-  <script type="text/javascript" src="/js/bootstrap.notify.js"></script>
-  <!--reveal end -->
+  <!-- Dependency Stylesheet -->
+  <link rel="stylesheet" type="text/css" href="/dependencies/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="/dependencies/fontawesome/css/all.min.css">
+  <link rel="stylesheet" type="text/css" href="/dependencies/animate/animate.min.css">
+  <link rel="stylesheet" type="text/css" href="/dependencies/swiper/css/swiper.min.css">
+  <link rel="stylesheet" type="text/css" href="/dependencies/magnific-popup/css/magnific-popup.css">
+  <!-- Site Stylesheet -->
+  <link rel="stylesheet" type="text/css" href="assets/css/style.css">
+  <!-- Dependency Scripts -->
+  <script src="/dependencies/jquery/jquery.min.js"></script>
+  <script src="/dependencies/popper.js/popper.min.js"></script>
+  <script src="/dependencies/bootstrap/js/bootstrap.min.js"></script>
+  <script src="/dependencies/appear/appear.min.js"></script>
+  <script src="/dependencies/swiper/js/swiper.min.js"></script>
+  <script src="/dependencies/masonry/masonry.min.js"></script>
+  <script src="/dependencies/magnific-popup/js/magnific-popup.min.js"></script>
+  <script src="/dependencies/theia-sticky-sidebar/resize-sensor.min.js"></script>
+  <script src="/dependencies/theia-sticky-sidebar/theia-sticky-sidebar.min.js"></script>
+  <script src="/dependencies/validator/validator.min.js"></script>
+  <script src="/dependencies/tween-max/tween-max.js"></script>
+  <script src="/dependencies/wow/js/wow.min.js"></script>
   <script type="text/javascript" src="/js/app.js"></script>
   <script src="/js/firebase-app.js"></script>
   <!-- Add Firebase products that you want to use -->
@@ -59,22 +53,11 @@
   <link type="text/css" rel="stylesheet" href="/vendor/firebase-ui/firebase-ui-auth.css" />
   <!-- Google tag (gtag.js) -->
   <script async defer src="https://www.googletagmanager.com/gtag/js?id=G-Z4PS6CP7TS"></script>
-      <meta name="google-site-verification" content="a6tAO2pnpa0sytcZBB_LRHj-RC-BH00myXjyqQgZS_w" />
-
+  <meta name="google-site-verification" content="a6tAO2pnpa0sytcZBB_LRHj-RC-BH00myXjyqQgZS_w" />
 </head>
 
-<body >
-  <% render("frontend_nav.html", conn: @conn) %>
+<body>
   <%= @inner_content %>
-  <div class="overlay"></div>
-  <div style="bottom: 3vh;right: 6vw; z-index: 100;" class="position-fixed ">
-    <div class="darkMode btn btn-dark btn-sm rounded">
-      <i class="far fa-2x fa-lightbulb" id="dm"></i>
-    </div>
-    <div class="toTop btn btn-success btn-sm rounded">
-      <i class="fa fa-2x fa-caret-up" id="arc"></i>
-    </div>
-  </div>
   <script type="text/javascript">
   $(document).ready(function() {
 
@@ -91,36 +74,30 @@
     App.notify("<%= get_flash(@conn, :error) %>", { type: 'danger' });
     <% true -> %>
     <% end %>
+
+
+
+    /*-------------------------------------
+  //  Mobile Menu Toggle
+  -------------------------------------*/
+    $(document).on("click", ".sidebarBtn",  function(e) {
+      e.preventDefault();
+      if ($(".rt-slide-nav").is(":visible")) {
+        $(".rt-slide-nav").slideUp();
+        $("body").removeClass("slidemenuon");
+      } else {
+        $(".rt-slide-nav").slideDown();
+        $("body").addClass("slidemenuon");
+      }
+    });
   })
 
-  $(".darkMode").click(() => {
-    toggleDarkMode()
 
-  })
 
-  $(".toTop").click(() => {
-    $("#pdf-render").removeClass("d-block")
-    $("#arc").removeClass("fa-times")
-    $("#arc").addClass("fa-caret-up")
-    $("div[aria-label='mainbar']")[0].scrollIntoView({ behavior: 'smooth'});
-  })
-  $(document).on("click", ".navi a", function(event) {
-    event.preventDefault();
-    navigateTo($(this).attr("href"))
-  });
   $(document).on("click", "a.navi", function(event) {
     event.preventDefault();
     navigateTo($(this).attr("href"))
   });
-
-  function toggleDarkMode() {
-    $("#subcontent").toggleClass("bg-dark text-white")
-    $(".darkMode").toggleClass("btn btn-dark")
-    $(".darkMode").toggleClass("btn btn-outline-light")
-    $("#dm").toggleClass("far")
-    $("#dm").toggleClass("text-white")
-    $("#dm").toggleClass("fas")
-  }
   </script>
   <div class="modal" id="transparentModal">
     <div class="modal-dialog modal-xl" role="document">
@@ -180,5 +157,7 @@
     </div>
   </div>
 </body>
+<!-- custom -->
+<script src="/assets/js/app.js"></script>
 
 </html>
