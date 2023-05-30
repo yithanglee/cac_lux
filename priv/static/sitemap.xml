@@ -6,10 +6,6 @@
     <lastmod>2021-06-22</lastmod>
   </url>    
   <url>
-    <loc>http://localhost:8501/blogs/3/《南钟》2022年第三期</loc>
-    <lastmod>2022-10-13</lastmod>
-  </url>    
-  <url>
     <loc>http://localhost:8501/blogs/90/和年会教牧女同工在线上交流</loc>
     <lastmod>2021-06-15</lastmod>
   </url>    
@@ -170,8 +166,8 @@
     <lastmod>2021-07-01</lastmod>
   </url>    
   <url>
-    <loc>http://localhost:8501/blogs/33/致词2</loc>
-    <lastmod>2022-11-16</lastmod>
+    <loc>http://localhost:8501/blogs/33/致词33</loc>
+    <lastmod>2023-05-24</lastmod>
   </url>    
   <url>
     <loc>http://localhost:8501/blogs/32/致词</loc>
@@ -195,7 +191,7 @@
   </url>    
   <url>
     <loc>http://localhost:8501/blogs/34/关于我们</loc>
-    <lastmod>2023-02-12</lastmod>
+    <lastmod>2023-05-19</lastmod>
   </url>    
   <url>
     <loc>http://localhost:8501/blogs/16/关丹牧区议会</loc>
@@ -232,10 +228,6 @@
   <url>
     <loc>http://localhost:8501/blogs/37/卫理堂会</loc>
     <lastmod>2023-04-15</lastmod>
-  </url>    
-  <url>
-    <loc>http://localhost:8501/blogs/38/寻找 Search</loc>
-    <lastmod>2023-04-16</lastmod>
   </url>    
   <url>
     <loc>http://localhost:8501/blogs/39/每月祷告通报 MONTHLY PRAYER BULLETIN</loc>
@@ -527,7 +519,7 @@
   </url>    
   <url>
     <loc>http://localhost:8501/blogs/137/古今崇拜</loc>
-    <lastmod>2021-03-13</lastmod>
+    <lastmod>2023-05-28</lastmod>
   </url>    
   <url>
     <loc>http://localhost:8501/blogs/122/在兵如港堂线上证道</loc>
@@ -546,7 +538,23 @@
     <lastmod>2021-03-13</lastmod>
   </url>    
   <url>
+    <loc>http://localhost:8501/blogs/139/寻找 Search</loc>
+    <lastmod>2023-05-25</lastmod>
+  </url>    
+  <url>
     <loc>http://localhost:8501/blogs/138/南钟报</loc>
-    <lastmod>2023-04-29</lastmod>
+    <lastmod>2023-05-25</lastmod>
+  </url>    
+  <url>
+    <loc>http://localhost:8501/blogs/3/《南钟》2022年第三期</loc>
+    <lastmod>2023-05-25</lastmod>
+  </url>    
+  <url>
+    <loc>http://localhost:8501/blogs/140/资源分享</loc>
+    <lastmod>2023-05-30</lastmod>
+  </url>    
+  <url>
+    <loc>http://localhost:8501/blogs/141/问答系统</loc>
+    <lastmod>2023-05-30</lastmod>
   </url>
 </urlset>

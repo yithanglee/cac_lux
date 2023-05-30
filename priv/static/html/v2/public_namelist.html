@@ -84,7 +84,7 @@ function populateNamelist() {
       <div id="region_` + region.id + `">
       </div>
       `)
-    populateRegion({ region_id: region.id })
+    populateRegion({ region_id: region.id }, i)
   })
 }
 var roles = ['主理', '协理', '代理', '副理', '传道']
@@ -114,7 +114,7 @@ function pastorCard(user, placeholder, remarks) {
   `
 }
 
-function populateRegion(j) {
+function populateRegion(j, index) {
   var region = App.api("get_region", { id: j.region_id, year_id: $("#service_years").val() })
   var venues = region.venues
   var venues_list = []
@@ -193,12 +193,12 @@ function populateRegion(j) {
 
   })
 
-
+  var ms = (200 * (index + 1))
   $("div#region_" + j.region_id).html(`
-        <div class="py-4 pb-2 d-flex  align-items-center gap-2">
-            <div class="fs-2 d-flex flex-column">
-              <span>` + region.name + `</span>
-              <span class="text-sm py-2">` + region.alias + `</span>
+        <div class="py-4 pb-2 d-flex  align-items-center gap-2 wow fadeInUp" data-wow-delay="`+ms+`ms" data-wow-duration="800ms">
+            <div class=" d-flex flex-column">
+              <span class="fs-2">` + region.name + `</span>
+              <span class=" py-2">` + region.alias + `</span>
             </div>
             <div class="flex-grow-1 d-flex align-items-center justify-content-between">
              <div style="height: 0px;width: 100%;" class="mx-4 border-bottom"></div>

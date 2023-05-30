@@ -25,6 +25,97 @@ defmodule Cac.Settings do
     end
   end
 
+  alias Cac.Settings.BlogSetting
+
+  def list_blog_settings() do
+    Repo.all(BlogSetting)
+  end
+
+  def get_blog_setting!(id) do
+    Repo.get!(BlogSetting, id)
+  end
+
+  def get_blog_setting_by_group_key(group, key) do
+    Repo.get_by(BlogSetting, group: group, key: key)
+  end
+
+  def create_blog_setting(params \\ %{}) do
+    BlogSetting.changeset(%BlogSetting{}, params) |> Repo.insert()
+  end
+
+  def update_blog_setting(model, params) do
+    BlogSetting.changeset(model, params) |> Repo.update()
+  end
+
+  def delete_blog_setting(%BlogSetting{} = model) do
+    Repo.delete(model)
+  end
+
+  def append_default_values2() do
+    items = ["stored_media_id", "position"]
+
+    for item <- items do
+      for index <- 1..6 do
+        create_blog_setting(%{
+          group: "is#{index}",
+          key: item
+        })
+      end
+    end
+  end
+
+  def append_default_values() do
+    Repo.delete_all(from bs in BlogSetting, where: bs.key in ^["category_id", "limit"])
+    groups = ["category_id", "limit"]
+
+    for item <- groups do
+      create_blog_setting(%{
+        group: "l1",
+        key: item
+      })
+
+      create_blog_setting(%{
+        group: "l2",
+        key: item
+      })
+
+      create_blog_setting(%{
+        group: "l3",
+        key: item
+      })
+
+      create_blog_setting(%{
+        group: "l4",
+        key: item
+      })
+
+      create_blog_setting(%{
+        group: "l5",
+        key: item
+      })
+
+      create_blog_setting(%{
+        group: "l6",
+        key: item
+      })
+
+      create_blog_setting(%{
+        group: "l7",
+        key: item
+      })
+
+      create_blog_setting(%{
+        group: "l8",
+        key: item
+      })
+
+      create_blog_setting(%{
+        group: "l9",
+        key: item
+      })
+    end
+  end
+
   alias Cac.Settings.FacebookPage
 
   def list_facebook_pages() do
@@ -322,6 +413,81 @@ defmodule Cac.Settings do
       end
 
     Repo.all(q)
+  end
+
+  def latest_sb() do
+    Blog
+    |> join(:left, [b], pp in Cac.Settings.Category, on: pp.id == b.category_id)
+    |> where([b, pp], pp.name == ^"e_southernbell")
+    |> where([b, pp], ilike(b.title, ^"《南钟》%"))
+    |> order_by([b, pp], desc: b.inserted_at)
+    |> limit([b, pp], 1)
+    |> Repo.one()
+  end
+
+  def list_instagram_grid() do
+    # this need a few sections, like getting 6 / 4 for each categories,
+    # need to get which 6 or 4 and which category
+    groups =
+      Repo.all(from(bs in BlogSetting, where: bs.key in ^["stored_media_id", "position"]))
+      |> Enum.group_by(& &1.group)
+      |> IO.inspect()
+
+    keys = groups |> Map.keys()
+
+    for item <- keys do
+      section = groups[item]
+      limit = section |> Enum.filter(&(&1.key == "position")) |> List.first()
+      cid = section |> Enum.filter(&(&1.key == "stored_media_id")) |> List.first()
+
+      b =
+        if cid.nvalue != nil do
+          Repo.one(
+            from(b in Cac.Settings.StoredMedia,
+              where: b.id == ^cid.nvalue,
+              order_by: [desc: b.inserted_at]
+            )
+          )
+          |> BluePotion.sanitize_struct()
+        else
+          nil
+        end
+
+      %{section: item, media: b}
+    end
+  end
+
+  def list_homepage_blogs() do
+    # this need a few sections, like getting 6 / 4 for each categories,
+    # need to get which 6 or 4 and which category
+    groups =
+      Repo.all(from(bs in BlogSetting, where: bs.key in ^["category_id", "limit"]))
+      |> Enum.group_by(& &1.group)
+      |> IO.inspect()
+
+    keys = groups |> Map.keys()
+
+    for item <- keys do
+      section = groups[item]
+      limit = section |> Enum.filter(&(&1.key == "limit")) |> List.first()
+      cid = section |> Enum.filter(&(&1.key == "category_id")) |> List.first()
+
+      b =
+        if cid.nvalue != nil do
+          Repo.all(
+            from(b in Blog,
+              where: b.category_id == ^cid.nvalue,
+              order_by: [desc: b.inserted_at],
+              limit: ^limit.nvalue
+            )
+          )
+          |> Enum.map(&(&1 |> BluePotion.sanitize_struct() |> Map.delete(:content)))
+        else
+          []
+        end
+
+      %{section: item, blogs: b}
+    end
   end
 
   def get_blog!(id) do
@@ -947,5 +1113,31 @@ defmodule Cac.Settings do
     else
       update_member(member, %{name: name})
     end
+  end
+
+  def list_blog_next_prev(id, category_id) do
+    # b = Repo.all(from b in Blog, where: b.id == ^id) |> List.first()
+
+    list =
+      Repo.all(
+        from b in Blog,
+          where: b.category_id == ^category_id,
+          order_by: [asc: b.inserted_at],
+          select: %{id: b.id, inserted_at: b.inserted_at, title: b.title}
+      )
+      |> IO.inspect()
+
+    index = Enum.find_index(list, &(&1.id == id)) |> IO.inspect()
+
+    prev =
+      if index == 0 do
+        nil
+      else
+        Enum.at(list, index - 1)
+      end
+
+    next = Enum.at(list, index + 1)
+
+    %{next: next, prev: prev}
   end
 end

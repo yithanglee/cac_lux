@@ -5,40 +5,53 @@
       <div class="row gutter-30">
         <div class="col-xl-3 col-md-6 wow fadeInUp" data-wow-delay="200ms" data-wow-duration="800ms">
           <div class="footer-widget">
-            <div class="logo footer-logo">
-              <a class="dark-logo" href="index.html">
-                <img width="162" height="52" src="/media/logo/logo-light.svg" alt="neeon">
+            <div class="logo d-flex align-items-center">
+              <a class="navi" href="/home">
+                <img width="64" height="52" src="/images/cac_logo.png" alt="cac">
               </a>
+              <div class="d-flex flex-column " onclick="navigateTo('/home');" style="cursor: pointer;  ">
+                <span style="color: black;" class="ps-2  fw-bolder text-white">马来西亚基督教 </span>
+                <span class="ps-2  fw-light" style="font-size: 12px;">卫理公会华人年议会 </span>
+              </div>
             </div>
-            <p class="text">
-              When an unknown printer took a galley
-              and scrambled it to make specimen
-              book not only five centurie.
-            </p>
-            <ul class="footer-social gutter-15">
+
+
+        <ul class="px-4 contact-info-list widget-list">
+          <li class="widget-list-item d-flex justify-content-start gap-3">
+            <i class="fas fa-map-marker-alt list-icon"></i>
+            <span class="text-white pe-4">
+              
+            6th Floor, Wisma Methodist, Lorong Hang Jebat 50150 Kuala Lumpur, Malaysia
+            </span>
+          </li>
+          <li class="widget-list-item d-flex justify-content-start gap-3">
+            <i class="fas fa-phone-alt list-icon"></i>
+            <a href="tel:0320702501" class="text-white pe-4">
+             03-2070 2501
+            </a>
+          </li>
+          <li class="widget-list-item d-flex justify-content-start gap-3">
+            <i class="fas fa-envelope list-icon"></i>
+            <a href="mailto:cacmcm@methodist.org.my" class="text-white pe-4">
+              cacmcm@methodist.org.my
+            </a>
+          </li>
+        </ul>
+
+            <ul class="ps-2 footer-social gutter-15 pt-4">
               <li class="social-item">
-                <a href="https://www.facebook.com/" class="social-link fb" target="_blank">
+                <a href="https://www.facebook.com/MethodistCAC" class="social-link fb" target="_blank">
                   <i class="fab fa-facebook-f"></i>
                 </a>
               </li>
               <li class="social-item">
-                <a href="https://twitter.com/" class="social-link tw" target="_blank">
-                  <i class="fab fa-twitter"></i>
+                <a href="https://www.instagram.com/cacmethodist/" class="social-link tw" target="_blank">
+                  <i class="fab fa-instagram"></i>
                 </a>
               </li>
               <li class="social-item">
-                <a href="https://vimeo.com/" class="social-link vm" target="_blank">
-                  <i class="fab fa-vimeo-v"></i>
-                </a>
-              </li>
-              <li class="social-item">
-                <a href="https://www.pinterest.com/" class="social-link pn" target="_blank">
-                  <i class="fab fa-pinterest-p"></i>
-                </a>
-              </li>
-              <li class="social-item">
-                <a href="https://www.whatsapp.com/" class="social-link wh" target="_blank">
-                  <i class="fab fa-whatsapp"></i>
+                <a href="https://youtube.com/@-cac7361" class="social-link yt" target="_blank">
+                  <i class="fab fa-youtube"></i>
                 </a>
               </li>
             </ul>
@@ -47,51 +60,10 @@
         <!-- end col -->
         <div class="col-xl-3 col-md-6 wow fadeInUp" data-wow-delay="400ms" data-wow-duration="800ms">
           <div class="footer-widget">
-            <h3 class="footer-widget-title">Recent Posts</h3>
+            <h3 class="footer-widget-title">CAC President Messages</h3>
             <!--  start footer-post-list -->
-            <div class="footer-post-list">
-              <div class="item mb--30">
-                <div class="rt-post post-sm white-style">
-                  <div class="post-img">
-                    <a href="single-post1.html">
-                      <img src="/media/gallery/post-sm_1.jpg" alt="post" width="100" height="100">
-                    </a>
-                  </div>
-                  <div class="ms-3 post-content">
-                    <h4 class="post-title">
-                      <a href="single-post1.html">
-                        Top Beste ampute are
-                        Speak Market.
-                      </a>
-                    </h4>
-                    <span class="rt-meta">
-                      <i class="far fa-calendar-alt icon"></i>
-                      DECEMBER 9, 2022
-                    </span>
-                  </div>
-                </div>
-              </div>
-              <div class="item">
-                <div class="rt-post post-sm white-style">
-                  <div class="post-img">
-                    <a href="single-post1.html">
-                      <img src="/media/gallery/post-sm_2.jpg" alt="post" width="100" height="100">
-                    </a>
-                  </div>
-                  <div class="ms-3 post-content">
-                    <h4 class="post-title">
-                      <a href="single-post1.html">
-                        Top Beste ampute are
-                        Speak Market.
-                      </a>
-                    </h4>
-                    <span class="rt-meta">
-                      <i class="far fa-calendar-alt icon"></i>
-                      DECEMBER 9, 2022
-                    </span>
-                  </div>
-                </div>
-              </div>
+            <div class="footer-post-list" id="cacp">
+
             </div>
             <!--  end footer-post-list -->
           </div>
@@ -99,76 +71,20 @@
         <!-- end col -->
         <div class="col-xl-3 col-md-6 wow fadeInUp d-flex justify-content-xl-center justify-content-start" data-wow-delay="400ms" data-wow-duration="800ms">
           <div class="footer-widget">
-            <h3 class="footer-widget-title">Categories</h3>
-            <ul class="widget-list cat-list">
-              <li class="widget-list-item">
-                <a href="politics.html" class="widget-list-link">
-                  Politics
-                </a>
-              </li>
-              <li class="widget-list-item">
-                <a href="politics.html" class="widget-list-link">
-                  Business
-                </a>
-              </li>
-              <li class="widget-list-item">
-                <a href="technology.html" class="widget-list-link">
-                  Technology
-                </a>
-              </li>
-              <li class="widget-list-item">
-                <a href="life-style.html" class="widget-list-link">
-                  Health
-                </a>
-              </li>
-              <li class="widget-list-item">
-                <a href="life-style.html" class="widget-list-link">
-                  Sports
-                </a>
-              </li>
-              <li class="widget-list-item">
-                <a href="gaming.html" class="widget-list-link">
-                  Entertainment
-                </a>
-              </li>
+            <h3 class="footer-widget-title">SiteMap</h3>
+            <ul class="widget-list cat-list a">
+             
             </ul>
           </div>
         </div>
+        
         <!-- end col -->
-        <div class="col-xl-3 col-md-6 wow fadeInUp" data-wow-delay="600ms" data-wow-duration="800ms">
+        <div class="col-xl-3 col-md-6  fadeInUp" data-wow-delay="600ms" data-wow-duration="800ms">
           <div class="footer-widget">
-            <h3 class="footer-widget-title">Instagram</h3>
+            <h3 class="footer-widget-title">Gallery</h3>
             <div class="insta-gallery">
-              <div class="galleryitem">
-                <a href="https://www.instagram.com/">
-                  <img src="/media/gallery/ins-gallery_1.jpg" width="100" height="90" alt="gallery1">
-                </a>
-              </div>
-              <div class="galleryitem">
-                <a href="https://www.instagram.com/">
-                  <img src="/media/gallery/ins-gallery_2.jpg" width="100" height="90" alt="gallery2">
-                </a>
-              </div>
-              <div class="galleryitem">
-                <a href="https://www.instagram.com/">
-                  <img src="/media/gallery/ins-gallery_3.jpg" width="100" height="90" alt="gallery3">
-                </a>
-              </div>
-              <div class="galleryitem">
-                <a href="https://www.instagram.com/">
-                  <img src="/media/gallery/ins-gallery_4.jpg" width="100" height="90" alt="gallery4">
-                </a>
-              </div>
-              <div class="galleryitem">
-                <a href="https://www.instagram.com/">
-                  <img src="/media/gallery/ins-gallery_5.jpg" width="100" height="90" alt="gallery5">
-                </a>
-              </div>
-              <div class="galleryitem">
-                <a href="https://www.instagram.com/">
-                  <img src="/media/gallery/ins-gallery_6.jpg" width="100" height="90" alt="gallery6">
-                </a>
-              </div>
+
+          
             </div>
           </div>
         </div>
@@ -181,8 +97,8 @@
     <div class="container">
       <div class="footer-bottom-area d-flex align-items-center justify-content-center">
         <p class="copyright-text mb-0 wow fadeInUp" data-wow-delay="200ms" data-wow-duration="800ms">
-          <span class="currentYear"></span> © neeon all right reserved by
-          <a href="https://www.radiustheme.com/" rel="nofollow">RadiusTheme</a>
+          <span class="currentYear"></span> © Chinese Annual Conference of
+          The Methodist Church in Malaysia
         </p>
       </div>
     </div>

@@ -98,18 +98,27 @@
         <div class="d-flex align-items-center justify-content-between">
           <!-- start logo here -->
           <div class="site-branding">
-            <a class="dark-logo" href="index.html">
-              <img width="162" height="52" src="media/logo/logo-dark.svg" alt="neeon">
-            </a>
-            <a class="light-logo" href="index.html">
-              <img width="162" height="52" src="media/logo/logo-light.svg" alt="neeon">
+            <div class="d-flex justify-content-between align-items-center">
+              <a class="dark-logo navi" href="/home">
+                <img width="64" height="52" src="/images/cac_logo.png" alt="cac">
+              </a>
+              <div class="d-flex flex-column " onclick="navigateTo('/home')" style="cursor: pointer;  ">
+                <span class="ps-2 d-lg-none ">马来西亚基督教 </span>
+                <span class="ps-2 d-lg-none ">卫理公会华人年议会 </span>
+                <span class="ps-2 d-none d-lg-block fw-bolder" style="color: black;">马来西亚基督教 卫理公会华人年议会 </span>
+                <span class="ps-2 text-sm d-none d-lg-block" style="font-size: 12px;">Chinese Annual Conference of
+                  The Methodist Church in Malaysia</span>
+              </div>
+            </div>
+            <a class="light-logo navi" href="/home">
+              <img width="64" height="52" src="/images/cac_logo.png" alt="cac">
             </a>
           </div>
           <!-- end logo here -->
           <!-- start main menu -->
           <div class="main-menu">
             <nav class="main-menu__nav">
-              <ul>
+              <ul class="quick-links">
                 <li class="main-menu__nav_sub list active">
                   <a class="animation" href="javascript:void(0)">Home</a>
                   <ul class="main-menu__dropdown">
@@ -124,46 +133,8 @@
                     <li><a href="index9.html">Home 09 - Fitness</a></li>
                   </ul>
                 </li>
-                <li class="main-menu__nav_sub list">
-                  <a class="animation" href="javascript:void(0)">Features</a>
-                  <ul class="main-menu__dropdown">
-                    <li class="main-menu__nav_sub">
-                      <a href="javascript:void(0)">
-                        Post Layout
-                      </a>
-                      <ul>
-                        <li><a href="single-post1.html">Single Post 01</a></li>
-                        <li><a href="single-post2.html">Single Post 02</a></li>
-                        <li><a href="single-post3.html">Single Post 03</a></li>
-                      </ul>
-                    </li>
-                    <li><a href="author.html">Author Deatils</a></li>
-                  </ul>
-                </li>
-                <li class="main-menu__nav_sub list">
-                  <a class="animation" href="javascript:void(0)">Categories </a>
-                  <ul class="main-menu__dropdown">
-                    <li><a href="life-style.html">Life Style</a></li>
-                    <li><a href="technology.html">Technology</a></li>
-                    <li><a href="gaming.html">Gaming</a></li>
-                    <li><a href="graphics.html">Graphics</a></li>
-                    <li><a href="politics.html">Politics</a></li>
-                  </ul>
-                </li>
-                <li class="main-menu__nav_sub list">
-                  <a class="animation" href="javascript:void(0)">Pages</a>
-                  <ul class="main-menu__dropdown">
-                    <li><a href="about.html">About Us</a></li>
-                    <li><a href="contact.html">Contact Us</a></li>
-                    <li><a href="404.html">404</a></li>
-                  </ul>
-                </li>
-                <li class="main-menu__nav_sub list">
-                  <a class="animation" href="javascript:void(0)">Shop</a>
-                  <ul class="main-menu__dropdown">
-                    <li><a href="shop.html">Shop</a></li>
-                    <li><a href="single-shop.html">Shop Deatils</a></li>
-                  </ul>
+                <li class="">
+                  <a class="animation navi" href="/home">Features</a>
                 </li>
               </ul>
             </nav>
@@ -174,7 +145,7 @@
             <li class="item">
               <a href="#template-search"><i class="fas fa-search"></i></a>
             </li>
-            <li class="item cart-icon">
+            <li class="item cart-icon d-none">
               <a href="javascript:void(0)" class="cart-menu-btn menu-open-btn">
                 <i class="fas fa-shopping-cart"></i>
                 <span class="item-count">0</span>
@@ -206,21 +177,22 @@
           <span class="currentDate">DECEMBER 9, 2022</span>
         </span>
       </li>
-      <li>
-        <span class="rt-meta">
-          <i class="fas fa-map-marker-alt icon"></i>
-          Chicago 12, Melborne City, USA
-        </span>
-      </li>
     </ul>
   </div>
   <!-- end mobile-top-bar -->
   <div class="mobile-menu-bar-wrap" id="mobile-menu-bar-wrap">
     <div class="mobile-menu-bar">
-      <div class="logo">
-        <a href="index.html">
-          <img src="/media/logo/logo-dark.svg" alt="neeon" width="162" height="52">
+      <div class="logo d-flex align-items-center">
+        <a class="navi" href="/home">
+          <img width="64" height="52" src="/images/cac_logo.png" alt="cac">
         </a>
+        <div class="d-flex flex-column " onclick="navigateTo('/home');" style="cursor: pointer;  ">
+          <span style="color: black;" class="ps-2 d-lg-none fw-bolder">马来西亚基督教 </span>
+          <span class="ps-2 d-lg-none fw-light" style="font-size: 12px;">卫理公会华人年议会 </span>
+          <span class="ps-2 d-none d-lg-block">马来西亚基督教 卫理公会华人年议会 </span>
+          <span class="ps-2 text-sm d-none d-lg-block">Chinese Annual Conference of
+            The Methodist Church in Malaysia</span>
+        </div>
       </div>
       <span class="sidebarBtn">
         <span class="bar"></span>
@@ -247,46 +219,9 @@
                 <li><a href="index9.html">Home 09 - Fitness</a></li>
               </ul>
             </li>
-            <li class="list menu-item-has-children">
-              <a class="animation" href="javascript:void(0)">Features</a>
-              <ul class="main-menu__dropdown sub-menu">
-                <li class="list menu-item-has-children">
-                  <a href="javascript:void(0)">
-                    Post Layout
-                  </a>
-                  <ul class="main-menu__dropdown sub-menu">
-                    <li><a href="single-post1.html">Single Post 01</a></li>
-                    <li><a href="single-post2.html">Single Post 02</a></li>
-                    <li><a href="single-post3.html">Single Post 03</a></li>
-                  </ul>
-                </li>
-                <li><a href="author.html">Author Deatils</a></li>
-              </ul>
+            <li class="list ">
+              <a class="animation navi" href="/home">Features</a>
             </li>
-            <li class="list menu-item-has-children">
-              <a class="animation" href="javascript:void(0)">Categories</a>
-              <ul class="main-menu__dropdown sub-menu">
-                <li><a href="life-style.html">Life Style</a></li>
-                <li><a href="technology.html">Technology</a></li>
-                <li><a href="gaming.html">Gaming</a></li>
-                <li><a href="graphics.html">Graphics</a></li>
-                <li><a href="politics.html">Politics</a></li>
-              </ul>
-            </li>
-            <li class="list menu-item-has-children">
-              <a class="animation" href="javascript:void(0)">Pages</a>
-              <ul class="main-menu__dropdown sub-menu">
-                <li><a href="about.html">About Us</a></li>
-                <li><a href="contact.html">Contact Us</a></li>
-                <li><a href="404.html">404</a></li>
-              </ul>
-            </li>
-            <li class="list menu-item-has-children">
-              <a class="animation" href="javascript:void(0)">Shop</a>
-              <ul class="main-menu__dropdown sub-menu">
-                <li><a href="shop.html">Shop</a></li>
-                <li><a href="single-shop.html">Shop Deatils</a></li>
-              </ul>
             </li>
           </ul>
         </nav>

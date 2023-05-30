@@ -145,6 +145,35 @@ defmodule CacWeb.ApiController do
   def webhook_post(conn, params) do
     final =
       case params["scope"] do
+        "qna" ->
+          %{status: "ok", res: params}
+
+        "set_blog_settings" ->
+          sample = %{
+            "blog_setting_id" => "18",
+            "category_id" => "21",
+            "limit" => "2",
+            "scope" => "set_blog_settings"
+          }
+
+          bs = Cac.Settings.get_blog_setting!(params["blog_setting_id"])
+
+          {:ok, res} =
+            Cac.Settings.update_blog_setting(bs, %{
+              cvalue: params["category_name"],
+              nvalue: params["category_id"]
+            })
+
+          if params["position"] != nil do
+            bs2 = Cac.Settings.get_blog_setting_by_group_key(bs.group, "position")
+            {:ok, res2} = Cac.Settings.update_blog_setting(bs2, %{nvalue: params["position"]})
+          else
+            bs2 = Cac.Settings.get_blog_setting_by_group_key(bs.group, "limit")
+            {:ok, res2} = Cac.Settings.update_blog_setting(bs2, %{nvalue: params["limit"]})
+          end
+
+          %{status: "ok", res: BluePotion.sanitize_struct(res)}
+
         "cache" ->
           if params["title"] != nil do
             c = Cac.Settings.get_cache_page_by_name(params["title"])
@@ -319,6 +348,18 @@ defmodule CacWeb.ApiController do
   def webhook(conn, params) do
     final =
       case params["scope"] do
+        "latest_sb" ->
+          Settings.latest_sb() |> BluePotion.sanitize_struct() |> Map.delete(:content)
+
+        "instagram_grid" ->
+          Settings.list_instagram_grid()
+
+        "homepage_blogs" ->
+          Settings.list_homepage_blogs()
+
+        "get_blog" ->
+          Settings.get_blog!(params["id"]) |> BluePotion.sanitize_struct()
+
         "show_fb_page_posts" ->
           FacebookHelper.page_post(params["page_id"], params["page_access_token"])
 
@@ -436,7 +477,14 @@ defmodule CacWeb.ApiController do
           Settings.get_category_children(params["id"])
 
         "blog" ->
-          Settings.get_blog!(params["id"]) |> BluePotion.s_to_map()
+          b = Settings.get_blog!(params["id"])
+
+          if b.category_id != nil do
+            next = Settings.list_blog_next_prev(b.id, b.category_id)
+            b |> BluePotion.s_to_map() |> Map.put(:meta, next)
+          else
+            b |> BluePotion.s_to_map()
+          end
 
         "blogs" ->
           put_ago = fn map ->
@@ -445,7 +493,7 @@ defmodule CacWeb.ApiController do
 
           Settings.list_blogs(params)
           |> Enum.map(&(&1 |> BluePotion.sanitize_struct()))
-          |> Enum.map(&(&1 |> put_ago.()))
+          |> Enum.map(&(&1 |> put_ago.() |> Map.delete(:content)))
 
         "get_token" ->
           # for member only
@@ -920,12 +968,12 @@ defmodule CacWeb.ApiController do
 
         preloads
         |> Poison.decode!()
-        |> IO.inspect()
         |> Enum.map(&(&1 |> convert_to_atom.()))
 
         # |> Enum.map(&(&1 |> String.to_atom()))
       end
       |> List.flatten()
+      |> IO.inspect()
 
     config = Application.get_env(:blue_potion, :contexts)
 

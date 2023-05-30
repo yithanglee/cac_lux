@@ -1,0 +1,144 @@
+<div class="col-xl-3 col-lg-8 mx-auto sticky-coloum-item ">
+  <div class="rt-sidebar sticky-wrap">
+    <div class="sidebar-wrap mb--40">
+      <div class="search-box">
+        <form action="#" class="form search-form-box">
+          <div class="form-group">
+            <input type="text" name="sarch" id="search" placeholder="Search..." class="form-control rt-search-control">
+            <button type="submit" class="search-submit">
+              <i class="fas fa-search"></i>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="rt-sidebar sticky-wrap">
+      <div class="sidebar-wrap mb--40">
+        <h2 class="rt-section-heading style-2 mb--30">
+          <span class="rt-section-text">Stay Connected </span>
+          <span class="rt-section-dot"></span>
+          <span class="rt-section-line"></span>
+        </h2>
+        <ul class="social-connection">
+          <li>
+            <a href="https://web.facebook.com/MethodistCAC" target="_blank">
+              <i class="fab fa-facebook-f facebook"></i>
+              <span class="text"><span></span> MY CAC</span>
+            </a>
+          </li>
+          <li>
+            <a href="https://www.instagram.com/cacmethodist/" target="_blank">
+              <i class="fab fa-instagram"></i>
+              <span class="text"><span></span> IG CAC</span>
+            </a>
+          </li>
+          <li>
+            <a href="https://www.youtube.com/@-cac7361" target="_blank">
+              <i class="fab fa-youtube youtube"></i>
+              <span class="text"><span></span> YT CAC</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+      <!-- end slidebar wrap  -->
+      <!-- end sidebar wrap -->
+      <div class="sidebar-wrap mb--40">
+        <div class="post-banner-style-1">
+          <a href="#" class="image-link">&nbsp;</a>
+          <div class="post-content">
+            <div class="logo">
+              <a href="index.html">
+                <img src="media/logo/logo-light.svg" alt="logo" width="162" height="52">
+              </a>
+            </div>
+            <h3 class="title">
+              <a href="#">
+                The Most Powerful
+                <span>News & Magazine WP Theme</span>
+              </a>
+            </h3>
+            <div class="btn-wrap">
+              <a href="#" class="btn-white-sm">
+                shop now
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- end slidebar wrap  -->
+      <div class="sidebar-wrap mb--40">
+        <h2 class="rt-section-heading style-2 mb--30">
+          <span class="rt-section-text">会长踪迹 </span>
+          <span class="rt-section-dot"></span>
+          <span class="rt-section-line"></span>
+        </h2>
+        <div class="row rt-gutter-10" id="l9">
+          <!-- col-6 -->
+        </div>
+      </div>
+      <!-- end slidebar wrap  -->
+      <div class="sidebar-wrap mb--40">
+        <h2 class="rt-section-heading style-2 mb--30">
+          <span class="rt-section-text">南钟报 </span>
+          <span class="rt-section-dot"></span>
+          <span class="rt-section-line"></span>
+        </h2>
+        <ul class="rt-categories sb">
+        </ul>
+      </div>
+      <!-- end slidebar wrap  -->
+      <div class="sidebar-wrap mb--40">
+        <div class="subscribe-box-style-1" data-bg-image="media/elements/element_5.png">
+          <div class="subscribe-content">
+            <h3 class="title">
+              Subscribe To Our Newsletter
+            </h3>
+            <p>
+              No spam, notifications only about
+              new products, updates.
+            </p>
+            <form action="#" method="post" class="subscribe-form rt-form">
+              <div class="rt-form-group">
+                <input type="email" name="email" id="email_1" placeholder="enter e-mail" class=" rt-form-control">
+              </div>
+              <button type="submit" class="rt-submit-btn">Subscribe Now</button>
+            </form>
+            <div class="small-text">Don’t worry, we don’t spam</div>
+          </div>
+        </div>
+      </div>
+      <!-- end sidebar wrap -->
+      <div class="sidebar-wrap mb--40 d-none">
+        <h2 class="rt-section-heading style-2 mb--30">
+          <span class="rt-section-text">Tags </span>
+          <span class="rt-section-dot"></span>
+          <span class="rt-section-line"></span>
+        </h2>
+        <div class="tag-list">
+          <a href="#" class="tag-link">beautiful</a>
+          <a href="#" class="tag-link">travel</a>
+          <a href="#" class="tag-link">technology</a>
+          <a href="#" class="tag-link">chemical</a>
+          <a href="#" class="tag-link">chemical</a>
+          <a href="#" class="tag-link">politics</a>
+          <a href="#" class="tag-link">business</a>
+          <a href="#" class="tag-link">makeup</a>
+          <a href="#" class="tag-link">social</a>
+        </div>
+      </div>
+      <!-- end sidebar wrap -->
+    </div>
+    <!-- end rt-sidebar -->
+  </div>
+  <!-- end col -->
+  <script type="text/javascript">
+  CacBlog.populateSb()
+  $("#l9").html('')
+
+  pblogs = App.api("blogs", { category: "会督特区" })
+
+  pblogs.forEach((blog, i) => {
+    // $("#l8").append(CacBlog.setEventCard(blog, i))
+    $("#l9").append(CacBlog.setTrailCard(blog, i))
+  })
+  </script>

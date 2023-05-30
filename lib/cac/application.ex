@@ -29,6 +29,7 @@ defmodule Cac.Application do
     end
 
     File.rm_rf("./priv/static/images/uploads")
+    File.rm_rf("./priv/static/wp-content/uploads")
     File.ln_s("#{File.cwd!()}/media/", "./priv/static/images/uploads")
 
     File.rm_rf("./priv/static/wp-content/uploads")

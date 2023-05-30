@@ -1,71 +1,104 @@
 <link rel="stylesheet" href="/css/datatables.min.css" />
 <script type="text/javascript" src="/js/datatables.min.js"></script>
-<!--City News Start-->
-<section class="wf100 city-news p75 pt-lg-8">
-  <div class="hero-pattern3" style="height: 150vh;position: absolute;width: 100vw; z-index: -1;">
-  </div>
-  <div class="container">
-    <div class="title-style-3" aria-label="category">
-      <h3>Title</h3>
-      <p>Subtitle</p>
+<style type="text/css">
+.row.grid_view {
+  margin-top: 8vh !important;
+  margin-bottom: 8vh !important;
+}
+#cbii_wrapper .row:first-child {
+  padding: 0px !important;
+  margin-top: 8vh;
+}
+#cbii_wrapper .row:last-child {
+  padding: 0px !important;
+}
+.dataTables_info {
+  font-size: 22px;
+  padding-top: 0px !important;
+  font-weight: bold;
+}
+</style>
+<main style="min-height: 90vh; ">
+  <section class=" ">
+    <div class="banner inner-banner">
+      <div class="container">
+        <nav class="rt-breadcrumb-wrap" aria-label="breadcrumb">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+              <a href="/home" class="navi">
+                <i class="fas fa-home"></i>
+                Home
+              </a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page" aria-label="category">
+              Blog
+            </li>
+          </ol>
+        </nav>
+      </div>
     </div>
-    <div class="row gy-4" id="book_intros">
+    <div class="container py-4">
+      <div class="row " id="book_intros">
+      </div>
     </div>
-  </div>
-</section>
+  </section>
+</main>
+<!--City News End-->
+<script type="text/javascript">
+var category_id = pageParams.id
+var category = categories.filter((v, i) => {
+  return v.id == category_id
+})[0];
+var title = category.name
+if (category.alias != null) {
+  title = category.alias
+}
 
-  <!--City News End-->
-  <script type="text/javascript">
-  var category_id = pageParams.id
-  var category = categories.filter((v, i) => {
-    return v.id == category_id
-  })[0];
-  var title = category.name
-  if (category.alias != null) {
-    title = category.alias
-  }
-
-  $("div[aria-label='category']").html(`
- <h3>` + title + `</h3>
+$("li[aria-label='category']").html(`
+` + title + `
   `)
-  var blogSource = new phoenixModel({
-    onDrawFn: () => {
-      formatDate()
-    },
-    xcard: (params) => {
-      console.log(params)
-      var data = params
-      var author = "n/a"
-      try {
-        author = data.author.name
-      } catch (e) {
-        author = "n/a"
-      }
-      var img = '/images/bg.jpg'
+var blogSource = new phoenixModel({
+  onDrawFn: () => {
+    formatDate()
+
+  },
+  xcard: (params) => {
+    console.log(params)
+    var data = params
+    var author = "n/a"
+    try {
+      author = data.author.name
+    } catch (e) {
+      author = "n/a"
+    }
+    var img = '/images/placeholder.png'
+    if (data.img_url != null) {
+
       try {
         img = data.img_url
       } catch (e) {
-        img = '/images/bg.jpg'
+        img = '/images/placeholder.png'
       }
-      var alias = data.category.alias
-      if (data.category.alias == null) {
-        alias = data.category.name
-      }
-      var card = `
+    }
+    var alias = data.category.alias
+    if (data.category.alias == null) {
+      alias = data.category.name
+    }
+    var ms = (200 * (data.index + 1))
+    var card = `
 
 
 
 
 
             <div onclick="navigateTo('/blogs/` + data.id + `/` + data.title + `')">
-              <div class="d-flex justify-content-center"
-                  style="cursor: pointer;   position: relative; height: 400px;">
+              <div class="d-flex justify-content-center wow fadeInUp" data-wow-delay="` + ms + `ms" data-wow-duration="800ms" 
+                  style="cursor: pointer;   position: relative; height: 300px;">
 
                 <div 
                   class="rounded py-2" style="
-                  height: 400px;
-       
-                  width:  260px;
+                  height: 300px;
+                  width:  300px;
                        position: absolute;
                   background-position: center;
                   background-size: contain; 
@@ -74,72 +107,62 @@
 
                 <div style=" background: #ffffff05;
                         position: absolute;
-                        height: 60vh;
                         width: 100%;
-
                         background-attachment: fixed;
                         ">
                 </div>
 
                 <div 
                   class="rounded py-2" style="
-                  height: 400px;
-                  width:  260px;
-                                       backdrop-filter: 
-                  blur(10px); 
+                  height: 300px;
+                  width:  300px;
+                  backdrop-filter: blur(10px); 
                   background-position: center;
                   background-repeat: no-repeat;
                   background-size: contain; 
                   background-image: url('` + img + `');">
-
                 </div>
-
-
               </div>
-              <div class="d-flex flex-column gap-2 py-2 px-2 px-lg-0" style="min-height: 150px;">
-                <small class=" text-muted border-bottom pb-2 mb-2">` + data.category.name + ` ` + alias + `</small>
-                <div class="d-flex flex-column justify-content-start align-items-center" style="min-height: 100px;">
-                  <div style="cursor: pointer;" >
-                    <div class=" fw-bold">` + data.title + `</div>
-                  </div>
-                 <a class="navi btn btn-primary btn-sm mt-4" href="/blogs/` + data.id + `/` + data.title + `">
-                  <i class="fa fa-book-open pe-2"></i>
-                  <span>Read</span>
-                 </a>
-                
+              <div class="post-content">
+                  <a href="/blog_listing/` + data.category.id + `/` + data.category.title + `" class="rt-post-cat-normal">` + data.category.name + `</a>
+                  <h3 class="post-title">
+                    <a href="/blogs/` + data.id + `/` + data.title + `" class="navi">
+                      ` + data.title.split("-")[0] + `<br><small>` + (data.title.split("-")[1] == null ? "" : data.title.split("-")[1]) + `</small>
+                    </a>
+                  </h3>
+                 
                 </div>
-              </div>  
 
             </div>
           `
-      return card
-    },
+    return card
+  },
 
-    data: {
-      dom: '<"row px-4"<"col-lg-6 col-12"i><"col-12 col-lg-6"p>><"row grid_view "><"list_view d-none"t><"row px-4"<"col-lg-6 col-12"><"col-lg-6 col-12"p>>',
-      preloads: ["category"],
-      additional_join_statements: [{ category: "category" }],
-      additional_search_queries: ["a.category_id=" + category_id],
-      // category_id: category_id,
-      pageLength: 12,
-      sorts: [
-        [1, 'desc']
-      ]
+  data: {
+    dom: '<"row px-4"<"col-lg-6 col-12"i><"col-12 col-lg-6"p>><"row grid_view "><"list_view d-none"t><"row px-4"<"col-lg-6 col-12"><"col-lg-6 col-12"p>>',
+    preloads: ["category"],
+    additional_join_statements: [{ category: "category" }],
+    additional_search_queries: ["a.category_id=" + category_id],
+    // category_id: category_id,
+    pageLength: 12,
+    sorts: [
+      [1, 'desc']
+    ]
+  },
+  columns: [{
+      label: 'title',
+      data: 'title'
     },
-    columns: [{
-        label: 'title',
-        data: 'title'
-      },
-      {
-        label: 'id',
-        data: 'id'
-      }
-    ],
+    {
+      label: 'id',
+      data: 'id'
+    }
+  ],
 
-    moduleName: "Blog",
-    link: "Blog",
-    buttons: [],
-    tableSelector: "#" + 'cbii'
-  })
-  blogSource.load('cbii', "#book_intros")
-  </script>
+  moduleName: "Blog",
+  link: "Blog",
+  buttons: [],
+  tableSelector: "#" + 'cbii'
+})
+blogSource.load('cbii', "#book_intros")
+</script>

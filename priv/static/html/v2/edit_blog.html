@@ -1,0 +1,172 @@
+<div class="row">
+  <div class="col-12 col-lg-10 offset-lg-1">
+    <div class="card">
+      <div class="card-header">
+        blog
+      </div>
+      <div class="card-body" id="edit_blog">
+        <form class="with_mod" id="Blog" module="Blog">
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+
+var authorSource1 = new phoenixModel({
+  onDrawFn: () => {
+
+  },
+  columns: [
+
+    { label: 'Action', data: 'id' }
+  ],
+  moduleName: "Author",
+  link: "Author",
+  customCols: null,
+  buttons: [],
+  tableSelector: "#1a"
+})
+getTableData(authorSource1)
+
+
+var categorySource1 = new phoenixModel({
+  onDrawFn: () => {
+
+  },
+  columns: [
+
+    { label: 'Action', data: 'id' }
+  ],
+  moduleName: "Category",
+  link: "Category",
+  customCols: null,
+  buttons: [],
+  tableSelector: "#1c"
+})
+getTableData(categorySource1)
+
+
+var stored_mediaSource = new phoenixModel({
+  onDrawFn: () => {
+
+  },
+  columns: [
+
+    { label: 'Action', data: 'id' }
+  ],
+  moduleName: "StoredMedia",
+  link: "StoredMedia",
+  customCols: null,
+  buttons: [],
+  tableSelector: "#1c"
+})
+getTableData(stored_mediaSource, 3000)
+  var customCols = [
+
+  {
+    name: "General",
+    list: ['id',
+      { label: 'inserted_at'  },
+      { label: 'author_id', selection: authorSource1.allData },
+      { label: 'category_id', selection: categorySource1.allData },
+      { label: 'blog_type', selection: ['blog', 'page'] },
+      'title',
+      { label: 'subtitle', binary: true },
+      'excerpt',
+    ]
+  },
+  {
+    name: "Content",
+    list: [
+      { label: 'content', editor: true },
+
+      { label: 'img_url', upload: true },
+      { label: 'thumbnail_img', upload: true },
+    ]
+  },
+  {
+    name: "Js",
+    list: [
+
+      { label: 'attachment_id', selection: stored_mediaSource.allData },
+      { label: 'javascript_binary', binary: true },
+
+    ]
+  }
+
+
+
+
+
+];
+
+
+
+
+
+
+
+
+$(document).ready(() => {
+  function processBlogForm(dom) {
+
+    var formData = new FormData($(dom)[0])
+
+    formData.append("token", window.userToken)
+    formData.append("scope", "update_blog")
+
+    $.ajax({
+        url: "/api/webhook",
+        dataType: "json",
+        headers: {
+          "Authorization": "Basic " + window.userToken
+        },
+        method: "POST",
+        enctype: "multipart/form-data",
+        processData: false, // tell jQuery not to process the data
+        contentType: false,
+        data: formData
+      })
+      .done(function(j) {
+        if (j.status == "ok") {
+
+          App.notify("Added!", {
+            type: "success"
+          });
+        
+        } else {
+          App.notify("Not added!", {
+            type: "danger"
+          });
+         
+        }
+        clear_book();
+      }).fail(() => {
+        App.notify("Not added!", {
+          type: "danger"
+        });
+      
+      })
+
+  }
+
+
+  // getTableData(roleSource)
+
+  data =
+    App.api("get_blog", {id: pageParams.id  })
+
+
+
+  createForm(data, null, customCols, function(){
+   
+  })
+
+
+
+
+   
+
+})
+</script>

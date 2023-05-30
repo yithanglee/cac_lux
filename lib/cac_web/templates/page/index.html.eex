@@ -2,14 +2,40 @@
 <link rel="stylesheet" type="text/css" href="/css/pagination.min.css" />
 <script src="/js/pdfobject.min.js"></script>
 <style type="text/css">
+#preloader {
+  background: url("/images/cac_logo_small.png") rgba(255, 255, 255, 0.99) no-repeat scroll center center;
+  height: 100%;
+  left: 0;
+  overflow: visible;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 9999999;
+}
 #pdf-render {
   display: none;
-  height: 100vh;
+  height: 86vh;
   position: fixed;
-  top: 1vh;
+  top: 12vh;
   left: 0;
   width: 100vw;
   z-index: 10;
+}
+#close-pdf {
+  font-size: 1rem;
+  color: var(--color-white);
+  background: var(--color-primary);
+  width: 40px;
+  height: 40px;
+  line-height: 40px;
+  text-align: center;
+  border-radius: 5px;
+  position: fixed;
+  right: 30px;
+  top: 17vh;
+  z-index: 99;
+  cursor: pointer;
+  overflow: hidden;
 
 }
 </style>
@@ -30,8 +56,8 @@
       <div class="offcanvas-header">
         <div class="offcanvas-logo">
           <div class="site-branding">
-            <a class="dark-logo" href="index.html"><img width="162" height="52" src="media/logo/logo-dark.svg" alt="neeon"></a>
-            <a class="light-logo" href="index.html"><img width="162" height="52" src="media/logo/logo-light.svg" alt="neeon"></a>
+            <a class="dark-logo navi" href="/home"><img width="162" height="52" src="/images/cac_logo.png" alt="cacmethodist"></a>
+            <a class="light-logo navi" href="/home"><img width="162" height="52" src="/images/cac_logo.png" alt="cacmethodist"></a>
           </div>
         </div>
         <div class="close-btn offcanvas-close">
@@ -42,15 +68,26 @@
       </div>
       <div class="offcanvas-widget">
         <h3 class="offcanvas-widget-title">About Us</h3>
-        <p>
-          The argument in favor of using filler text
-          goes something like this: If you use arey
-          real content in the Consulting Process
-          anytime you reachtent.
-        </p>
+        <div class="p-2 d-flex flex-column align-items-start justify-content-center gap-3 mb-4">
+              <div class="d-flex flex-column align-items-start justify-content-center gap-2">
+                <span class="fs-5">为主多结果子的生命</span>
+                <span>
+                  称之为更新的生命
+                </span>
+              </div>
+              <small class=" ">
+                <strong class="pe-1">改变</strong>为了多结果子
+              </small>
+              <small class="">
+                <strong class="pe-1"> 装备</strong>为了不断成长
+              </small>
+              <small class=" ">
+                <strong class="pe-1"> 传承</strong>为了兴起多代
+              </small>
+            </div>
       </div>
       <div class="offcanvas-widget">
-        <h3 class="offcanvas-widget-title">Instagram</h3>
+        <h3 class="offcanvas-widget-title">Gallery</h3>
         <div class="insta-gallery">
           <div class="galleryitem">
             <a href="https://www.instagram.com/">
@@ -89,126 +126,51 @@
         <ul class="contact-info-list widget-list">
           <li class="widget-list-item">
             <i class="fas fa-map-marker-alt list-icon"></i>
-            Chicago 12, Melborne City, USA
+            6th Floor, Wisma Methodist, Lorong Hang Jebat 50150 Kuala Lumpur, Malaysia
           </li>
           <li class="widget-list-item">
             <i class="fas fa-phone-alt list-icon"></i>
-            <a href="tel:123333000999" class="widget-list-link">
-              (123) 333-000-999
+            <a href="tel:0320702501" class="widget-list-link">
+             03-2070 2501
             </a>
           </li>
           <li class="widget-list-item">
             <i class="fas fa-envelope list-icon"></i>
-            <a href="mailto:info@example.com" class="widget-list-link">
-              neeon@gmail.com
+            <a href="mailto:cacmcm@methodist.org.my" class="widget-list-link">
+              cacmcm@methodist.org.my
             </a>
           </li>
         </ul>
         <ul class="footer-social style-2 gutter-15">
           <li class="social-item">
-            <a href="https://www.facebook.com/" class="social-link fb" target="_blank">
+            <a href="https://web.facebook.com/MethodistCAC" class="social-link fb" target="_blank">
               <i class="fab fa-facebook-f"></i>
             </a>
           </li>
           <li class="social-item">
-            <a href="https://twitter.com/" class="social-link tw" target="_blank">
-              <i class="fab fa-twitter"></i>
+            <a href="https://www.instagram.com/cacmethodist/" class="social-link tw" target="_blank">
+              <i class="fab fa-instagram"></i>
             </a>
           </li>
           <li class="social-item">
-            <a href="https://vimeo.com/" class="social-link vm" target="_blank">
-              <i class="fab fa-vimeo-v"></i>
+            <a href="https://www.youtube.com/@-cac7361" class="social-link yt" target="_blank">
+              <i class="fab fa-youtube"></i>
             </a>
           </li>
-          <li class="social-item">
-            <a href="https://www.pinterest.com/" class="social-link pn" target="_blank">
-              <i class="fab fa-pinterest-p"></i>
-            </a>
-          </li>
-          <li class="social-item">
-            <a href="https://www.whatsapp.com/" class="social-link wh" target="_blank">
-              <i class="fab fa-whatsapp"></i>
-            </a>
-          </li>
+      
+     
         </ul>
       </div>
     </div>
   </div>
   <!-- End  offcanvas menu -->
-  <!-- Start Cart Wrap -->
-  <div class="cart-wrap" id="cart-wrap" data-position="left">
-    <div class="cart-content">
-      <div class="cart-header">
-        <span class="cart-title d-inlie-block">Cart</span>
-        <button type="button" class="cart-menu-btn menu-close-btn">
-          <span class="menu-btn-icon">
-            <i class="fas fa-times"></i>
-          </span>
-        </button>
-      </div>
-      <ul class="cart-items ">
-        <li class="d-flex ">
-          <div class="item-figure">
-            <a href="#">
-              <img src="media/gallery/ins-gallery_1.jpg" alt="Cart" width="100" height="90">
-            </a>
-            <div class="item-dismiss">
-              <a href="#"><i class="fas fa-times"></i></a>
-            </div>
-          </div>
-          <div class="item-description">
-            <span class="item-main-title"><a href="#">Animal</a></span>
-            <span class="item-amount d-flex align-items-center"><span class="item-quantity">1</span>X<span class="item-price">$12.00</span></span>
-          </div>
-        </li>
-        <li class="d-flex">
-          <div class="item-figure">
-            <a href="#">
-              <img src="media/gallery/ins-gallery_2.jpg" alt="Cart" width="100" height="90">
-            </a>
-            <div class="item-dismiss">
-              <a href="#"><i class="fas fa-times"></i></a>
-            </div>
-          </div>
-          <div class="item-description">
-            <span class="item-main-title"><a href="#">Sports</a></span>
-            <span class="item-amount d-flex align-items-center"><span class="item-quantity">1</span>X<span class="item-price">$18.00</span></span>
-          </div>
-        </li>
-        <li class="d-flex">
-          <div class="item-figure">
-            <a href="#">
-              <img src="media/gallery/ins-gallery_3.jpg" alt="Cart" width="100" height="90">
-            </a>
-            <div class="item-dismiss">
-              <a href="#"><i class="fas fa-times"></i></a>
-            </div>
-          </div>
-          <div class="item-description">
-            <span class="item-main-title"><a href="#">Fashion</a></span>
-            <span class="item-amount d-flex align-items-center"><span class="item-quantity">1</span>X<span class="item-price">$20.00</span></span>
-          </div>
-        </li>
-      </ul>
-      <div class="cart-footer">
-        <ul class="total-amount">
-          <li class="title">Subtotal:</li>
-          <li class="amount">$50.00</li>
-        </ul>
-        <ul class="action-buttons">
-          <li><a href="#" class="rt-submit-btn">VIEW CART</a></li>
-          <li><a href="#" class="rt-submit-btn">CHECKOUT</a></li>
-        </ul>
-      </div>
-    </div>
-  </div>
-  <!-- End Cart Wrap -->
+
   <!-- Start Search  -->
   <div id="template-search" class="template-search">
     <button type="button" class="close">×</button>
-    <form class="search-form">
-      <input type="search" value="" placeholder="Search" />
-      <button type="submit" class="search-btn btn-ghost style-1">
+    <form class="search-form" action="javascript:void(0);" >
+      <input type="search" name="hsearch" value="" placeholder="Search" />
+      <button type="submit"  class="search-btn btn-ghost style-1">
         <i class="flaticon-search"></i>
       </button>
     </form>
@@ -230,6 +192,10 @@
   <a href="javascript:void(0)" id="back-to-top">
     <i class="fas fa-angle-double-up"></i>
   </a>
+  <a href="javascript:void(0)" class="d-none" id="close-pdf">
+    <i class="fas fa-times"></i>
+  </a>
+
   <!-- End back to top -->
 </div>
 <%= if false do %>

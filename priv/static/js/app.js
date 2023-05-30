@@ -50,7 +50,10 @@ window.addEventListener(
 function setCurrentPage(fn_name, title) {
   App.show();
   var adder = new Function(fn_name);
-  var stateObj = { fn: fn_name, title: title };
+  var stateObj = {
+    fn: fn_name,
+    title: title
+  };
   $("title").html(title)
   history.pushState(stateObj, title, "?get=" + title);
   try {
@@ -58,7 +61,11 @@ function setCurrentPage(fn_name, title) {
   } catch (e) {
 
     // setCurrentPage("window.init();", "Home")
-    App.notify({ message: "route not available" }, { type: "warning" })
+    App.notify({
+      message: "route not available"
+    }, {
+      type: "warning"
+    })
 
   }
   App.hide();
@@ -145,7 +152,9 @@ let App = {
         var parent = key.split("\[")[0]
         var child = key.split("\[")[1].split("\]")[0]
         childMap[child] = value;
-        object[parent] = { ...object[parent], ...childMap };
+        object[parent] = { ...object[parent],
+          ...childMap
+        };
 
       } else {
         // Reflect.has in favor of: object.hasOwnProperty(key)
@@ -226,6 +235,57 @@ let App = {
       $(".wrapper-ring").hide()
     }, 3000)
   },
+
+
+  toast(options) {
+    var default_options = {
+      selector: "#myToast",
+      body: ".toast-body",
+      title: ".toast-header",
+      // foot: ".modal-footer",
+      header: `<img src="/images/cac_logo_small.png" style="height: 35px;" class="rounded me-2" alt="...">
+        <strong class="me-auto">CAC MY Methodist</strong>
+        <small>0 mins ago</small>
+        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>`,
+      content: "Here is content for modal body",
+      footer: "",
+      drawFn: null,
+      autoClose: true
+
+    }
+
+    var keys =
+      Object.keys(default_options)
+    keys.forEach((v, i) => {
+      this[v] = default_options[v]
+    })
+    keys.forEach((v, i) => {
+      if (options[v] != null) {
+        this[v] = options[v]
+      }
+    })
+    $(this.selector).find(this.title).html(this.header)
+    $(this.selector).find(this.body).html(this.content)
+    $(this.selector).find(this.foot).html(this.footer)
+    // $(this.selector).modal("show")
+
+
+    var toastElList = [].slice.call(document.querySelectorAll('.toast'))
+    var toastList = toastElList.map(function(toastEl) {
+      return new bootstrap.Toast(toastEl, {
+        autohide: false
+      }).show()
+    })
+
+    this.drawFn();
+    if (this.autoClose) {
+      setTimeout(() => {
+        $(this.selector).modal("hide")
+      }, 5000);
+    }
+
+
+  },
   modal(options) {
 
     var default_options = {
@@ -236,7 +296,7 @@ let App = {
       header: "Modal Header",
       content: "Here is content for modal body",
       footer: "",
-      drawFn: enlargeModal,
+      drawFn: resetModal,
       autoClose: true
 
     }
@@ -493,16 +553,14 @@ let App = {
         <span id="crumb"></span>
       </div>`)
 
-        $("#v-pills-tab button").each((ii, v) => {
-            $(v).toggleClass("d-none")
-            if ($("#v-pills-tab button").length == (ii + 1)) {
-              $("#v-pills-tab button")[0].click()
-            }
-          setTimeout(() => {
-          }, (20 * ii) + 1)
-        })
-      setTimeout(() => {
-      }, 1)
+      $("#v-pills-tab button").each((ii, v) => {
+        $(v).toggleClass("d-none")
+        if ($("#v-pills-tab button").length == (ii + 1)) {
+          $("#v-pills-tab button")[0].click()
+        }
+        setTimeout(() => {}, (20 * ii) + 1)
+      })
+      setTimeout(() => {}, 1)
 
 
     },
@@ -537,7 +595,9 @@ let App = {
       };
 
       var setWidth = function() {
-        progressBar.css({ width: getWidth() });
+        progressBar.css({
+          width: getWidth()
+        });
       };
 
       $(document).on("scroll", setWidth);
@@ -697,7 +757,7 @@ class phoenixModel {
       data: {},
       allData: [],
       buttons: [],
-        tableButtons: [],
+      tableButtons: [],
       table: null,
       columns: [],
       customCols: null,
@@ -752,7 +812,10 @@ class phoenixModel {
     this.load = function(makeid, dom) {
       if (makeid != null) {
         this.tableSelector = "#" + makeid
-        this.makeid = { id: makeid, dom: dom }
+        this.makeid = {
+          id: makeid,
+          dom: dom
+        }
         App.Page.createTable(makeid, dom)
       } else {
         App.Page.createTable(this.makeid.id, this.makeid.dom)
@@ -1063,7 +1126,9 @@ function populateTable(dataSource) {
       })
 
       j.forEach((xx, xi) => {
-        $($(v).find(".jsv" + dataSource.makeid.id)[xi]).jsonViewer(table.data()[i][xx.data], { collapsed: true });
+        $($(v).find(".jsv" + dataSource.makeid.id)[xi]).jsonViewer(table.data()[i][xx.data], {
+          collapsed: true
+        });
       })
 
     })
@@ -1687,7 +1752,9 @@ function showAssocData(params) {
     subSource.tableSelector = "#" + preferedSelector
     console.log(map)
     console.log(params.subSource)
-    subSource.data = { ...map, ...subSource.data };
+    subSource.data = { ...map,
+      ...subSource.data
+    };
     var label_keys =
       Object.keys(subSource.data)
     label_keys.forEach((v, i) => {
@@ -1929,13 +1996,20 @@ function repopulateFormInput(data, formSelector) {
   var inputs = $(formSelector).find("[name]");
   $(inputs).each(function(i, v) {
     var name = $(v).attr("aria-label");
+    var defaultVal = $(v).attr("has-default")
     var hidden_value = $(v).attr("aria-value");
 
-
-
     if ($(v).prop("localName") == "select") {
-      // $(v).selectpicker("val", data[name]);
-      $(v).val(data[name]);
+      console.log("selct def val")
+      if (data[name] == null) {
+
+      } else {
+        $(v).val(data[name]);
+
+      }
+    } else if (defaultVal == "true" && data[name] == null) {
+
+
     } else if (hidden_value != null) {
       $(v).val(hidden_value);
     } else if ($(v).hasClass("code")) {
@@ -1956,12 +2030,12 @@ function repopulateFormInput(data, formSelector) {
             </select>
           </div>`
 
-        
+
         $("#editor1").val(data[name])
         $("#editor1").richText({
           // imageHTML: select_input
         })
-// whenever the add button is clicked, maybe pop up the modal to choose image instead?
+        // whenever the add button is clicked, maybe pop up the modal to choose image instead?
         // $("")
 
       } catch (e) {
@@ -2040,6 +2114,7 @@ function repopulateFormInput(data, formSelector) {
         }
       }
     }
+
 
 
   });
@@ -2431,7 +2506,31 @@ function generateInputs(j, v, object, qv) {
 
   }
 
-  return input2;
+  console.log("i2")
+  // var dom2 = new DOMParser().parseFromString(input2, "text/xml")
+  var div = document.createElement("div")
+  div.innerHTML = input2
+
+
+  if (qv.default != null) {
+
+    default_val = qv.default()
+
+    if ($(div).find("input").length > 0) {
+
+      $(div).find("input").val(default_val)
+      $(div).find("input").attr("has-default", "true")
+      $(div).find("input").attr("value", default_val)
+    } else if ($(div).find("select").length > 0) {
+
+      $(div).find("select").val(default_val)
+      $(div).find("select").attr("has-default", "true")
+      $(div).find("select").attr("value", default_val)
+    }
+
+  }
+
+  return div.firstChild;
 }
 
 function appendInputs(xv, cols, j, object) {
@@ -2529,7 +2628,9 @@ function form_new(id, data, customCols, postFn, onDrawFn) {
     .html("Create  New " + dataSource.moduleName);
   $(default_selector).find(".modal-body").html(form);
   createForm({
-    ...{ id: 0 },
+    ...{
+      id: 0
+    },
     ...data
   }, dataSource.table, customCols, postFn, onDrawFn);
 
@@ -3553,7 +3654,8 @@ function formatDate() {
 
   $(".format_date").each((i, v) => {
     // console.log() 
-    var d = $(v).html();
+    var d = $(v).html().replace(" ", "");
+
     if (Date.parse(d) > 0) {
       var date = new Date(d)
       var day;
@@ -3563,13 +3665,16 @@ function formatDate() {
         day = "0" + date.getDate()
       }
       var month;
+      var MONTH_NAMES = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
       if ((date.getMonth() + 1).toString().length > 1) {
         month = (date.getMonth() + 1)
       } else {
         month = "0" + (date.getMonth() + 1)
       }
+      month = MONTH_NAMES[date.getMonth()]
 
       $(v).html("<b>" + day + "-" + month + "-" + date.getFullYear() + "</b>")
+      $(v).html("<b>" + month + " " + day + " " + date.getFullYear() + "</b>")
     } else {
       $(v).html(d)
 
@@ -3626,6 +3731,7 @@ function formatDate() {
 
   })
 }
+
 function dataFormatter(dtdata, v) {
   var input2 = null;
   var formatType = ['formatFloat', 'showBoolean', 'formatDateTime', 'showImg', 'showChild']
@@ -3657,9 +3763,9 @@ function dataFormatter(dtdata, v) {
       }
       break;
     case 'showChild':
-      input2 = dtdata[v.xdata.child][v.xdata.data]
       if (v.xdata.showImg) {
         try {
+          input2 = dtdata[v.xdata.child][v.xdata.data]
           console.log("attemp to show img...")
           if (dtdata[v.xdata.child][0] != null) {
             input2 = `
@@ -3794,7 +3900,9 @@ let ColumnFormater = {
         // populate the list
         var pg = []
         var perc = 1 / progressList.length * 100
-        var check_index = progressList.findIndex((v, i) => { return v == content });
+        var check_index = progressList.findIndex((v, i) => {
+          return v == content
+        });
         progressList.forEach((progress, pi) => {
           if (check_index >= pi) {
             var bar = `<div class="progress-bar bg-warning " role="progressbar" style="width: ` + perc + `%;" ></div>

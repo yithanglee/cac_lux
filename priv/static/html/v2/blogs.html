@@ -8,6 +8,12 @@ var tab_list = [{
     </div>`,
   },
   {
+    title: "BlogSetting",
+    icon: "fa fa-cog",
+    content: `<div id="tab1as">
+    </div>`,
+  },
+  {
     title: "Authors",
     icon: "fa fa-users",
     content: `<div id="tab2"></div>`,
@@ -32,9 +38,169 @@ $("button#Categories-tab").click(() => {
   $("button#AssignCategories-tab").remove()
 })
 
+blog_settingSource1 = new phoenixModel({
+  onDrawFn: () => {
+
+  },
+  columns: [
+
+    { label: 'Action', data: 'id' }
+  ],
+  moduleName: "BlogSetting",
+  link: "BlogSetting",
+  customCols: null,
+  buttons: [],
+  tableSelector: "#1c"
+})
+getTableData(blog_settingSource1, 200)
 
 
+var customCols = null
+var random_id = "gs"
+blog_settingSource = new phoenixModel({
+  columns: [
 
+    { label: 'id', data: 'id' },
+    { label: 'Group', data: 'group' },
+    { label: 'Key', data: 'key' },
+    { label: 'CharVal', data: 'cvalue' },
+    { label: 'NumVal', data: 'nvalue' },
+
+    { label: 'Action', data: 'id' }
+
+  ],
+  moduleName: "BlogSetting",
+  link: "BlogSetting",
+  customCols: customCols,
+  buttons: [{
+    buttonType: "grouped",
+    name: "Manage",
+    color: "outline-warning",
+    buttonList: [
+
+      {
+        name: "Edit",
+        iconName: "fa fa-edit",
+        color: "btn-sm btn-outline-warning",
+        onClickFunction: editData,
+        fnParams: {
+          drawFn: enlargeModal,
+          customCols: customCols
+        }
+      },
+      {
+        name: "Delete",
+        iconName: "fa fa-trash",
+        color: "outline-danger",
+        onClickFunction: deleteData,
+        fnParams: {}
+      }
+    ],
+    fnParams: {
+
+    }
+  }, ],
+  tableSelector: "#" + random_id
+})
+blog_settingSource.load(random_id, "#tab1as")
+
+function editData2(params) {
+  console.log("editing data...")
+  var dt = params.dataSource;
+  window.currentSelector = dt.tableSelector
+  var table = dt.table;
+  var r = table.row(params.row);
+  var rowData = table.data()[params.index]
+
+  window.open("/admin/blogs/" + rowData.id)
+  // navigateTo("/admin/blogs/" + rowData.id)
+}
+
+function smB() {
+  App.form("form#set", "set_blog_settings")
+}
+
+function setBlogSettings2(params) {
+  resetModal()
+  console.log("editing data...")
+  var dt = params.dataSource;
+  window.currentSelector = dt.tableSelector
+  var table = dt.table;
+  var r = table.row(params.row);
+  var rowData = table.data()[params.index]
+
+  var opts = []
+
+  blog_settingSource1.allData.forEach((d, i) => {
+    if (d.key == "stored_media_id") {
+
+      opts.push(`<option value="` + d.id + `">` + d.group + `</option>`)
+    }
+  })
+
+
+  var html = `
+
+<form id="set">
+<input type="hidden" name="category_name" value="` + rowData.name + `">
+<input type="hidden" name="category_id" value="` + rowData.id + `">
+  <select name="blog_setting_id"  class="form-control">
+    ` + opts.join() + `
+  </select>
+
+  <label>Position</label>
+  <input type="number" name="position" class="form-control">
+
+  <div id="submit" class="btn btn-primary" onclick="smB()">Submit
+  </div>
+</form>
+
+
+`
+  App.modal({ header: "Set", content: html, selector: "#mySubModal", autoClose: false })
+
+}
+
+function setBlogSettings(params) {
+  resetModal()
+  console.log("editing data...")
+  var dt = params.dataSource;
+  window.currentSelector = dt.tableSelector
+  var table = dt.table;
+  var r = table.row(params.row);
+  var rowData = table.data()[params.index]
+
+  var opts = []
+
+  blog_settingSource1.allData.forEach((d, i) => {
+    if (d.key == "category_id") {
+
+      opts.push(`<option value="` + d.id + `">` + d.group + `</option>`)
+    }
+  })
+
+
+  var html = `
+
+<form id="set">
+<input type="hidden" name="category_name" value="` + rowData.name + `">
+<input type="hidden" name="category_id" value="` + rowData.id + `">
+  <select name="blog_setting_id"  class="form-control">
+    ` + opts.join() + `
+  </select>
+
+  <label>Blogs to show</label>
+  <input type="number" name="limit" class="form-control">
+
+  <div id="submit" class="btn btn-primary" onclick="smB()">Submit
+  </div>
+</form>
+
+
+`
+  App.modal({ header: "Set", content: html, selector: "#mySubModal", autoClose: false })
+
+}
 
 function assignChildren(params) {
 
@@ -113,11 +279,27 @@ var readyTables = [];
 var random_id = "smm"
 var customCols = [
   'id',
-  'name', { label: 'f_type', selection: ["image", "pdf"] },
+  {
+    label: 'name',
+    default: () => {
+      var d = new Date()
+      return d.toISOString()
+    }
+  }, {
+    label: 'f_type',
+    selection: ["image", "pdf"],
+    default: () => {
+      return 'image'
+    }
+  },
   's3_url',
   { label: 'img_url', upload: true }
 ]
 stored_mediaSource = new phoenixModel({
+  data: {
+
+
+  },
   columns: [
 
     { label: 'id', data: 'id' },
@@ -131,34 +313,49 @@ stored_mediaSource = new phoenixModel({
   moduleName: "StoredMedia",
   link: "StoredMedia",
   customCols: customCols,
-  buttons: [{
-    buttonType: "grouped",
-    name: "Manage",
-    color: "outline-warning",
-    buttonList: [
+  buttons: [
 
-      {
-        name: "Edit",
-        iconName: "fa fa-edit",
-        color: "btn-sm btn-outline-warning",
-        onClickFunction: editData,
-        fnParams: {
-          drawFn: enlargeModal,
-          customCols: customCols
-        }
-      },
-      {
-        name: "Delete",
-        iconName: "fa fa-trash",
-        color: "outline-danger",
-        onClickFunction: deleteData,
-        fnParams: {}
+    {
+      name: "Set To Homepage",
+      iconName: "fa fa-cogs",
+      color: "btn-sm btn-outline-warning",
+      onClickFunction: setBlogSettings2,
+      fnParams: {
+
+
       }
-    ],
-    fnParams: {
+    },
 
-    }
-  }, ],
+
+    {
+      buttonType: "grouped",
+      name: "Manage",
+      color: "outline-warning",
+      buttonList: [
+
+        {
+          name: "Edit",
+          iconName: "fa fa-edit",
+          color: "btn-sm btn-outline-warning",
+          onClickFunction: editData,
+          fnParams: {
+            drawFn: enlargeModal,
+            customCols: customCols
+          }
+        },
+        {
+          name: "Delete",
+          iconName: "fa fa-trash",
+          color: "outline-danger",
+          onClickFunction: deleteData,
+          fnParams: {}
+        }
+      ],
+      fnParams: {
+
+      }
+    },
+  ],
   tableSelector: "#" + random_id
 })
 stored_mediaSource.load(random_id, "#tab4")
@@ -258,43 +455,59 @@ categorySource = new phoenixModel({
   moduleName: "Category",
   link: "Category",
   customCols: customCols,
-  buttons: [{
-    buttonType: "grouped",
-    name: "Manage",
-    color: "outline-warning",
-    buttonList: [
+  buttons: [
 
-      {
-        name: "Assign Children",
-        iconName: "fa fa-edit",
-        color: "btn-sm btn-outline-warning",
-        onClickFunction: assignChildren,
-        fnParams: {
+    {
+      name: "Assign Children",
+      iconName: "fa fa-edit",
+      color: "btn-sm btn-outline-warning",
+      onClickFunction: assignChildren,
+      fnParams: {
 
 
-        }
-      }, {
-        name: "Edit",
-        iconName: "fa fa-edit",
-        color: "btn-sm btn-outline-warning",
-        onClickFunction: editData,
-        fnParams: {
-          drawFn: enlargeModal,
-          customCols: customCols
-        }
-      },
-      {
-        name: "Delete",
-        iconName: "fa fa-trash",
-        color: "outline-danger",
-        onClickFunction: deleteData,
-        fnParams: {}
       }
-    ],
-    fnParams: {
+    },
 
-    }
-  }, ],
+    {
+      name: "Set To Homepage",
+      iconName: "fa fa-cogs",
+      color: "btn-sm btn-outline-warning",
+      onClickFunction: setBlogSettings,
+      fnParams: {
+
+
+      }
+    },
+
+    {
+      buttonType: "grouped",
+      name: "Manage",
+      color: "outline-warning",
+      buttonList: [
+
+        {
+          name: "Edit",
+          iconName: "fa fa-edit",
+          color: "btn-sm btn-outline-warning",
+          onClickFunction: editData,
+          fnParams: {
+            drawFn: enlargeModal,
+            customCols: customCols
+          }
+        },
+        {
+          name: "Delete",
+          iconName: "fa fa-trash",
+          color: "outline-danger",
+          onClickFunction: deleteData,
+          fnParams: {}
+        }
+      ],
+      fnParams: {
+
+      }
+    },
+  ],
   tableSelector: "#" + random_id
 })
 categorySource.load(random_id, "#tab3")
@@ -306,6 +519,7 @@ var customCols = [
   {
     name: "General",
     list: ['id',
+      { label: 'inserted_at' },
       { label: 'author_id', selection: authorSource.allData },
       { label: 'category_id', selection: categorySource.allData },
       { label: 'blog_type', selection: ['blog', 'page'] },
@@ -339,8 +553,33 @@ var customCols = [
 
 ];
 blogSource = new phoenixModel({
-  data: { preloads: ["category"] },
+  onDrawFn: () => {
+    if ($("#search_bookc").length == 0) {
+      $("#bgs").closest(".table-responsive").find(".module_buttons").prepend(`
+        <label class="col-form-label " for="inputSmall">Books </label>
+        <input class="mx-4 form-control placeholder="barcode" placeholder="ie: GB000132"  form-control-sm" id="search_bookc"></input>
+                  `)
+    }
+    $('input#search_bookc').unbind();
+    $('input#search_bookc').on('change', function(e) {
+      var query = $(this).val()
+      var tarMod = window.phoenixModels.filter((v, i) => {
+        return v.moduleName == 'Blog' && v.tableSelector == '#bgs'
+      })[0]
+      tarMod.table
+        .search(query)
+        .draw();
+    })
+  },
+  data: {
+    preloads: ["category"],
+    additional_search_queries: ["title"],
+    sorts: [
+      [0, "desc"]
+    ]
+  },
   columns: [
+    { label: 'ID', data: 'id' },
     { label: 'Img', data: 'img_url', showImg: true },
     { label: 'Title', data: 'title', showSubtitle: true, subtitle: 'img_url' },
     { label: 'Subtitle', className: 'd-none', data: 'img_url' },
@@ -360,32 +599,44 @@ blogSource = new phoenixModel({
   moduleName: "Blog",
   link: "Blog",
   customCols: customCols,
-  buttons: [{
-    buttonType: "grouped",
-    name: "Manage",
-    color: "outline-warning",
-    buttonList: [{
-        name: "Edit",
-        iconName: "fa fa-edit",
-        color: "btn-sm btn-outline-warning",
-        onClickFunction: editData,
-        fnParams: {
-          drawFn: enlargeModal,
-          customCols: customCols
-        }
-      },
-      {
-        name: "Delete",
-        iconName: "fa fa-trash",
-        color: "outline-danger",
-        onClickFunction: deleteData,
-        fnParams: {}
-      }
-    ],
-    fnParams: {
+  buttons: [
 
-    }
-  }, ],
+    {
+      name: "Edit",
+      iconName: "fa fa-edit",
+      color: "btn-sm btn-outline-warning",
+      onClickFunction: editData2,
+      fnParams: {
+
+      }
+    },
+    {
+      buttonType: "grouped",
+      name: "Manage",
+      color: "outline-warning",
+      buttonList: [{
+          name: "Edit",
+          iconName: "fa fa-edit",
+          color: "btn-sm btn-outline-warning",
+          onClickFunction: editData,
+          fnParams: {
+            drawFn: enlargeModal,
+            customCols: customCols
+          }
+        },
+        {
+          name: "Delete",
+          iconName: "fa fa-trash",
+          color: "outline-danger",
+          onClickFunction: deleteData,
+          fnParams: {}
+        }
+      ],
+      fnParams: {
+
+      }
+    },
+  ],
   tableSelector: "#" + random_id
 })
 
@@ -487,6 +738,4 @@ function callStoredMedia(editor) {
     })
   })
 }
-
-
 </script>

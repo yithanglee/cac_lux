@@ -2,7 +2,9 @@ defmodule CacWeb.UserChannel do
   use CacWeb, :channel
 
   @impl true
-  def join("user:lobby", payload, socket) do
+  def join("user:" <> room_id, payload, socket) do
+    IO.inspect("room #{room_id}")
+
     if authorized?(payload) do
       {:ok, socket}
     else
@@ -25,8 +27,27 @@ defmodule CacWeb.UserChannel do
     {:noreply, socket}
   end
 
+  @impl true
+  def handle_in("get_question", payload, socket) do
+    broadcast(socket, "get_question", payload)
+    {:noreply, socket}
+  end
+
+  @impl true
+  def handle_in("question", payload, socket) do
+    broadcast(socket, "question", payload)
+    {:noreply, socket}
+  end
+
+  @impl true
+  def handle_in("answer", payload, socket) do
+    broadcast(socket, "answer", payload)
+    {:noreply, socket}
+  end
+
   # Add authorization logic here as required.
-  defp authorized?(_payload) do
+  defp authorized?(payload) do
+    IO.inspect(payload)
     true
   end
 end

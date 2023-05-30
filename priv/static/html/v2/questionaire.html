@@ -1,0 +1,242 @@
+<!--
+open a socket?
+save all the QnA into localstorage
+ask if user is host or joining a room
+host will create a set of question with 4 answers 
+
+participant need to choose the answers based on the question
+-->
+<main>
+  <div class="d-flex flex-column justify-content-center align-items-center gap-4">
+    <p>Here you can create questionaire and get a real time response.</p>
+    <div class="d-flex flex-column justify-content-center align-items-center gap-3" id="1">
+      <p>Please describe, are you...</p>
+      <div class="btn btn-primary" onclick="chooseRole('host')">
+        Host
+      </div>
+      <div class="btn btn-primary" onclick="chooseRole('participant')">
+        Participant
+      </div>
+    </div>
+    <div class="" id="2">
+    </div>
+  </div>
+</main>
+<script type="text/javascript">
+var socket = new Phoenix.Socket("/socket", {
+  params: { token: window.userToken }
+});
+socket.connect();
+
+var pname, rid, room_id, topic, channel, questions = [];
+
+
+function createQuestion(dom, index) {
+  $(dom).remove()
+  var nextIndex = index + 1
+  $("#qna").append(`
+	<div class="mt-4">
+		<label>Question ` + index + `</label>
+		<textarea name="question[` + index + `]" class="form-control " rows=5>how you  first met jesus?</textarea>
+
+		<label>Answer 1</label>
+		<input class="form-control" value="yt" name="answer[` + index + `][1]">
+
+		<label>Answer 2</label>
+		<input class="form-control" value="ig" name="answer[` + index + `][2]">
+
+
+		<label>Answer 3</label>
+		<input class="form-control" value="fb" name="answer[` + index + `][3]">
+
+		<label>Responses</label>
+		<div class="response p-4" id="question` + index + `"  >
+		</div>
+
+		<div class="mt-2 btn btn-primary" onclick="createQuestion(this, ` + nextIndex + `)">Create next question</div>
+	</div>
+
+	`)
+}
+
+function publish() {
+  App.form("form#qna", "qna", (res) => {
+    window.res = res
+    localStorage.setItem("qna", JSON.stringify(res))
+    channel.push("question", JSON.parse(localStorage.qna))
+
+  })
+}
+
+function joingRoom() {
+  rid = $("input[name='room_id']").val()
+
+  if (rid != null) {
+    room_id = rid
+    pname = $("input[name='pname']").val()
+  } else if (rid == null) {
+    pname = 'host'
+    room_id = makeid(4)
+  }
+
+
+
+  topic = "user:" + room_id;
+  // Join the topic
+  channel = socket.channel(topic, { role: "participant", pname: pname });
+  channel
+    .join()
+    .receive("ok", (data) => {
+      console.log("Joined topic", topic);
+    })
+    .receive("error", (resp) => {
+      console.log("Unable to join topic", topic);
+    });
+
+  if (rid != null) {
+    successParticipantJoin()
+  } else if (rid == null) {
+    sHost()
+  }
+}
+
+function sHost() {
+  $("#1").html(`<div class="fs-5">Tell your participants to key in the room id : ` + room_id + `</div>`)
+  channel.on("get_question", (payload) => {
+    console.log("getting question from host..")
+
+    channel.push("question", JSON.parse(localStorage.qna))
+  })
+ channel.on("answer", (payload) => {
+    console.log("getting anwer from participant.." + payload.pname )
+
+    $("#answer_q"+payload.question+"_"+payload.pname+"").remove()
+
+    $("#question" + payload.question).append(
+    	`<div id="answer_q`+payload.question+`_`+payload.pname+`" >`+payload.pname+` answered: `+payload.answer+` </div>`
+
+    	)
+
+
+  })
+}
+
+function updateParticipantAnsnwer(dom, qid){
+	var inputs = $(dom).find("input")
+
+	inputs.each((i,v) => {
+		console.log(
+		$(v)[0].checked)
+
+		if ($(v)[0].checked) {
+			console.log("qa")
+			console.log($(v).val())
+			channel.push("answer", {pname: pname, question: qid, answer: $(v).val() })
+		}
+	})
+}
+
+function renderQuestions(payload) {
+  var hostQuestions = Object.keys(window.pl.question)
+
+  $("#2").html('')
+  hostQuestions.forEach((v, i) => {
+    var radios = []
+    var rkey = Object.keys(window.pl.answer[v])
+    rkey.forEach((k, i) => {
+      radios.push(`
+		<div class="form-check">
+		  <input class="form-check-input" type="radio"  name="q[` + v + `]"  value="` + window.pl.answer[v][k] + `" id="` + window.pl.answer[v][k] + `">
+		  <label class="form-check-label" for="` + window.pl.answer[v][k] + `">
+		  ` + window.pl.answer[v][k] + `
+		  </label>
+		</div>
+		`)
+    })
+
+    $("#2").append(`
+    	<form id="q`+v+`" onchange="updateParticipantAnsnwer(this, `+v+`)">
+	    	<div class="d-flex p-2 flex-column align-items-center justify-content-center">
+	    		<label>Question ` + v + `</label>
+	    		<div>` + window.pl.question[v] + `</div>
+	    		<div class="d-flex flex-column">
+	    		` + radios.join("") + `
+	    		</div>
+	    	</div>
+    	</form>
+    	`)
+
+
+  })
+
+}
+// renderQuestions()
+
+function successParticipantJoin() {
+  $("#1").html(`
+		<div class="d-flex justify-content-between align-items-center gap-2">
+
+		<span>Room : <b>` + room_id + `</b></span>
+		<span>Name : <b>` + pname + `</b></span>
+
+		</div>
+
+		`)
+  channel.push("get_question", {
+
+  })
+
+  channel.on("question", (payload) => {
+    window.pl = payload
+    console.log(payload)
+    // render the #2 with question and answers
+     renderQuestions()
+  })
+}
+
+function initHost() {
+
+  var html = `
+<form id="qna" class="d-flex flex-column justify-content-center align-items-center">
+<div class="btn btn-primary" onclick="createQuestion(this, 1)">Create question</div>
+</form>
+<div  class="mt-4 d-flex flex-column justify-content-center align-items-center">
+<p>After finishing the question setting, press Done so that your participants can see the questions.</p>
+	<div class="mt-4  btn btn-lg btn-primary" onclick="publish()">Done </div>
+</div>
+
+	`
+  $("#2").html(html)
+
+}
+
+function showJoin() {
+
+}
+
+function initParticipant() {
+  $("#1").html(`
+
+	<div class="d-flex  flex-column gap-3">
+		<div class="fs-5">Ask your host for the room id : </div>
+		<input class="form-control" name="room_id" placeholder="room id" onchange="showJoin()"></input>
+		<input class="form-control" name="pname" placeholder="Your name" ></input>
+		<div class="btn btn-primary btn-lg mt-4" onclick="joingRoom()">
+			Join
+		</div>
+
+	</div>
+		`)
+}
+
+function chooseRole(role) {
+  if (role == 'participant') {
+    initParticipant()
+
+  } else if (role == 'host') {
+    initHost()
+    joingRoom()
+
+  }
+}
+</script>

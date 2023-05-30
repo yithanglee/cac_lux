@@ -49,7 +49,18 @@ var route_names = [{
     skipNav: true
   },
 
-
+  {
+    html: "blogs.html",
+    title: "Blogs - CAC",
+    route: "/admin/blogs",
+    skipNav: true
+  },
+  {
+    html: "edit_blog.html",
+    title: "Blogs - CAC",
+    route: "/admin/blogs/:id",
+    skipNav: true
+  },
   {
     html: "churches.html",
     title: "Church - CAC",
@@ -86,12 +97,6 @@ var route_names = [{
     skipNav: true
   },
 
-  {
-    html: "blogs.html",
-    title: "Blogs - CAC",
-    route: "/admin/blogs",
-    skipNav: true
-  },
 
 
   {
@@ -207,6 +212,9 @@ function navigateTo(route, additionalParamString) {
 
   }
 }
+
+
+
 
 function updatePageParams(obj) {
   window.stateObj = obj

@@ -31,7 +31,7 @@
   <link rel="stylesheet" type="text/css" href="/dependencies/swiper/css/swiper.min.css">
   <link rel="stylesheet" type="text/css" href="/dependencies/magnific-popup/css/magnific-popup.css">
   <!-- Site Stylesheet -->
-  <link rel="stylesheet" type="text/css" href="assets/css/style.css">
+  <link rel="stylesheet" type="text/css" href="/assets/css/style.css">
   <!-- Dependency Scripts -->
   <script src="/dependencies/jquery/jquery.min.js"></script>
   <script src="/dependencies/popper.js/popper.min.js"></script>
@@ -45,6 +45,8 @@
   <script src="/dependencies/validator/validator.min.js"></script>
   <script src="/dependencies/tween-max/tween-max.js"></script>
   <script src="/dependencies/wow/js/wow.min.js"></script>
+  <script type="text/javascript" src="/js/bootstrap.notify.js"></script>
+    <script type="text/javascript" src="/js/phoenix.js"></script>
   <script type="text/javascript" src="/js/app.js"></script>
   <script src="/js/firebase-app.js"></script>
   <!-- Add Firebase products that you want to use -->
@@ -59,7 +61,20 @@
 <body>
   <%= @inner_content %>
   <script type="text/javascript">
+  /*-------------------------------
+ //  WOW
+-------------------------------*/
+  const wow = new WOW({
+    boxClass: "wow",
+    animateClass: "animated",
+    offset: 0,
+    mobile: true,
+    live: true,
+    scrollContainer: null,
+  });
+
   $(document).ready(function() {
+    wow.init();
 
     window.dataLayer = window.dataLayer || [];
 
@@ -78,9 +93,9 @@
 
 
     /*-------------------------------------
-  //  Mobile Menu Toggle
-  -------------------------------------*/
-    $(document).on("click", ".sidebarBtn",  function(e) {
+    //  Mobile Menu Toggle
+    -------------------------------------*/
+    $(document).on("click", ".sidebarBtn", function(e) {
       e.preventDefault();
       if ($(".rt-slide-nav").is(":visible")) {
         $(".rt-slide-nav").slideUp();
@@ -90,17 +105,67 @@
         $("body").addClass("slidemenuon");
       }
     });
+    $(document).on("click", "#close-pdf", function(e) {
+      $("#pdf-render").toggleClass("d-block")
+      $("#close-pdf").toggleClass("d-none")
+    })
+
+
+    /*-------------------------------
+     //  Back to Top
+    -------------------------------*/
+    const backToTop = document.getElementById("back-to-top");
+    window.onscroll = function() {
+      scrollFunction();
+    };
+
+    function scrollFunction() {
+      if (backToTop !== null) {
+        if (
+          document.body.scrollTop > 80 ||
+          document.documentElement.scrollTop > 80
+        ) {
+          backToTop.style.display = "block";
+        } else {
+          backToTop.style.display = "none";
+        }
+      }
+    }
+    if (backToTop !== null) {
+      backToTop.addEventListener("click", (e) => {
+        e.preventDefault();
+        document.body.scrollTop = 0; // For Safari
+        document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+      });
+    }
+
+
   })
 
+  $(document).on("submit", "form.search-form", function(e) {
+    console.log("submited")
+    var directories = App.api("get_directory", {})
+    var query = $("input[name='hsearch']").val()
+    navigateTo("/pages/" + searchPage.id + "/" + searchPage.title)
+    setTimeout(() => {
 
+      $("input[name='search']").val(query)
+      searchBlog()
+    }, 1000)
+
+    $("#template-search").removeClass("open");
+  })
 
   $(document).on("click", "a.navi", function(event) {
     event.preventDefault();
+
     navigateTo($(this).attr("href"))
+    document.body.scrollTop = 0; // For Safari
+    document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
   });
   </script>
   <div class="modal" id="transparentModal">
-    <div class="modal-dialog modal-xl" role="document">
+    <div class="modal-dialog modal-lg" role="document">
       <div class="modal-content border-0" style="background: transparent;">
         <div class="modal-header border-0">
           <h5 class="modal-title">Modal title</h5>
@@ -108,7 +173,7 @@
             <span aria-hidden="true"></span>
           </button>
         </div>
-        <div class="modal-body" style="height: 100vh; width: 100vw;">
+        <div class="modal-body">
           <p>Modal body text goes here.</p>
         </div>
         <div class="modal-footer border-0">
@@ -147,6 +212,16 @@
         </div>
         <div class="modal-footer">
         </div>
+      </div>
+    </div>
+  </div>
+  <div class="position-fixed bottom-0 p-3" style="z-index: 11">
+    <div id="myToast" class="toast hide w-100" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="toast-header">
+
+      </div>
+      <div class="toast-body">
+        Hello, world! This is a toast message.
       </div>
     </div>
   </div>

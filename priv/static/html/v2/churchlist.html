@@ -1,16 +1,33 @@
-<div class="row  w-100 text-end">
-  <div class="col-12 col-lg-8 align-items-center d-flex">
-    <label class=" px-2" style="min-width: 100px;">Service Year</label>
-    <select id="service_years2" class="form-control">
+<style type="text/css">
+.divider {
+  width: 100%;
+  border-bottom: solid 1px #0000001c;
+  padding: 7px;
+}
+</style>
+<div class="row me-4 me-lg-0 d-none">
+  <div class="col-12  align-items-center d-flex row text-end">
+    <div class="col-sm"></div>
+    <div class="col-sm"></div>
+    <div class="col-sm"></div>
+    <label class=" col-lg " style="min-width: 100px;">Service Year</label>
+    <select id="service_years2" class="mx-4  mx-lg-0 col-sm form-control">
     </select>
   </div>
 </div>
-<div class="row gx-0">
-  <div class="col-12 col-lg-4">
-    <div id="region_toc" class="p-lg-4"></div>
+<div class="d-lg-none d-block">
+	
+	<nav class="nav nav-pills" id="pills-tab" role="tablist">
+	</nav>
+	<div class="tab-content" id="pills-tabContent">
+	  <div class="tab-pane fade " id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquid tempore tempora molestiae pariatur, voluptate fuga corrupti est reiciendis maxime totam dolores, voluptates, dolorem eaque sequi.</div>
+	</div>
+</div>
+<div class="row gx-0 d-none d-lg-block">
+  <div class="col-12 row pt-4" id="region_toc" >
   </div>
-  <div class="col-12 col-lg-8" style="height: 80vh; overflow-y: scroll ;">
-    <div id="toc" class="p-4"></div>
+  <div class="col-12 ">
+    <div id="toc" class="p-4" style="height: 80vh; overflow: scroll;"></div>
   </div>
 </div>
 <div id="all-region">
@@ -61,18 +78,23 @@ regions.sort((a, b) => {
 })
 
 regions.forEach((data, i) => {
+	var ms = (200 * (i + 1))
   $("#region_toc").append(`
-  													<div class="d-flex justify-content-between  p-3  py-2 m-lg-4 my-lg-3 border">
-															<span class='fw-bold'>
-														  	` + data.region.name + `
-													  	</span>
-													  		<span class="px-3 d-flex align-items-center gap-4" style="cursor: pointer;" onclick="spy('`+ data.region.id +`')">
-																	<small>Show </small>
-																	<i class="fa fa-caret-right"></i>
-																</span>
-												  	</div>
-												  	`)
+  	<div class="col-6 col-lg-2 mt-2 mt-lg-0 wow fadeInUp" data-wow-delay="`+ms+`ms" data-wow-duration="800ms" onclick="spy('` + data.region.id + `')">
+      <div class='border p-lg-2  px-0  text-center fw-bold' style="cursor: pointer;">
+        ` + data.region.name + `
+      </div>
+    </div>
+  `)
+
+  $("#pills-tab").append(`
+
+  <a class="nav-link ` + (i == 0 ? "active" : "") + `" id="pills-` + data.region.id + `-tab" data-bs-toggle="pill" href="#pills-` + data.region.id + `" role="tab" aria-controls="pills-` + data.region.id + `" aria-selected="false">` + data.region.name + `</a>
+
+  	`)
+
   $("#toc").append(`<div  data-id='` + data.region.id + `' class="fw-bold pt-4">` + data.region.name + `</div>`)
+
 
 
   var venues = []
@@ -124,28 +146,17 @@ regions.forEach((data, i) => {
 
     var div = `
 	
-				<div  onclick="showChurch( '` + venue.id + `')" class="card p-4 my-2" style="cursor: pointer;">
+				<div  onclick="showChurch( '` + venue.id + `')" class="mx-3 m-2" style="cursor: pointer;">
 					<div class="d-flex align-items-center justify-content-start gap-2">
 						<div class="fw-bold">` + venue.name + `</div>
-					
-
 					</div>
 					<div class="text-secondary">` + venue.reg_no + `</div>
 					<div class="">` + venue.desc + `</div>
-					<div class=" d-flex justify-content-between align-items-center">
-						<span>
-							` + venue.address + `
-						</span>
-						<span class="px-3 d-flex align-items-center gap-4">
-						<span>More info </span>
-							<i class="fa fa-caret-right"></i>
-						</span>
-					</div>
+	
 				</div>
+					<div class="divider"></div>
 
-					<div class="card m-4 p-4 d-none" aria-name=` + venue.name + ` aria-label="u` + venue.id + `">
-							` + users.join("") + `
-					</div>
+	
 	
 		
 		`
@@ -156,20 +167,25 @@ regions.forEach((data, i) => {
     venues.push(div)
   })
 
-  $("#all-region").append(`<div id="` + data.region.id + `" class="card my-4">
-		<div class="card-header">
-			` + data.region.name + `
-		</div>
-			<div	class="d-flex flex-column p-3">
 
-				` + venues.join("") + `
 
-			</div>
-		</div>`)
+
+
+  $("#pills-tabContent").append(`
+
+
+  <div class="tab-pane fade ` + (i == 0 ? "show active" : "") + `" id="pills-` + data.region.id + `" role="tabpanel" aria-labelledby="pills-pills-` + data.region.id + `-tab">
+
+  ` + venues.join("") + `
+
+  </div>
+	`)
 
 })
+$("#toc").append(`<div style="height: 80vh;">...</div>`)
 
 function spy(id) {
+  console.log("spying ..." + id)
   var elem = $("[data-id='" + id + "']")[0]
   elem.scrollIntoView()
   var y = $(window).scrollTop(); //your current y position on the page

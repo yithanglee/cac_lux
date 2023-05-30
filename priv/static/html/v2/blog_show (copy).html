@@ -1,0 +1,177 @@
+<style type="text/css">
+body {
+  font-weight: 400;
+  letter-spacing: 1px;
+}
+</style>
+<span class="post-thumbnail full-width-image"></span>
+<div class="container-fluid">
+  <div class="progress-container fixed-bottom">
+    <span class="progress-bar bg-info" style="height: 8px;"></span>
+  </div>
+  <style type="text/css">
+  div[aria-label="content"] {
+    line-height: 1.7em;
+  }
+  </style>
+  <div class="d-block row gx-4 pt-4 pt-lg-8">
+    <div class="col-12 col-lg-6 offset-lg-3">
+      <span class="badge bg-primary rounded-pill my-2" aria-label="category"></span>
+      <h2 aria-label="title">Show Blog</h2>
+      <span aria-label="subtitle" class="text-muted"></span>
+      <div aria-label="img" class="d-none d-lg-block my-4" style="
+      background-image: linear-gradient(rgba(255, 255, 255, 0.59), rgba(255, 255, 255, 0.91)), url('/images/daniel-tseng-QCjC1KpA4nA-unsplash.webp');background-repeat: no-repeat;
+        background-size: contain;
+        background-position: top;
+      
+        height: 500px;">
+      </div>
+      <div aria-label="img" class="d-lg-none d-block my-4" style="
+      background-image: linear-gradient(rgba(255, 255, 255, 0.59), rgba(255, 255, 255, 0.91)), url('/images/daniel-tseng-QCjC1KpA4nA-unsplash.webp');background-repeat: no-repeat;
+        background-size: contain;
+        background-position: center;
+      
+        height: 200px;">
+      </div>
+      <div aria-label="content" class="pt-4 fs-4">
+        <div class="d-flex justify-content-center align-items-center " style="height: 400px;">
+          <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="d-flex justify-content-center align-items-center p-4">
+    <div id="pdf-render">
+    </div>
+  </div>
+  <div class="row gx-0">
+    <div class="col-12 col-lg-10 offset-lg-1">
+      <div class="pb-4 ps-2 ps-lg-0">
+        <span class="pb-2 fs-5 border border-bottom border-top-0 border-start-0 border-end-0 border-5 border-danger fw-bolder">
+          <label data-label="editor-pick"> Recent Entries</label>
+        </span>
+      </div>
+    </div>
+  </div>
+  <div class="row gx-0">
+    <div class="col-12 col-lg-10 offset-lg-1">
+      <div class="row gx-0" id="l6">
+      </div>
+    </div>
+  </div>
+  <script type="text/javascript">
+  var blogs = App.api("blogs", { limit: 6 });
+
+  blogs.forEach((blog, i) => {
+    var url = '/images/daniel-tseng-QCjC1KpA4nA-unsplash.webp'
+    if (blog.img_url != null) {
+      url = blog.img_url
+    }
+    if (blog.category != null) {
+
+      $("#l6").append(`
+            <div class="col-sm col-12 px-3 ps-lg-0 pb-3 " style="">
+                  <div class="position-relative">
+                    <div 
+                       data-blog-title="` + blog.title + `"
+                      data-blog-id="` + blog.id + `"
+                      class="blog position-relative"
+                      style="
+                            overflow: hidden;
+                            cursor: pointer;
+                            background: #C04848;
+                            background: linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 0), rgba(2,2,2, 1)), url('` + url + `');
+                            height: 200px;
+                            background-size: cover;
+                            background-repeat: no-repeat;
+                            background-position: center;">
+                    </div>
+                    <div class="position-absolute p-3 d-flex flex-column align-items-start justify-content-start " style="bottom: 4px;">
+                      <a class="navi" href="/blog_listing/` + blog.category.id + `/` + blog.category.title + `">
+                          <span class=" badge rounded-pill bg-danger">` + blog.category.name + `</span>
+                      </a>
+                    </div>          
+                  </div>
+                  <div 
+                     data-blog-title="` + blog.title + `"
+                        data-blog-id="` + blog.id + `"
+                  class="  blog p-3 d-flex flex-column align-items-start justify-content-start " style="cursor: pointer;">
+                        <span class="pb-1   fw-bold">` + blog.title + `</span>
+                        <span class="pb-1   text-sm text-muted d-flex align-items-center justify-content-center">
+                          <i class="fa fa-clock pe-2"> </i>
+                          <span>` + blog.ago + ` ago</span>
+                        </span>
+                    </div>
+            </div>
+          `)
+    }
+
+  })
+
+  function renderPDF() {
+
+    $("#pdf-render").toggleClass("d-block")
+    $("#arc").addClass("fa-times")
+    $("#arc").removeClass("fa-caret-up")
+  }
+  $(document).ready(() => {
+    $(".blog").each((i, v) => {
+      v.onclick = function() {
+        // window.currentBlog = blogs.filter((b, ii) => {
+        //   return b.id == v.dataset.blogId
+        // })[0]
+        navigateTo("/blogs/" + v.dataset.blogId + "/" + v.dataset.blogTitle)
+      }
+    })
+    window.currentBlog = App.api("blog", { id: window.pageParams.id })
+    var blog = window.currentBlog
+    $("h2[aria-label='title']").html(blog.title)
+    $("title").html(blog.title)
+    var url = '/images/daniel-tseng-QCjC1KpA4nA-unsplash.webp'
+    if (blog.img_url != null) {
+      url = blog.img_url
+    }
+    $("div[aria-label='img']").css("background-image", "url('" + url + "')")
+    $("div[aria-label='content']").html(blog.content.replaceAll("http://www.methodist.org.my", "https://archive.methodist.org.my"))
+    var adder2 = new Function(currentBlog.javascript_binary);
+    adder2();
+    $("span[aria-label='subtitle']").html(blog.subtitle)
+    $("span[aria-label='category']").html(
+
+      `      <a class="navi" href="/blog_listing/` + blog.category.id + `/` + blog.category.name + `"><span class="text-white">`
+
+      +
+      blog.category.name + `</span></a>`
+    )
+
+    $("blockquote").addClass("d-flex flex-column justify-content-between")
+
+    if (blog.attachment != null) {
+      if (blog.attachment.f_type == "pdf") {
+
+        if (PDFObject.supportsPDFs) {
+          console.log("Yay, this browser supports inline PDFs.");
+          PDFObject.embed(blog.attachment.s3_url, "#pdf-render")
+          $("#pdf-render").after(`
+              <div class="btn btn-primary" onclick='renderPDF()'>View PDF Now?</div>
+              `)
+        } else {
+          console.log("Boo, inline PDFs are not supported by this browser");
+          $("#pdf-render").after(`
+              <a class="btn btn-warning" target="_blank" href="` + blog.attachment.s3_url + `">Download Pdf</div>
+              `)
+        }
+      }
+    }
+
+    App.Page.scrollProgressBar(".progress-bar")
+
+    App.post("cache", { blog_id: window.currentBlog.id, content: $("#subcontent").html() })
+
+
+  })
+  </script>
+  <script type="text/javascript" aria-label="content"></script>
+</div>

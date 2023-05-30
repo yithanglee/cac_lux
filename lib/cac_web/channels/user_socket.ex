@@ -3,7 +3,7 @@ defmodule CacWeb.UserSocket do
 
   ## Channels
   # channel "room:*", CacWeb.RoomChannel
-  channel "user:lobby", CacWeb.UserChannel
+  channel "user:*", CacWeb.UserChannel
   channel "support:*", CacWeb.SupportChannel
   # Socket params are passed from the client and can
   # be used to verify and authenticate a user. After

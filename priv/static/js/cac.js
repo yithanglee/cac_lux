@@ -3,19 +3,23 @@ var route_names = [{
     html: "landing.html",
     title: "Home - 马来西亚基督教 卫理公会华人年议会",
     route: "/home"
-  }, {
-    html: "account.html",
-    title: "Account - 马来西亚基督教 卫理公会华人年议会",
-    route: "/account"
-  }, {
-    html: "event_listing.html",
-    title: "Events - 马来西亚基督教 卫理公会华人年议会",
-    route: "/event_listing/:id/:title"
-  }, {
-    html: "event_show.html",
-    title: "Event - 马来西亚基督教 卫理公会华人年议会",
-    route: "/events/:id/:title"
-  }, {
+  },
+  // {
+  //   html: "account.html",
+  //   title: "Account - 马来西亚基督教 卫理公会华人年议会",
+  //   route: "/account"
+  // }, 
+  // {
+  //   html: "event_listing.html",
+  //   title: "Events - 马来西亚基督教 卫理公会华人年议会",
+  //   route: "/event_listing/:id/:title"
+  // }, 
+  // {
+  //   html: "event_show.html",
+  //   title: "Event - 马来西亚基督教 卫理公会华人年议会",
+  //   route: "/events/:id/:title"
+  // }, 
+  {
     html: "church.html",
     title: "Church - 马来西亚基督教 卫理公会华人年议会",
     route: "/church/:id"
@@ -40,18 +44,24 @@ var route_names = [{
   }, {
     html: "page_show.html",
     title: "Page - 马来西亚基督教 卫理公会华人年议会",
-    route: "/pages/:id/:title",
-    customNav: "blog_nav_sub.html"
+    route: "/pages/:id/:title"
+    // customNav: "blog_nav_sub.html"
   }, {
     html: "privacy_policy.html",
     title: "Privacy Policy - 马来西亚基督教 卫理公会华人年议会",
     route: "/privacy_policy",
     skipNav: true
-  },
-
+  }
 ]
 
 function navigateTo(route, additionalParamString, dom) {
+
+  if ($("#preloader").length == 0) {
+
+    $("#main_content").before(`  <div class="pre-loader" id="preloader">
+    <div class="loader"></div>
+  </div>`)
+  }
   console.log(dom)
   // event.preventDefault();
   App.show()
@@ -132,7 +142,7 @@ function navigateTo(route, additionalParamString, dom) {
     var html = App.html(match_2[0].html)
     var footer = App.html("footer.html")
     var keys = Object.keys(match_2[0])
-    $("html")[0].scrollIntoView()
+
 
 
     if (keys.includes("skipNav")) {
@@ -166,18 +176,27 @@ function navigateTo(route, additionalParamString, dom) {
 
 }
 
+function renderCallback() {
+  populate_menus()
+  checkLoginUser();
+  App.hide()
+  templateSearch();
+  sliders()
+  setDate()
 
-/*-------------------------------
- //  WOW
--------------------------------*/
-const wow = new WOW({
-  boxClass: "wow",
-  animateClass: "animated",
-  offset: 0,
-  mobile: false,
-  live: true,
-  scrollContainer: null,
-});
+  setHeader()
+  windowLoad()
+
+  try {
+    cachePage()
+    document.documentElement.scrollTop = 0;
+      
+
+  } catch (e) {
+
+  }
+}
+
 
 
 function templateSearch() {
@@ -547,23 +566,6 @@ function windowLoad() {
   $("body").removeClass("slidemenuon");
 }
 
-function renderCallback() {
-  populate_menus()
-  checkLoginUser();
-  App.hide()
-  templateSearch();
-  sliders()
-  setDate()
-
-  setHeader()
-  windowLoad()
-  try {
-    cachePage()
-    wow.init();
-  } catch (e) {
-
-  }
-}
 
 function updatePageParams(obj) {
   window.stateObj = obj
@@ -641,36 +643,6 @@ function checkLoginUser() {
 
   }
 }
-var ui;
-$(document).ready(() => {
-
-  var firebaseConfig = {
-    apiKey: "AIzaSyCJJTXUbUlyai7QWuw51aE6FHr7xrcQrUM",
-    authDomain: "cac-my.firebaseapp.com",
-    projectId: "cac-my",
-    storageBucket: "cac-my.appspot.com",
-    messagingSenderId: "878950911140",
-    appId: "1:878950911140:web:f784759123b3cc25db2a31",
-  };
-
-  if (!firebase.apps.length) {
-
-    firebase.initializeApp(firebaseConfig);
-    firebase.auth().languageCode = "en";
-  } else {
-    firebase.app(); // if already initialized, use that one
-  }
-  window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier(
-    "sign-in-button", {
-      size: "invisible",
-      callback: function(response) {
-        console.log(response);
-      }
-    }
-  );
-  ui = new firebaseui.auth.AuthUI(firebase.auth());
-  navigateTo();
-})
 
 
 function populate_menus() {
@@ -708,13 +680,25 @@ function populate_menus() {
           ` + div + `
         </li>`
     if (cat.show_menu) {
-      $("#nav_items").append(li)
-      $("#nav_items2").append(li)
-      var li2 = `
-      <li>
-        <a class="navi" href="/blog_listing/` + cat.id + `/` + cat.name + `">
-          <i class=""></i>` + name + `</a></li>`
-      $("ul[aria-label='web-nav']").append(li2)
+
+
+
+        var li = ` <li class="">
+        <a class="animation navi" href="/blog_listing/` + cat.id + `/` + cat.name + `" >` + cat.name + `</a>
+      </li>`
+
+        $("ul.quick-links").append(li)
+
+        var li = `<li class="widget-list-item">
+                <a href="/blog_listing/` + cat.id + `/` + cat.name + `" class="navi widget-list-link">
+                 ` + cat.name + `
+                </a>
+              </li>
+
+        `
+        $(".a.cat-list").append(li)
+
+
     }
 
 
@@ -771,6 +755,7 @@ function populate_directory() {
     "派司名单",
     "南钟报",
     "年会活动",
+    "资源分享",
     "寻找 Search",
   ]
 
@@ -778,7 +763,11 @@ function populate_directory() {
 
     try {
 
-
+      if (lv == "寻找 Search") {
+        window.searchPage = directories.filter((v, i) => {
+          return v.title == lv
+        })[0]
+      }
 
       if (lv == "年会活动") {
         var li = ` <li class="">
@@ -786,28 +775,60 @@ function populate_directory() {
       </li>`
 
         $("ul.quick-links").append(li)
+        $(".menu.a").append(li)
 
 
-        var li = ` <li class="navi nav-item">
-        <a class="nav-link" href="/blog_listing/` + al3.id + `/` + al3.name + `" >年会活动</a>
+        var li = ` <li class="">
+        <a class="animation navi" href="/blog_listing/` + al3.id + `/` + al3.name + `" >年会活动</a>
       </li>`
 
         $("#nav_items").append(li)
+
+
+      } else if (lv == "资源分享") {
+
+  var al4 = categories.filter((v, i) => {
+    return v.name == '资源分享'
+  })[0]
+        var li = ` <li class="">
+        <a class="animation navi" href="/blog_listing/` + al4.id + `/` + al4.name + `" >资源分享</a>
+      </li>`
+
+        $("ul.quick-links").append(li)
+        $(".menu.a").append(li)
+
+
+        var li = ` <li class="">
+        <a class="animation navi" href="/blog_listing/` + al4.id + `/` + al4.name + `" >资源分享</a>
+      </li>`
+
+        $("#nav_items").append(li)
+
 
       } else {
 
         var v = directories.filter((z, ii) => {
           return z.title == lv
         })[0]
-        var li = ` <li class="navi nav-item">
-        <a class="nav-link" href="/pages/` + v.id + `/` + v.title + `" >` + v.title + `</a>
+        var li = ` <li class="">
+        <a class="animation navi" href="/pages/` + v.id + `/` + v.title + `" >` + v.title + `</a>
       </li>`
 
         $("ul.quick-links").append(li)
+        $(".menu.a").append(li)
+
+        var li = `<li class="widget-list-item">
+                <a href="/pages/` + v.id + `/` + v.title + `" class="navi widget-list-link">
+                 ` + v.title + `
+                </a>
+              </li>
+
+        `
+        $(".a.cat-list").append(li)
 
 
-        var li = ` <li class="navi nav-item">
-        <a class="nav-link" href="/pages/` + v.id + `/` + v.title + `" >` + v.title + `</a>
+        var li = ` <li class="">
+        <a class="animation navi" href="/pages/` + v.id + `/` + v.title + `" >` + v.title + `</a>
       </li>`
 
         $("#nav_items").append(li)
@@ -820,30 +841,908 @@ function populate_directory() {
 
   })
 
-  // var li = ` 
+}
 
-  //   <li class=" nav-item">
-  //     <a id="axr" onclick="checkLogin()" style="cursor: pointer;" class="  nav-link "> 
-  //     <i class="fa fa-user pe-2"></i>
-  //     <span aria-label='displayName'>Profile</span> </a>
-  //   </li>
-  //   `
-  // $("#nav_items").append(li)
-  // $(".quick-links").append(li)
+function populate_highlight_media(section) {
+  // query the is1,2,3 etc
+  // each of it append to the instagram grid
+  var me = window.isg.filter((v, i) => {
+    return v.section == section
+  })[0]
+
+  if (me != null) {
+
+    App.modal({ header: "Preview", content: `<div class="d-flex justify-content-center">
+
+                               <div style="
+         
+                            overflow: hidden;
+                            cursor: pointer;
+                            background: #C04848;
+                            background: url('` + me.media.s3_url + `');
+                            height: 70vh;
+                            width: 70vw;
+                            background-size: contain;
+                            background-repeat: no-repeat;
+                            background-position: center;">
+    </div>`, selector: "#transparentModal" , autoClose: false})
+  }
+
 
 }
 
 function populate_footer() {
-  // var groups = App.api("list_groups", {})
-  // $("ul[aria-label='cac-directory']").html('')
-  // groups.forEach((g, i) => {
-  //   var li = `<li>
-  //     <a href="javascript:void(0);">
-  //       <i class=""></i>` + g.name + `</a>
-  //       </li>`
-  //   $("ul[aria-label='cac-directory']").append(li)
-  // })
+
   var dt = new Date()
   var edate = dt.toGMTString().split(",")[1].split(" ").splice(0, 4).join(" ")
   $("#tedate").html(edate)
+
+  window.isg = App.api("instagram_grid", {})
+   $(".insta-gallery").html('')
+  window.isg.forEach((v, i) => {
+
+
+    media = v.media
+
+    if (media != null) {
+
+      $(".insta-gallery").append(
+
+        `
+              <div class="galleryitem">
+                <a href="javascript:void(0);" onclick="populate_highlight_media('` + v.section + `')">
+                               <div style="
+         
+                            overflow: hidden;
+                            cursor: pointer;
+                            background: #C04848;
+                            background: url('` + v.media.s3_url + `');
+                            height: 90px;
+                            width: 100px;
+                            background-size: cover;
+                            background-repeat: no-repeat;
+                            background-position: center;">
+                </div>
+                </a>
+              </div>
+`
+      )
+
+    }
+
+
+  })
+
+  window.cacps = App.api("blogs", { category: "会长心语", limit: 2 })
+  $("#cacp").html("")
+  window.cacps.forEach((blog, i) => {
+    var url = '/images/daniel-tseng-QCjC1KpA4nA-unsplash.webp'
+    if (blog.img_url != null) {
+      url = blog.img_url
+    }
+    var cacp = `
+
+          
+              <div class="item">
+                <div class="rt-post post-sm white-style">
+                  <div class="post-img">
+                    <a class="navi" href="/blogs/` + blog.id + `/` + blog.title + `">
+                      <div 
+
+                       style="
+                       clip-path: circle(50% at 50% 50%);
+                                  overflow: hidden;
+                                  cursor: pointer;
+                                  background: #C04848;
+                                  background: url('` + url + `');
+                                  height: 100px;
+                                  width: 100px;
+                                  background-size: cover;
+                                  background-repeat: no-repeat;
+                                  background-position: center;"
+
+                      >
+                      </div>
+                    </a>
+                  </div>
+                  <div class="ms-3 post-content">
+                    <h4 class="post-title">
+                      <a class="navi" href="/blogs/` + blog.id + `/` + blog.title + `">
+                        ` + blog.title + `
+                      </a>
+                    </h4>
+                    <span class="rt-meta">
+                      <i class="far fa-calendar-alt icon"></i>
+                      <span class="format_date">` + blog.inserted_at + `</span>
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+  `
+    $("#cacp").append(cacp)
+
+  })
+
 }
+
+let CacBlog = {
+  chipBlog(blog) {
+    var url = '/images/daniel-tseng-QCjC1KpA4nA-unsplash.webp'
+    if (blog.img_url != null) {
+      url = blog.img_url
+    }
+
+    return `
+            <div class="col-xl-3 col-md-6 wow fadeInUp" data-wow-delay="200ms" data-wow-duration="800ms">
+          <div class="rt-post post-sm style-1">
+            <div class="post-img">
+              <a  href="/blogs/` + blog.id + `/` + blog.title + `" class="navi">
+                <div 
+
+                 style="
+                 clip-path: circle(50% at 50% 50%);
+                            overflow: hidden;
+                            cursor: pointer;
+                            background: #C04848;
+                            background: url('` + url + `');
+                            height: 100px;
+                            width: 100px;
+                            background-size: cover;
+                            background-repeat: no-repeat;
+                            background-position: center;"
+
+                >
+                </div>
+              </a>
+            </div>
+            <div class="ms-4 post-content">
+              <a  href="/blog_listing/` + blog.category_id + `/` + blog.title + `" class="navi rt-post-cat-normal">CAC</a>
+              <h3 class="post-title">
+                <a  href="/blogs/` + blog.id + `/` + blog.title + `" class="navi">
+                  ` + blog.title + `
+                </a>
+              </h3>
+              <span class="rt-meta">
+                <i class="far fa-calendar-alt icon"></i>
+                <span class="format_date">` + blog.inserted_at + `</span>
+              </span>
+            </div>
+          </div>
+        </div>
+`
+  },
+  videoSlider(blog) {
+    var url = '/images/daniel-tseng-QCjC1KpA4nA-unsplash.webp'
+    if (blog.img_url != null) {
+      url = blog.img_url
+    }
+    return `
+        <div class="swiper-slide">
+          <div class="item  video-slide" data-bg-image="` + url + `">
+            <div class="container">
+              <div class="row justify-content-center">
+                <div class="col-xl-7 col-lg-8 col-md-10">
+                  <div class="post-content text-center">
+                    <a  href="/blog_listing/` + blog.category_id + `/` + blog.title + `" class="navi rt-post-cat-normal text--white">CAC</a>
+                    <h2 class="post-title bold-underline">
+                      <a href="/blogs/` + blog.id + `/` + blog.title + `" class="navi">
+                           ` + blog.title + `
+                      </a>
+                    </h2>
+                    <div class="post-meta">
+                      <ul class="justify-content-center">
+                        <li>
+                          <span class="rt-meta">
+                            <i class="far fa-calendar-alt icon"></i>
+                            <span class="format_date"> ` + blog.inserted_at + `</span>
+                          </span>
+                        </li>
+                        <li>
+                          <span class="rt-meta">
+                            <i class="fas fa-user icon"></i>
+                            CAC President
+                          </span>
+                        </li>
+                        
+                      </ul>
+                    </div>
+                    <div class="btn-wrap mt--30 d-none">
+                      <a href="http://www.youtube.com/watch?v=1iIZeIy7TqM" class="play-btn play-btn-primary">
+                        <i class="fas fa-play"></i>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- end swiper-slide -->
+  `
+  },
+  thumbnailVideoSlider(blog) {
+    var url = '/images/daniel-tseng-QCjC1KpA4nA-unsplash.webp'
+    if (blog.img_url != null) {
+      url = blog.img_url
+    }
+    return `
+
+            <div class="swiper-slide">
+              <div class="item video-slide-thumb">
+                <div class="rt-post post-sm post-thumb">
+                  <div class="post-img">
+                    <div class="su" style="
+
+                      overflow: hidden;
+                      cursor: pointer;
+                      background: #C04848;
+                      background: url('` + url + `');
+                      height: 100px;
+                      width: 130px;
+                      background-size: cover;
+                      background-repeat: no-repeat;
+                      background-position: center;">
+                    </div>
+                  </div>
+                  <div class="ms-3 post-content">
+                    <span class="rt-post-cat-normal">CAC</span>
+                    <h4 class="post-title">
+                      <span class="title-ex">
+                        ` + blog.title + `
+                      </span>
+                    </h4>
+                    <span class="rt-meta">
+                      <i class="far fa-calendar-alt icon"></i>
+                      <span class="format_date"> ` + blog.inserted_at + `</span>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- end thumb slide -->
+  `
+  },
+  topStory(blog) {
+
+    var url = '/images/daniel-tseng-QCjC1KpA4nA-unsplash.webp'
+    if (blog.img_url != null) {
+      url = blog.img_url
+    }
+    var ms = 200
+
+    return `
+
+        <div class="col-xl-3 col-md-6 wow fadeInUp" data-wow-delay="200ms" data-wow-duration="800ms">
+          <div class="rt-post-grid grid-meta">
+            <div class="post-img">
+              <a   href="/blogs/` + blog.id + `/` + blog.title + `" class="navi"  >
+              <div class="d-flex justify-content-center wow fadeInUp" data-wow-delay="` + ms + `ms" data-wow-duration="800ms" 
+                  style="cursor: pointer;   position: relative; height: 240px;">
+
+                <div 
+                  class=" rounded py-2" style="
+                  height: 240px;
+                  width:  320px;
+                  position: absolute;
+                  background-position: center;
+                  background-size: contain; 
+                  filter: blur(10px); 
+                  background-image: url('` + url + `');">
+                </div>
+
+          
+
+                <div 
+                  class="su rounded py-2" style="
+                  height: 240px;
+                  width:  320px;
+                  background-position: center;
+                  background-repeat: no-repeat;
+                  background-size: contain; 
+                  background-image: url('` + url + `');">
+                </div>
+              </div>
+              </a>
+            </div>
+            <div class="post-content">
+              <a href="/blog_listing/` + blog.category_id + `/` + blog.title + `" class="rt-post-cat-normal">CAC</a>
+              <h3 class="post-title">
+                <a  href="/blogs/` + blog.id + `/` + blog.title + `" class="navi">
+                      ` + blog.title + `
+                </a>
+              </h3>
+              <div class="post-meta">
+                <ul>
+                  <li>
+                    <span class="rt-meta">
+                      by <a href="author.html" class="name">CAC Author</a>
+                    </span>
+                  </li>
+                  <li>
+                    <span class="rt-meta">
+                      <i class="far fa-calendar-alt icon"></i>
+                      <span class="format_date"> ` + blog.inserted_at + `</span>
+                    </span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+    
+  `
+  },
+  tabContent(blogs, index) {
+
+    var list = []
+
+
+    blogs.forEach((blog, i) => {
+
+
+      var url = '/images/daniel-tseng-QCjC1KpA4nA-unsplash.webp'
+      if (blog.img_url != null) {
+        url = blog.img_url
+      }
+      var ms = 200
+
+      list.push(`  <div class="col-12">
+                          <div class="rt-post post-sm style-2">
+                            <div class="post-content">
+                              <a   href="/blog_listing/` + blog.category_id + `/` + blog.title + `" class="navi rt-post-cat-normal">CAC</a>
+                              <h4 class="post-title">
+                                <a  href="/blogs/` + blog.id + `/` + blog.title + `" class="navi">
+                                  ` + blog.title + `
+                                </a>
+                              </h4>
+                              <span class="rt-meta">
+                                <i class="far fa-calendar-alt icon"></i>
+                                <span class="format_date"> ` + blog.inserted_at + `</span>
+                              </span>
+                            </div>
+                            <div class="post-img">
+                              <a href="single-post1.html">
+                                <div class="d-flex justify-content-center "
+                                    style="cursor: pointer;   position: relative; height: 90px;">
+
+                                  <div 
+                                    class=" rounded py-2" style="
+                                    width:  145px;
+                                    height: 90px;
+                                    position: absolute;
+                                    background-position: center;
+                                    filter: blur(10px); 
+                                    background-size: contain; 
+                                    background-image: url('` + url + `');">
+                                  </div>
+
+                                  <div 
+                                    class="su rounded py-2" style="
+                                    width:  145px;
+                                    height: 90px;
+                                    background-position: center;
+                                    background-repeat: no-repeat;
+                                    background-size: contain; 
+                                    background-image: url('` + url + `');">
+                                  </div>
+                                </div>
+                              </a>
+                            </div>
+                          </div>
+                        </div>`)
+    })
+
+    var main = blogs[0]
+    var ms = 200
+    var url = '/images/daniel-tseng-QCjC1KpA4nA-unsplash.webp'
+    try {
+
+      if (main.img_url != null) {
+        url = main.img_url
+      }
+      return `<div class="tab-pane tab-item animated fadeInUp ` + (index == 1 ? "show active" : "") + `" id="menu-` + index + `" role="tabpanel" aria-labelledby="menu-` + index + `-tab">
+                    <div class="row gutter-24">
+                      <div class="col-lg-7">
+                        <div class="rt-post-overlay rt-post-overlay-lg">
+                          <div class="post-img">
+                            <a   href="/blogs/` + main.id + `/` + main.title + `" class="navi img-link">
+                                  <div class="d-flex justify-content-center " 
+                                      style="cursor: pointer;   position: relative; height: 520px;">
+
+                                    <div 
+                                      class=" rounded py-2" style="
+                                      width:  520px;
+                                      height: 520px;
+                                      position: absolute;
+                                      background-position: center;
+                                      filter: blur(10px); 
+                                      background-size: contain; 
+                                      background-image: url('` + url + `');">
+                                    </div>
+
+                                    <div 
+                                      class="su rounded py-2" style="
+                                      width:  520px;
+                                      height: 520px;
+                                      background-position: center;
+                                      background-repeat: no-repeat;
+                                      background-size: contain; 
+                                      background-image: url('` + url + `');">
+                                    </div>
+                                  </div>
+                            </a>
+                          </div>
+                          <div class="post-content">
+                            <a href="life-style.html" class="world">World</a>
+                            <h3 class="post-title bold-underline">
+                              <a  href="/blogs/` + main.id + `/` + main.title + `" class="navi">
+                               ` + main.title + `
+                              </a>
+                            </h3>
+                            <div class="post-meta">
+                              <ul>
+                                <li>
+                                  <span class="rt-meta">
+                                    by <a href="author.html" class="name">CAC Author</a>
+                                  </span>
+                                </li>
+                                <li>
+                                  <span class="rt-meta">
+                                    <i class="far fa-calendar-alt icon"></i>
+                                    <span class="format_date"> ` + main.inserted_at + `</span>
+                                  </span>
+                                </li>
+                                <li>
+                                  <span class="rt-meta">
+                                    <i class="far fa-comments icon"></i>
+                                    <a href="#"> 3,250</a>
+                                  </span>
+                                </li>
+                              </ul>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-lg-5">
+                        <div class="row gutter-24">
+                        ` + list.join("") + `
+                        </div>
+                      </div>
+                    </div>
+                  </div><!-- end ./tab item -->
+    `
+    } catch (e) {
+      return ``
+    }
+
+  },
+  tabHeader(cat, index) {
+    return ` <li class="menu-item" role="presentation">
+                    <a class="menu-link ` + (index == 1 ? "active" : "") + `" id="menu-` + index + `-tab" data-bs-toggle="tab" href="#menu-` + index + `" role="tab" aria-controls="menu-` + index + `" aria-selected="true"> ` + cat.name + ` </a>
+                  </li>
+
+  `
+  },
+  setWhatsNew(blogs, tabIndex, tabName) {
+
+    $("#myTab").append(CacBlog.tabHeader({
+      name: tabName,
+    }, tabIndex))
+    // $("#myTab").append(CacBlog.tabHeader({
+    //   name: "Travel"
+    // }, 2))
+    // $("#myTab").append(CacBlog.tabHeader({
+    //   name: "Food"
+    // }, 3))
+    // $("#myTab").append(CacBlog.tabHeader({
+    //   name: "Tech"
+    // }, 4))
+
+    $("#myTabContent").append(CacBlog.tabContent(blogs, tabIndex))
+    // $("#myTabContent").append(CacBlog.tabContent(blogs, 2))
+    // $("#myTabContent").append(CacBlog.tabContent(blogs, 3))
+    // $("#myTabContent").append(CacBlog.tabContent(blogs, 4))
+
+  },
+  setLargeCard(blog, index) {
+    var ms = 200 * index
+    var url = '/images/daniel-tseng-QCjC1KpA4nA-unsplash.webp'
+    if (blog.img_url != null) {
+      url = blog.img_url
+    }
+    return `<div class="col-lg-6 wow fadeInUp" data-wow-delay="` + ms + `ms" data-wow-duration="800ms">
+                  <div class="rt-post-overlay rt-post-overlay-md">
+                    <div class="post-img">
+                      <a  href="/blogs/` + blog.id + `/` + blog.title + `" class="navi img-link">
+                                <div class="d-flex justify-content-center " 
+                                    style="cursor: pointer;   position: relative; height: 350px;">
+
+                                  <div 
+                                    class=" rounded py-2" style="
+                                    width:  440px;
+                                    height: 350px;
+                                    position: absolute;
+                                    background-position: center;
+                                    background-size: contain; 
+                                    background-image: url('` + url + `');">
+                                  </div>
+
+                                  <div 
+                                    class="su rounded py-2" style="
+                                      width:  440px;
+                                    height: 350px;
+                                    backdrop-filter: blur(10px); 
+                                    background-position: center;
+                                    background-repeat: no-repeat;
+                                    background-size: contain; 
+                                    background-image: url('` + url + `');">
+                                  </div>
+                                </div>
+                      </a>
+                    </div>
+                    <div class="post-content">
+                      <h3 class="post-title bold-underline">
+                        <a  href="/blogs/` + blog.id + `/` + blog.title + `" class="navi">
+                         ` + blog.title + `
+                        </a>
+                      </h3>
+                      <div class="post-meta">
+                        <ul>
+                          <li>
+                            <span class="rt-meta">
+                              by <a href="author.html" class="name">CAC Author</a>
+                            </span>
+                          </li>
+                          <li>
+                            <span class="rt-meta">
+                              <i class="far fa-calendar-alt icon"></i>
+                              <span class="format_date"> ` + blog.inserted_at + `</span>
+                            </span>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+         
+  `
+  },
+  setRowCard(blog, index) {
+    var ms = 200 * index
+    var url = '/images/daniel-tseng-QCjC1KpA4nA-unsplash.webp'
+    if (blog.img_url != null) {
+      url = blog.img_url
+    }
+
+    return `<div class="post-item wow fadeInUp" data-wow-delay="200ms" data-wow-duration="800ms">
+                <div class="rt-post post-md style-2 grid-meta">
+                  <div class="post-img">
+                    <a  href="/blogs/` + blog.id + `/` + blog.title + `" class="navi">
+                                <div class="d-flex justify-content-center " 
+                                    style="cursor: pointer;   position: relative; height: 250px;">
+
+                                  <div 
+                                    class=" rounded py-2" style="
+                                    width:  360px;
+                                    height: 250px;
+                                    position: absolute;
+                                    filter: blur(10px); 
+                                    background-position: center;
+                                    background-size: contain; 
+                                    background-image: url('` + url + `');">
+                                  </div>
+
+                         
+                                  <div 
+                                    class="su rounded py-2" style="
+                                    width:  360px;
+                                    height: 250px;
+                          
+                                    background-position: center;
+                                    background-repeat: no-repeat;
+                                    background-size: contain; 
+                                    background-image: url('` + url + `');">
+                                  </div>
+                                </div>
+                    </a>
+                  </div>
+                  <div class="post-content">
+                    <a  href="/blogs/` + blog.id + `/` + blog.title + `" class="navi">CAC</a>
+                    <h3 class="post-title bold-underline">
+                      <a href="single-post1.html">
+                    ` + blog.title + `
+                      </a>
+                    </h3>
+                    <p>
+                      Ahen an unknown printer took a galley of type and scrambled imake
+                      type specimen book has survived not only five centurie.
+                    </p>
+                    <div class="post-meta">
+                      <ul>
+                        <li>
+                          <span class="rt-meta">
+                            by <a href="author.html" class="name">CAC Author</a>
+                          </span>
+                        </li>
+                        <li>
+                          <span class="rt-meta">
+                            <i class="far fa-calendar-alt icon"></i>
+                            <span class="format_date"> ` + blog.inserted_at + `</span>
+                          </span>
+                        </li>
+                        <li>
+                          <span class="rt-meta">
+                            <i class="fas fa-share-alt icon"></i>
+                            3,250
+                          </span>
+                        </li>
+                      </ul>
+                    </div>
+                    <div class="btn-wrap mt--25">
+                      <a  href="/blogs/` + blog.id + `/` + blog.title + `" class="navi rt-read-more rt-button-animation-out">
+                        Read More
+                        <svg width="34px" height="16px" viewBox="0 0 34.53 16" xml:space="preserve">
+                          <rect class="rt-button-line" y="7.6" width="34" height=".4">
+                          </rect>
+                          <g class="rt-button-cap-fake">
+                            <path class="rt-button-cap" d="M25.83.7l.7-.7,8,8-.7.71Zm0,14.6,8-8,.71.71-8,8Z"></path>
+                          </g>
+                        </svg>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- end post-item -->
+
+  `
+  },
+  setEventCard(blog, index) {
+    var ms = 200 * index
+    var url = '/images/daniel-tseng-QCjC1KpA4nA-unsplash.webp'
+    if (blog.img_url != null) {
+      url = blog.img_url
+    }
+    return ` <div class="item">
+                  <div class="rt-post post-sm style-1">
+                    <div class="post-img">
+                      <a  href="/blogs/` + blog.id + `/` + blog.title + `" class="navi">
+             
+                      
+                <div style="
+                 clip-path: circle(50% at 50% 50%);
+                            overflow: hidden;
+                            cursor: pointer;
+                            background: #C04848;
+                            background: url('` + url + `');
+                            height: 100px;
+                            width: 100px;
+                            background-size: cover;
+                            background-repeat: no-repeat;
+                            background-position: center;">
+                </div>
+
+                      </a>
+                    </div>
+                    <div class="ms-4 post-content">
+                      <a href="/blog_listing/` + blog.category_id + `/` + blog.title + `" class="rt-post-cat-normal">CAC</a>
+                      <h4 class="post-title">
+                        <a href="single-post1.html">
+                         ` + blog.title + `
+                        </a>
+                      </h4>
+                      <span class="rt-meta">
+                        <i class="far fa-calendar-alt icon"></i>
+                       <span class="format_date"> ` + blog.inserted_at + `</span>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+      `
+  },
+  setTrailCard(blog, index) {
+
+    var ms = 200 * index
+    var url = '/images/daniel-tseng-QCjC1KpA4nA-unsplash.webp'
+    if (blog.img_url != null) {
+      url = blog.img_url
+    }
+    return `
+                <div class="col-6">
+                  <div class="rt-post-grid post-grid-md grid-meta">
+                    <div class="post-img">
+                      <a href="/blogs/` + blog.id + `/` + blog.title + `" class="navi"> 
+                                <div class="d-flex justify-content-center " 
+                                    style="cursor: pointer;   position: relative; height: 100px;">
+
+                                  <div 
+                                    class=" rounded py-2" style="
+                                    width:  150px;
+                                    height: 100px;
+                                    position: absolute;
+                                    filter: blur(10px); 
+                                    background-position: center;
+                                    background-size: contain; 
+                                    background-image: url('` + url + `');">
+                                  </div>
+
+                         
+                                  <div 
+                                    class="su rounded py-2" style="
+                                    width:  150px;
+                                    height: 100px;
+                          
+                                    background-position: center;
+                                    background-repeat: no-repeat;
+                                    background-size: contain; 
+                                    background-image: url('` + url + `');">
+                                  </div>
+                                </div>
+                      </a>
+                    </div>
+                    <div class="post-content">
+                      <a href="/blog_listing/` + blog.category_id + `/` + blog.title + `" class="rt-post-cat-normal">CAC</a>
+                      <h4 class="post-title">
+                        <a  href="/blogs/` + blog.id + `/` + blog.title + `" class="navi">
+                                 ` + blog.title + `
+                        </a>
+                      </h4>
+                      <span class="rt-meta">
+                        <i class="far fa-calendar-alt icon"></i>
+                        <span class="format_date"> ` + blog.inserted_at + `</span>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+            `
+  },
+  populateSb() {
+    $("ul.sb").html('')
+    var sb =
+      categories.filter((v, i) => {
+        return v.name == "e_southernbell"
+      })[0]
+
+    var bg_images = ['joel-muniz-A4Ax1ApccfA-unsplash.webp', 'akira-hojo-_86u_Y0oAaM-unsplash.webp', 'bg2_new.webp', 'daniel-tseng-QCjC1KpA4nA-unsplash.webp', 'joel-muniz-A4Ax1ApccfA-unsplash.webp', 'akira-hojo-_86u_Y0oAaM-unsplash.webp', 'bg2_new.webp', 'daniel-tseng-QCjC1KpA4nA-unsplash.webp']
+    sb.children.forEach((c, i) => {
+      var div = `
+
+
+
+
+        <li>
+          <a  class="navi" href="/blog_listing/` + c.id + `/` + c.name + `" 
+          data-bg-image="/images/` + bg_images[i] + `">
+            <span class="cat-name">` + c.name + `</span>
+            <span class="count">` + c.id + `</span>
+          </a>
+        </li>
+
+
+  `
+      if (c.name != "e_southernbell") {
+
+        $("ul.sb").append(div)
+        $("[data-bg-image]").each(function() {
+          const img = $(this).data("bg-image");
+          $(this).css({
+            backgroundImage: "url(" + img + ")",
+          });
+        });
+
+      }
+    })
+  },
+  init(fullData) {
+
+    fullData.forEach((data, i) => {
+      blogs = data.blogs
+      if (data.section == "l1") {
+        blogs.forEach((blog, i) => {
+
+          $("#l1").append(CacBlog.chipBlog(blog))
+        })
+      }
+      if (data.section == "l2") {
+        blogs.forEach((blog, i) => {
+
+          $("#l2").append(CacBlog.videoSlider(blog))
+        })
+      }
+      if (data.section == "l3") {
+        blogs.forEach((blog, i) => {
+
+          $("#l3").append(CacBlog.thumbnailVideoSlider(blog))
+        })
+      }
+      if (data.section == "l4") {
+        blogs.forEach((blog, i) => {
+
+          $("#l4").append(CacBlog.topStory(blog))
+        })
+      }
+
+      if (data.section == "l5") {
+
+        CacBlog.setWhatsNew(blogs, 1, "CAC")
+
+      }
+
+      if (data.section == "l6") {
+        blogs.forEach((blog, i) => {
+
+          $("#n6").after(CacBlog.setRowCard(blog, i))
+        })
+      }
+      if (data.section == "l7") {
+        blogs.forEach((blog, i) => {
+
+          $("#l7").append(CacBlog.setLargeCard(blog, i))
+        })
+      }
+      if (data.section == "l8") {
+        blogs.forEach((blog, i) => {
+
+          $("#l8").append(CacBlog.setEventCard(blog, i))
+        })
+      }
+      if (data.section == "l9") {
+        blogs.forEach((blog, i) => {
+
+          $("#l9").append(CacBlog.setTrailCard(blog, i))
+        })
+      }
+
+
+
+    })
+
+
+    CacBlog.populateSb()
+
+    formatDate()
+    $("[data-bg-image]").each(function() {
+      const img = $(this).data("bg-image");
+      $(this).css({
+        backgroundImage: "url(" + img + ")",
+      });
+    });
+  }
+
+}
+
+var ui;
+$(document).ready(() => {
+
+  var firebaseConfig = {
+    apiKey: "AIzaSyCJJTXUbUlyai7QWuw51aE6FHr7xrcQrUM",
+    authDomain: "cac-my.firebaseapp.com",
+    projectId: "cac-my",
+    storageBucket: "cac-my.appspot.com",
+    messagingSenderId: "878950911140",
+    appId: "1:878950911140:web:f784759123b3cc25db2a31",
+  };
+
+  if (!firebase.apps.length) {
+
+    firebase.initializeApp(firebaseConfig);
+    firebase.auth().languageCode = "en";
+  } else {
+    firebase.app(); // if already initialized, use that one
+  }
+  window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier(
+    "sign-in-button", {
+      size: "invisible",
+      callback: function(response) {
+        console.log(response);
+      }
+    }
+  );
+  ui = new firebaseui.auth.AuthUI(firebase.auth());
+  navigateTo();
+
+
+})

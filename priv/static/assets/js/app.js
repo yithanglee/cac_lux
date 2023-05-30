@@ -90,40 +90,6 @@
     },
   });
 
-  /*---------------------------------------
-  // rt-post-slider-style-3
-  ----------------------------------------*/
-  const rtPostSliderStyle3 = new Swiper(".rt-post-slider-style-3", {
-    slidesPerView: 4,
-    spaceBetween: 24,
-    loop: true,
-    slideToClickedSlide: true,
-    autoplay: {
-      delay: 4000,
-    },
-    navigation: {
-      nextEl: ".btn-next",
-      prevEl: ".btn-prev",
-    },
-    speed: 800,
-    breakpoints: {
-      0: {
-        slidesPerView: 1,
-      },
-      576: {
-        slidesPerView: 1,
-      },
-      768: {
-        slidesPerView: 2,
-      },
-      992: {
-        slidesPerView: 3,
-      },
-      1200: {
-        slidesPerView: 4,
-      },
-    },
-  });
 
   /*---------------------------------------
   // rt-post-slider-style-4
@@ -525,32 +491,6 @@
 
 
 
-  /*-------------------------------
-   //  Back to Top
-  -------------------------------*/
-  const backToTop = document.getElementById("back-to-top");
-  window.onscroll = function () {
-    scrollFunction();
-  };
-  function scrollFunction() {
-    if (backToTop !== null) {
-      if (
-        document.body.scrollTop > 80 ||
-        document.documentElement.scrollTop > 80
-      ) {
-        backToTop.style.display = "block";
-      } else {
-        backToTop.style.display = "none";
-      }
-    }
-  }
-  if (backToTop !== null) {
-    backToTop.addEventListener("click", (e) => {
-      e.preventDefault();
-      document.body.scrollTop = 0; // For Safari
-      document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
-    });
-  }
 
 
 
